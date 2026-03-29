@@ -4,119 +4,826 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>سجل الجريمة 187</title>
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:#080810;color:#f0ede8;font-family:'Tajawal',sans-serif;min-height:100vh}
-.header{background:linear-gradient(180deg,#0a0a0f,#080810);border-bottom:1px solid #c9a84c40;padding:20px 40px;display:flex;align-items:center;justify-content:space-between}
-.logo{font-size:28px;font-weight:900;color:#c9a84c;letter-spacing:2px}
-.logo span{color:#c0392b}
-.nav-btn{background:#c9a84c;color:#080810;border:none;padding:10px 24px;font-family:'Tajawal',sans-serif;font-size:14px;font-weight:700;cursor:pointer}
-.hero{text-align:center;padding:80px 20px;position:relative}
-.hero::before{content:'187';position:absolute;font-size:300px;font-weight:900;color:rgba(201,168,76,0.03);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
-.hero-badge{display:inline-block;background:#c0392b;color:white;font-size:12px;padding:4px 16px;letter-spacing:3px;margin-bottom:20px}
-.hero h1{font-size:48px;font-weight:900;line-height:1.2;margin-bottom:16px}
-.hero h1 span{color:#c9a84c}
-.hero p{color:#9a9ab0;font-size:18px;max-width:600px;margin:0 auto 40px}
-.btn-primary{background:#c9a84c;color:#080810;border:none;padding:16px 48px;font-family:'Tajawal',sans-serif;font-size:16px;font-weight:700;cursor:pointer;margin-left:16px}
-.btn-secondary{background:transparent;color:#c9a84c;border:1px solid #c9a84c;padding:16px 48px;font-family:'Tajawal',sans-serif;font-size:16px;font-weight:700;cursor:pointer}
-.stats{display:flex;justify-content:center;gap:60px;padding:40px;border-top:1px solid #1e1e28;border-bottom:1px solid #1e1e28;margin:40px 0}
-.stat-num{font-size:36px;font-weight:900;color:#c9a84c;display:block}
-.stat-label{font-size:14px;color:#9a9ab0}
-.section{padding:60px 40px;max-width:1100px;margin:0 auto}
-.section-title{font-size:24px;font-weight:900;color:#c9a84c;margin-bottom:8px;border-right:4px solid #c9a84c;padding-right:16px}
-.section-sub{color:#9a9ab0;font-size:14px;margin-bottom:32px;padding-right:20px}
-.case-card{background:#14141a;border:1px solid #1e1e28;padding:24px;margin-bottom:16px;display:flex;align-items:center;gap:20px;cursor:pointer;transition:border-color 0.2s}
-.case-card:hover{border-color:#c9a84c40}
-.case-file{width:50px;height:60px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
-.case-file.brown{background:#5c3d2e}
-.case-file.red{background:#7b1c1c}
-.case-file.black{background:#1a1a1a;border:1px solid #333}
-.case-file.purple{background:#3d1a5c}
-.case-info{flex:1}
-.case-title{font-size:18px;font-weight:700;margin-bottom:4px}
-.case-meta{font-size:13px;color:#9a9ab0}
-.case-status{font-size:12px;padding:4px 12px;font-weight:700}
-.status-active{background:rgba(192,57,43,0.2);color:#e57373;border:1px solid #c0392b}
-.status-closed{background:rgba(26,122,74,0.2);color:#4caf82;border:1px solid #1a7a4a}
-.ranks{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:32px}
-.rank-card{background:#14141a;border:1px solid #1e1e28;padding:20px;text-align:center}
-.rank-icon{font-size:32px;margin-bottom:8px}
-.rank-name{font-size:14px;font-weight:700;color:#c9a84c;margin-bottom:4px}
-.rank-pts{font-size:12px;color:#9a9ab0}
-.login-section{background:linear-gradient(135deg,rgba(201,168,76,0.05),rgba(201,168,76,0.02));border:1px solid #c9a84c40;padding:60px 40px;text-align:center;margin:40px}
-.login-section h2{font-size:32px;font-weight:900;margin-bottom:12px}
-.google-btn{background:white;color:#333;border:none;padding:14px 32px;font-family:'Tajawal',sans-serif;font-size:16px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:12px;margin-top:24px}
-.footer{border-top:1px solid #1e1e28;padding:24px 40px;text-align:center;color:#9a9ab0;font-size:13px}
-@media(max-width:768px){.hero h1{font-size:32px}.stats{gap:30px;flex-wrap:wrap}.ranks{grid-template-columns:1fr 1fr}.header{padding:16px 20px}.section{padding:40px 20px}}
+:root{
+  --black:#01010a;--dark:#06060f;--card:#0d0d1c;
+  --border:rgba(201,168,76,0.09);--gold:#c9a84c;--gold-dim:#7a6530;
+  --red-bright:#c0392b;--smoke:#686882;--white:#ede9e0;
+  --cold-bright:#3a8fd4;
+}
+*{margin:0;padding:0;box-sizing:border-box;cursor:crosshair}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--white);font-family:'Tajawal',sans-serif;overflow-x:hidden}
+
+/* ══ NAV ══ */
+.nav{position:fixed;top:0;inset-inline:0;z-index:400;padding:18px 52px;
+  display:flex;align-items:center;justify-content:space-between;
+  background:linear-gradient(180deg,rgba(1,1,10,0.97) 0%,transparent 100%)}
+.logo{font-size:19px;font-weight:900}
+.logo em{color:var(--gold);font-style:normal;font-family:'IBM Plex Mono',monospace}
+.nav-links{display:flex;gap:30px;list-style:none}
+.nav-links a{color:var(--smoke);text-decoration:none;font-size:12px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;transition:color .2s}
+.nav-links a:hover{color:var(--gold)}
+.nav-btn{background:var(--gold);color:var(--black);border:none;padding:10px 28px;font-family:'Tajawal',sans-serif;font-size:13px;font-weight:800;letter-spacing:1px;transition:opacity .2s,transform .15s}
+.nav-btn:hover{opacity:.88;transform:translateY(-1px)}
+
+/* ══ HERO ══ */
+.hero{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
+
+/* Pure black base with deep red atmospheric center */
+.hero-atmo{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 80% 60% at 72% 60%, rgba(90,5,5,0.22) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 80% at 20% 50%, rgba(15,8,3,0.5) 0%, transparent 70%),
+    radial-gradient(ellipse 100% 100% at 50% 50%, #080410 0%, #030209 50%, #010108 100%);
+}
+
+/* Ghost 187 */
+.hero-ghost{
+  position:absolute;font-family:'IBM Plex Mono',monospace;
+  font-size:clamp(280px,44vw,660px);font-weight:700;
+  color:transparent;-webkit-text-stroke:1px rgba(201,168,76,0.032);
+  letter-spacing:-30px;user-select:none;pointer-events:none;
+  top:50%;left:50%;transform:translate(-50%,-54%);white-space:nowrap;z-index:0;
+}
+
+/* Hero 2-col layout */
+.hero-inner{
+  position:relative;z-index:10;width:100%;max-width:1240px;
+  margin:0 auto;padding:110px 52px 70px;
+  display:grid;grid-template-columns:1fr 1.1fr;gap:48px;align-items:center;
+}
+
+.hero-eyebrow{display:inline-flex;align-items:center;gap:12px;margin-bottom:18px;color:var(--gold);font-size:10px;font-weight:700;letter-spacing:5px;text-transform:uppercase}
+.hero-eyebrow::before,.hero-eyebrow::after{content:'';width:28px;height:1px;background:var(--gold);opacity:0.32}
+.hero-h1{font-size:clamp(44px,5.5vw,78px);font-weight:900;line-height:.98;letter-spacing:-2px;margin-bottom:4px}
+.hero-h1-num{display:block;font-family:'IBM Plex Mono',monospace;font-size:clamp(58px,9vw,126px);letter-spacing:-4px;-webkit-text-stroke:2px var(--gold);color:transparent;animation:flicker 10s infinite;filter:drop-shadow(0 0 22px rgba(201,168,76,0.2))}
+@keyframes flicker{0%,91%,100%{opacity:1}92%{opacity:.18}93%{opacity:1}96.5%{opacity:.48}97%{opacity:1}}
+.hero-sub{font-size:16px;color:var(--smoke);max-width:400px;margin:16px 0 34px;line-height:1.95;font-weight:300}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap}
+.btn-g{background:var(--gold);color:var(--black);border:none;padding:14px 38px;font-family:'Tajawal',sans-serif;font-size:15px;font-weight:800;letter-spacing:1px;transition:transform .2s,box-shadow .2s}
+.btn-g:hover{transform:translateY(-3px);box-shadow:0 12px 36px rgba(201,168,76,0.2)}
+.btn-o{background:transparent;color:var(--white);border:1px solid rgba(255,255,255,0.1);padding:14px 38px;font-family:'Tajawal',sans-serif;font-size:15px;font-weight:700;transition:border-color .2s,color .2s}
+.btn-o:hover{border-color:var(--gold);color:var(--gold)}
+
+/* ══ REALISTIC DESK ILLUSTRATION ══ */
+.desk-visual{position:relative;height:540px;display:flex;align-items:flex-end;justify-content:center}
+.desk-scene{width:100%;height:100%;position:relative}
+
+/* The SVG desk - ultra detailed */
+.desk-svg{width:100%;height:100%;overflow:visible}
+
+/* Particle effects */
+@keyframes dust{0%{opacity:0;transform:translate(0,0) scale(1)}30%{opacity:.5}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(.3)}}
+.dust{position:absolute;width:2px;height:2px;background:rgba(201,168,76,0.6);border-radius:50%;animation:dust 5s infinite;pointer-events:none}
+
+.scroll-hint{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:5px;color:var(--smoke);font-size:9px;letter-spacing:4px;text-transform:uppercase;animation:bob 2.5s infinite;z-index:10}
+.scroll-hint::after{content:'';width:1px;height:40px;background:linear-gradient(180deg,var(--gold),transparent)}
+@keyframes bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(7px)}}
+
+/* ══ URGENCY ══ */
+.urgency{background:rgba(139,26,26,0.1);border-top:1px solid rgba(192,57,43,0.18);border-bottom:1px solid rgba(192,57,43,0.18);padding:12px 52px;display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap}
+.urg-dot{width:7px;height:7px;border-radius:50%;background:var(--red-bright);animation:pdot 1.5s infinite}
+@keyframes pdot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.65)}}
+.urg-t{font-size:13px;font-weight:600}
+.urg-n{font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:700;color:var(--gold);line-height:1}
+.urg-l{font-size:10px;color:var(--smoke);letter-spacing:2px;text-transform:uppercase}
+
+/* ══ SECTIONS ══ */
+.sec{padding:80px 52px;max-width:1100px;margin:0 auto}
+.sec-dk{background:var(--dark);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.stag{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--gold);letter-spacing:4px;text-transform:uppercase;margin-bottom:10px}
+.stitle{font-size:clamp(26px,4vw,46px);font-weight:900;letter-spacing:-1px;line-height:1.1}
+.stitle span{color:var(--gold)}
+.shdr{margin-bottom:48px}
+
+/* ══ HOW ══ */
+.steps{display:grid;grid-template-columns:repeat(4,1fr)}
+.step{padding:34px 22px;text-align:center;position:relative}
+.step:not(:last-child)::after{content:'←';position:absolute;left:0;top:42%;color:var(--gold-dim);font-size:20px;transform:translateY(-50%)}
+.sn{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--gold-dim);letter-spacing:2px;display:block;margin-bottom:10px}
+.si{font-size:34px;display:block;margin-bottom:10px}
+.st{font-size:15px;font-weight:800;margin-bottom:7px}
+.sd{font-size:13px;color:var(--smoke);line-height:1.7}
+
+/* ══ TIMING ══ */
+.lifecycle{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:44px;position:relative}
+.lifecycle::before{content:'';position:absolute;top:68px;left:16%;right:16%;height:2px;background:linear-gradient(90deg,var(--gold) 0%,rgba(201,168,76,0.4) 50%,var(--cold-bright) 100%);z-index:0}
+.phase{background:var(--card);border:1px solid var(--border);padding:26px 18px;text-align:center;position:relative;z-index:1}
+.phase:first-child{border-left:1px solid var(--border)}
+.phase-icon{font-size:30px;display:block;margin-bottom:10px}
+.phase-title{font-size:15px;font-weight:800;margin-bottom:7px}
+.pa{color:var(--gold)}.pw{color:#e57373}.pc{color:var(--cold-bright)}
+.phase-desc{font-size:13px;color:var(--smoke);line-height:1.7;margin-bottom:12px}
+.pbadge{display:inline-block;padding:4px 12px;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase}
+.pb-g{background:rgba(201,168,76,0.08);color:var(--gold);border:1px solid var(--gold-dim)}
+.pb-r{background:rgba(192,57,43,0.1);color:#e57373;border:1px solid rgba(192,57,43,0.35)}
+.pb-b{background:rgba(58,143,212,0.1);color:var(--cold-bright);border:1px solid rgba(58,143,212,0.28)}
+.cold-box{margin-top:24px;background:rgba(26,58,92,0.22);border:1px solid rgba(58,143,212,0.18);padding:18px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.cold-box-t{font-size:13px;line-height:1.75}
+.cold-box-t strong{color:var(--cold-bright)}
+.cold-n{font-family:'IBM Plex Mono',monospace;font-size:26px;font-weight:700;color:var(--cold-bright);flex-shrink:0}
+.rw-box{margin-top:16px;background:rgba(201,168,76,0.03);border:1px solid rgba(201,168,76,0.12);padding:18px 22px;display:flex;gap:14px;align-items:flex-start}
+.rw-icon{font-size:26px;flex-shrink:0;margin-top:2px}
+.rw-t strong{color:var(--gold);font-size:14px;display:block;margin-bottom:3px}
+.rw-t p{font-size:13px;color:var(--smoke);line-height:1.7}
+
+/* ══ CASES ══ */
+.cases-list{display:grid;gap:2px;margin-top:40px}
+.crow{background:var(--card);border:1px solid var(--border);padding:22px 26px;display:grid;grid-template-columns:56px 1fr auto auto;align-items:center;gap:18px;transition:border-color .3s,background .3s;position:relative;overflow:hidden}
+.crow::before{content:'';position:absolute;right:0;top:0;bottom:0;width:3px;background:transparent;transition:background .3s}
+.crow:hover{border-color:rgba(201,168,76,0.2);background:#0e0e1d}
+.crow:hover::before{background:var(--gold)}
+.folder{width:56px;height:62px;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0}
+.f1{background:rgba(92,61,46,0.35);border:1px solid rgba(92,61,46,0.5)}
+.ccode{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--gold-dim);letter-spacing:2px;margin-bottom:4px;text-transform:uppercase}
+.cname{font-size:18px;font-weight:700;margin-bottom:5px}
+.cmeta{font-size:12px;color:var(--smoke);display:flex;gap:14px;flex-wrap:wrap}
+.cpts{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--gold);text-align:center;flex-shrink:0}
+.cpts span{display:block;font-size:24px;font-weight:700}
+.cbadge{padding:5px 12px;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;flex-shrink:0}
+.cb-s{background:rgba(201,168,76,0.07);color:var(--gold);border:1px solid var(--gold-dim)}
+.cempty{background:var(--card);border:1px dashed rgba(201,168,76,0.1);padding:38px;text-align:center;color:var(--smoke);font-size:13px;letter-spacing:1px}
+
+/* HIDDEN LEVELS TEASER */
+.levels-teaser{margin-top:24px;background:rgba(201,168,76,0.03);border:1px dashed rgba(201,168,76,0.15);padding:20px 24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.levels-teaser-text{font-size:13px;color:var(--smoke);line-height:1.7;flex:1}
+.levels-teaser-text strong{color:var(--gold)}
+.levels-icons{display:flex;gap:8px;flex-shrink:0}
+.lvl-dot{width:28px;height:28px;border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;font-family:'IBM Plex Mono',monospace;position:relative}
+.lvl-dot.visible{background:rgba(92,61,46,0.5);border:1px solid rgba(92,61,46,0.7);color:rgba(200,160,100,0.8)}
+.lvl-dot.hidden{background:rgba(20,20,30,0.8);border:1px dashed rgba(201,168,76,0.15);color:rgba(201,168,76,0.2)}
+.lvl-dot.hidden::after{content:'?';position:absolute;font-size:13px;color:rgba(201,168,76,0.25)}
+
+/* ══ RANKS ══ */
+.ranks-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:38px;max-width:900px}
+.rcard{background:var(--card);border:1px solid var(--border);padding:24px 16px;text-align:center;transition:transform .2s,border-color .2s}
+.rcard:hover{transform:translateY(-3px);border-color:rgba(201,168,76,0.14)}
+.rcard.unlocked{border-color:rgba(201,168,76,0.22);background:rgba(201,168,76,0.025)}
+.rcard.legend{border-color:rgba(201,168,76,0.35);background:rgba(201,168,76,0.04)}
+.rbadge{width:58px;height:66px;margin:0 auto 12px;display:block}
+.rname{font-size:14px;font-weight:800;margin-bottom:4px}
+.rcard.unlocked .rname{color:var(--gold)}.rcard.legend .rname{color:var(--gold)}
+.rpts{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--smoke)}
+.rlimit{margin-top:8px;font-size:10px;color:var(--red-bright);font-weight:700;letter-spacing:1px}
+.ranks-note{text-align:center;margin-top:22px;font-size:13px;color:var(--smoke)}
+
+/* ══ POINTS ══ */
+.pts-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:38px}
+.pcard{background:var(--card);border:1px solid var(--border);padding:18px 20px}
+.phead{font-size:13px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.phead.earn{color:#4caf82}.phead.lose{color:#e57373}
+.prow{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--border)}
+.prow:last-child{border-bottom:none}
+.plbl{font-size:13px;color:var(--smoke)}
+.pval{font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:700}
+.pos{color:#4caf82}.neg{color:#e57373}.neu{color:var(--gold)}
+.safe{margin-top:14px;padding:12px 16px;background:rgba(26,122,74,0.07);border:1px solid rgba(26,122,74,0.16)}
+.safe p{font-size:12px;color:#4caf82;line-height:1.7}
+
+/* ══ EPISODE ══ */
+.ep-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:28px;align-items:center;margin-top:38px}
+.vid-box{position:relative;padding-bottom:56.25%;background:#000;overflow:hidden}
+.vid-box iframe{position:absolute;inset:0;width:100%;height:100%;border:none}
+.vid-ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--card);border:1px solid var(--border);gap:10px}
+.vid-ph span{font-size:42px;opacity:.32}
+.vid-ph p{font-size:12px;color:var(--smoke);text-align:center;line-height:1.7}
+.epbadge{display:inline-block;background:rgba(192,57,43,0.1);color:#e57373;border:1px solid var(--red-bright);padding:4px 12px;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px}
+.eptitle{font-size:20px;font-weight:800;line-height:1.3;margin-bottom:10px}
+.epdesc{font-size:14px;color:var(--smoke);line-height:1.8;margin-bottom:20px}
+.ep-timer{display:flex;gap:16px;margin-bottom:20px}
+.tblock{text-align:center}
+.tnum{display:block;font-family:'IBM Plex Mono',monospace;font-size:28px;font-weight:700;color:var(--gold);line-height:1}
+.tlbl{font-size:9px;color:var(--smoke);letter-spacing:1px;text-transform:uppercase}
+.ep-cta{background:var(--gold);color:var(--black);border:none;padding:12px 28px;font-family:'Tajawal',sans-serif;font-size:14px;font-weight:800;letter-spacing:1px;transition:opacity .2s}
+.ep-cta:hover{opacity:.85}
+
+/* ══ CTA ══ */
+.cta-sec{position:relative;overflow:hidden;padding:100px 52px;text-align:center;background:radial-gradient(ellipse 60% 80% at 50% 50%,rgba(90,8,8,0.14) 0%,transparent 70%),var(--dark);border-top:1px solid var(--border)}
+.cta-inner{position:relative;z-index:1;max-width:520px;margin:0 auto}
+.cta-inner h2{font-size:clamp(32px,5vw,56px);font-weight:900;line-height:1.1;letter-spacing:-1px;margin-bottom:14px}
+.cta-inner h2 span{color:var(--gold)}
+.cta-inner p{color:var(--smoke);font-size:15px;margin-bottom:32px;line-height:1.9}
+.gbtn{display:inline-flex;align-items:center;gap:14px;background:white;color:#111;border:none;padding:14px 32px;font-family:'Tajawal',sans-serif;font-size:16px;font-weight:700;transition:transform .2s,box-shadow .2s}
+.gbtn:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(0,0,0,0.5)}
+.cta-note{margin-top:12px;font-size:11px;color:var(--smoke);display:flex;align-items:center;justify-content:center;gap:6px}
+.cta-note::before{content:'🔒'}
+
+/* ══ FOOTER ══ */
+.footer{background:var(--black);border-top:1px solid var(--border);padding:28px 52px;display:flex;align-items:center;justify-content:space-between}
+.flogo{font-size:15px;font-weight:900;color:var(--gold-dim)}
+.fdisc{font-size:11px;color:var(--smoke);text-align:center;max-width:360px}
+.fnum{font-family:'IBM Plex Mono',monospace;font-size:14px;color:rgba(201,168,76,0.13);letter-spacing:6px}
+
+/* ══ REVEAL ══ */
+.rv{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}
+.rv.show{opacity:1;transform:translateY(0)}
+.d1{transition-delay:.07s}.d2{transition-delay:.14s}.d3{transition-delay:.21s}.d4{transition-delay:.28s}
+
+@media(max-width:960px){
+  .nav{padding:14px 20px}.nav-links{display:none}
+  .hero-inner{grid-template-columns:1fr;padding:100px 20px 60px;gap:36px}
+  .desk-visual{height:360px}
+  .steps{grid-template-columns:1fr 1fr}.step:not(:last-child)::after{display:none}
+  .lifecycle{grid-template-columns:1fr}.lifecycle::before{display:none}
+  .ranks-grid{grid-template-columns:1fr 1fr}
+  .pts-grid{grid-template-columns:1fr}
+  .ep-grid{grid-template-columns:1fr}
+  .crow{grid-template-columns:auto 1fr}.cpts,.cbadge{grid-column:2}
+  .footer{flex-direction:column;gap:10px;text-align:center}
+  .sec,.cta-sec{padding:56px 20px}
+  .sec-dk{padding:0}.sec-dk .sec{padding:56px 20px}
+}
 </style>
 </head>
 <body>
 
-<div class="header">
-  <div class="logo">سجل الجريمة <span>187</span></div>
-  <button class="nav-btn" onclick="document.getElementById('login').scrollIntoView({behavior:'smooth'})">انضم الآن</button>
-</div>
+<nav class="nav">
+  <div class="logo">سجل الجريمة <em>187</em></div>
+  <ul class="nav-links">
+    <li><a href="#how">كيف يعمل</a></li>
+    <li><a href="#cases">الملفات</a></li>
+    <li><a href="#ranks">الرتب</a></li>
+  </ul>
+  <button class="nav-btn" onclick="document.getElementById('join').scrollIntoView({behavior:'smooth'})">ابدأ التحقيق</button>
+</nav>
 
-<div class="hero">
-  <div class="hero-badge">قصص خيالية — للترفيه فقط</div>
-  <h1>كل جريمة<br><span>قصة تنتظر محققاً</span></h1>
-  <p>شاهد الحلقة، حلل الأدلة، وأثبت أنك المحقق الأذكى في العالم العربي</p>
-  <button class="btn-primary" onclick="document.getElementById('cases').scrollIntoView({behavior:'smooth'})">ابدأ التحقيق</button>
-  <button class="btn-secondary" onclick="document.getElementById('ranks').scrollIntoView({behavior:'smooth'})">رتب المحققين</button>
-</div>
+<section class="hero">
+  <div class="hero-atmo"></div>
+  <div class="hero-ghost">187</div>
 
-<div class="stats">
-  <div style="text-align:center"><span class="stat-num">0</span><span class="stat-label">محقق مسجل</span></div>
-  <div style="text-align:center"><span class="stat-num">0</span><span class="stat-label">قضية محلولة</span></div>
-  <div style="text-align:center"><span class="stat-num">187</span><span class="stat-label">مقعد للأسطورة</span></div>
-</div>
+  <!-- ATMOSPHERIC OVERLAY SVG -->
+  <svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="vg" cx="50%" cy="50%" r="72%"><stop offset="0%" stop-color="transparent"/><stop offset="100%" stop-color="rgba(1,1,10,0.88)"/></radialGradient>
+      <linearGradient id="fb" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="transparent"/><stop offset="100%" stop-color="rgba(1,1,10,0.96)"/></linearGradient>
+    </defs>
+    <!-- crime tape top -->
+    <g opacity="0.52" transform="rotate(-5.5,720,200)">
+      <rect x="-80" y="148" width="1700" height="21" fill="rgba(201,168,76,0.86)"/>
+      <line x1="-80" y1="148" x2="1620" y2="148" stroke="rgba(4,4,4,0.56)" stroke-width="21" stroke-dasharray="64,64"/>
+      <text x="40" y="163" font-family="'IBM Plex Mono',monospace" font-size="7.5" font-weight="700" fill="rgba(2,2,2,0.68)" letter-spacing="3">CRIME SCENE • DO NOT CROSS • مسرح الجريمة • لا تتخطَّ • CRIME SCENE • DO NOT CROSS • مسرح الجريمة •</text>
+    </g>
+    <g opacity="0.2" transform="rotate(4,720,640)">
+      <rect x="-80" y="618" width="1700" height="17" fill="rgba(201,168,76,0.75)"/>
+      <line x1="-80" y1="618" x2="1620" y2="618" stroke="rgba(4,4,4,0.5)" stroke-width="17" stroke-dasharray="64,64" stroke-dashoffset="32"/>
+    </g>
+    <rect width="1440" height="900" fill="url(#vg)"/>
+    <rect x="0" y="740" width="1440" height="160" fill="url(#fb)"/>
+    <rect x="0" y="0" width="1440" height="130" fill="url(#fb)" transform="rotate(180,720,65)"/>
+  </svg>
 
-<div class="section" id="cases">
-  <div class="section-title">ملفات القضايا</div>
-  <div class="section-sub">اختر قضية وابدأ التحقيق — كل قضية تنتهي بكشف الحقيقة</div>
-
-  <div class="case-card">
-    <div class="case-file brown">📁</div>
-    <div class="case-info">
-      <div class="case-title">القضية الأولى — قريباً</div>
-      <div class="case-meta">مستوى: مبتدئ • الملف البني</div>
+  <div class="hero-inner">
+    <!-- LEFT TEXT -->
+    <div>
+      <div class="hero-eyebrow">قصص خيالية للترفيه فقط</div>
+      <h1 class="hero-h1">كل جريمة<em class="hero-h1-num">187</em></h1>
+      <p class="hero-sub">قصة غامضة تنتظر محققاً ذكياً.<br>شاهد الحلقة، حلل الأدلة، وأثبت أنك الأفضل.</p>
+      <div class="hero-btns">
+        <button class="btn-g" onclick="document.getElementById('join').scrollIntoView({behavior:'smooth'})">ابدأ التحقيق الآن</button>
+        <button class="btn-o" onclick="document.getElementById('cases').scrollIntoView({behavior:'smooth'})">استعرض الملفات</button>
+      </div>
     </div>
-    <span class="case-status status-active">قادمة</span>
+
+    <!-- RIGHT: ULTRA-REALISTIC DESK -->
+    <div class="desk-visual">
+      <svg class="desk-svg" viewBox="0 0 520 540" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <!-- Realistic wood texture gradient -->
+          <linearGradient id="wood" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#1a0e05"/>
+            <stop offset="15%" stop-color="#261508"/>
+            <stop offset="30%" stop-color="#1e1108"/>
+            <stop offset="45%" stop-color="#2a1a09"/>
+            <stop offset="60%" stop-color="#1c1007"/>
+            <stop offset="75%" stop-color="#241508"/>
+            <stop offset="100%" stop-color="#160d05"/>
+          </linearGradient>
+          <linearGradient id="wood2" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="rgba(255,200,100,0.06)"/>
+            <stop offset="40%" stop-color="rgba(180,120,40,0.03)"/>
+            <stop offset="100%" stop-color="rgba(0,0,0,0.4)"/>
+          </linearGradient>
+          <!-- Spotlight from top right -->
+          <radialGradient id="spot" cx="75%" cy="5%" r="75%">
+            <stop offset="0%" stop-color="rgba(255,252,220,0.18)"/>
+            <stop offset="30%" stop-color="rgba(255,240,180,0.08)"/>
+            <stop offset="65%" stop-color="rgba(201,168,76,0.03)"/>
+            <stop offset="100%" stop-color="transparent"/>
+          </radialGradient>
+          <!-- Paper texture -->
+          <linearGradient id="paper" x1="0" y1="0" x2="0.1" y2="1">
+            <stop offset="0%" stop-color="#f0e8d0"/>
+            <stop offset="100%" stop-color="#e0d4b0"/>
+          </linearGradient>
+          <linearGradient id="paper2" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#e8dfc8"/>
+            <stop offset="100%" stop-color="#d8cca8"/>
+          </linearGradient>
+          <!-- Glass refraction -->
+          <radialGradient id="glass" cx="30%" cy="25%" r="60%">
+            <stop offset="0%" stop-color="rgba(180,200,220,0.15)"/>
+            <stop offset="50%" stop-color="rgba(120,150,180,0.06)"/>
+            <stop offset="100%" stop-color="rgba(40,60,100,0.12)"/>
+          </radialGradient>
+          <!-- Lamp light cone -->
+          <radialGradient id="lamp-cone" cx="50%" cy="0%" r="100%">
+            <stop offset="0%" stop-color="rgba(255,248,200,0.22)"/>
+            <stop offset="50%" stop-color="rgba(255,235,150,0.07)"/>
+            <stop offset="100%" stop-color="transparent"/>
+          </radialGradient>
+          <!-- Shadow -->
+          <filter id="dropshadow"><feDropShadow dx="2" dy="4" stdDeviation="5" flood-color="rgba(0,0,0,0.7)"/></filter>
+          <filter id="softglow"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <filter id="papershadow"><feDropShadow dx="1" dy="3" stdDeviation="4" flood-color="rgba(0,0,0,0.65)"/></filter>
+          <filter id="texturenoise">
+            <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="4" stitchTiles="stitch" result="noise"/>
+            <feColorMatrix type="saturate" values="0" in="noise" result="grey"/>
+            <feBlend in="SourceGraphic" in2="grey" mode="multiply" result="blend"/>
+            <feComposite in="blend" in2="SourceGraphic" operator="in"/>
+          </filter>
+          <clipPath id="desk-clip"><rect x="0" y="280" width="520" height="260"/></clipPath>
+        </defs>
+
+        <!-- ═══ SPOTLIGHT CONE FROM TOP ═══ -->
+        <ellipse cx="360" cy="10" rx="220" ry="380" fill="url(#lamp-cone)" opacity="0.9"/>
+
+        <!-- ═══ DESK LAMP (top right) ═══ -->
+        <g opacity="0.72" transform="translate(390,0)">
+          <!-- Lamp neck -->
+          <path d="M55,20 Q50,60 30,100 Q20,130 25,160" fill="none" stroke="rgba(80,70,55,0.8)" stroke-width="4" stroke-linecap="round"/>
+          <!-- Lamp shade -->
+          <path d="M0,155 Q12,100 55,100 Q72,100 80,155 Z" fill="rgba(45,38,25,0.9)" stroke="rgba(100,85,50,0.5)" stroke-width="1"/>
+          <path d="M2,158 L78,158" stroke="rgba(80,70,45,0.6)" stroke-width="1.5"/>
+          <!-- Inner lamp glow -->
+          <ellipse cx="40" cy="158" rx="36" ry="8" fill="rgba(255,245,180,0.25)" filter="url(#softglow)"/>
+          <!-- Bulb gleam -->
+          <ellipse cx="40" cy="150" rx="8" ry="5" fill="rgba(255,250,200,0.4)"/>
+          <!-- Base -->
+          <rect x="30" y="160" width="20" height="6" fill="rgba(60,50,35,0.8)" rx="1"/>
+        </g>
+
+        <!-- ═══ DESK SURFACE ═══ -->
+        <!-- Main desk top -->
+        <rect x="0" y="285" width="520" height="255" fill="url(#wood)" rx="2"/>
+        <rect x="0" y="285" width="520" height="255" fill="url(#wood2)"/>
+        <!-- Wood grain lines -->
+        <g opacity="0.12" stroke="rgba(180,120,40,0.6)" stroke-width="0.6">
+          <path d="M0,295 Q130,290 260,296 Q390,300 520,294"/>
+          <path d="M0,312 Q160,308 320,313 Q440,316 520,311"/>
+          <path d="M0,335 Q80,330 200,336 Q380,342 520,333"/>
+          <path d="M0,358 Q200,354 350,360 Q450,363 520,357"/>
+          <path d="M0,385 Q100,381 250,386 Q420,391 520,384"/>
+          <path d="M0,420 Q150,415 300,421 Q430,426 520,419"/>
+        </g>
+        <!-- Desk edge highlight -->
+        <line x1="0" y1="285" x2="520" y2="285" stroke="rgba(201,168,76,0.18)" stroke-width="1.5"/>
+        <!-- Desk subtle reflection -->
+        <rect x="0" y="285" width="520" height="40" fill="rgba(255,220,120,0.04)"/>
+
+        <!-- ═══ DESK MAT / BLOTTER ═══ -->
+        <rect x="55" y="292" width="310" height="200" fill="rgba(15,10,5,0.75)" stroke="rgba(80,60,30,0.4)" stroke-width="1" rx="2" filter="url(#dropshadow)"/>
+        <!-- Mat texture -->
+        <rect x="55" y="292" width="310" height="200" fill="rgba(20,14,7,0.5)" rx="2" opacity="0.6"/>
+
+        <!-- ═══ MAIN CASE FILE (open) ═══ -->
+        <g transform="translate(62,295)" filter="url(#papershadow)">
+          <!-- Folder back -->
+          <rect x="0" y="28" width="230" height="175" fill="rgba(92,55,22,0.95)" rx="2" stroke="rgba(110,70,28,0.6)" stroke-width="1"/>
+          <!-- Folder worn edges -->
+          <rect x="0" y="28" width="230" height="10" fill="rgba(110,72,30,0.7)" rx="1"/>
+          <rect x="0" y="28" width="8" height="175" fill="rgba(110,72,30,0.5)"/>
+          <rect x="222" y="28" width="8" height="175" fill="rgba(60,36,12,0.6)"/>
+
+          <!-- Tab -->
+          <rect x="18" y="18" width="72" height="18" fill="rgba(92,55,22,0.9)" rx="2"/>
+          <rect x="18" y="18" width="72" height="8" fill="rgba(110,70,28,0.8)" rx="1"/>
+          <text x="54" y="30" font-family="'IBM Plex Mono',monospace" font-size="7.5" fill="rgba(220,185,120,0.85)" text-anchor="middle" font-weight="700" letter-spacing="1">ملف-001</text>
+
+          <!-- Page 1 (back, slightly askew) -->
+          <rect x="8" y="22" width="214" height="172" fill="url(#paper2)" rx="1" transform="rotate(1.5,115,108)"/>
+
+          <!-- Page 2 (front page - main) -->
+          <rect x="10" y="22" width="210" height="170" fill="url(#paper)" rx="1"/>
+
+          <!-- Page content: typed text lines (realistic) -->
+          <g opacity="0.65">
+            <!-- Header bold line -->
+            <rect x="22" y="34" width="120" height="5" fill="rgba(40,25,8,0.9)" rx="1"/>
+            <rect x="22" y="44" width="186" height="2.5" fill="rgba(40,25,8,0.55)" rx="1"/>
+            <rect x="22" y="51" width="170" height="2.5" fill="rgba(40,25,8,0.45)" rx="1"/>
+            <rect x="22" y="58" width="180" height="2.5" fill="rgba(40,25,8,0.45)" rx="1"/>
+            <rect x="22" y="65" width="155" height="2.5" fill="rgba(40,25,8,0.4)" rx="1"/>
+            <!-- Divider -->
+            <line x1="22" y1="73" x2="198" y2="73" stroke="rgba(40,25,8,0.3)" stroke-width="0.8"/>
+            <rect x="22" y="79" width="186" height="2" fill="rgba(40,25,8,0.35)" rx="1"/>
+            <rect x="22" y="85" width="162" height="2" fill="rgba(40,25,8,0.3)" rx="1"/>
+            <rect x="22" y="91" width="176" height="2" fill="rgba(40,25,8,0.32)" rx="1"/>
+            <rect x="22" y="97" width="148" height="2" fill="rgba(40,25,8,0.28)" rx="1"/>
+            <!-- Evidence photo placeholder -->
+            <rect x="148" y="78" width="44" height="36" fill="rgba(60,60,60,0.3)" stroke="rgba(80,60,30,0.4)" stroke-width="0.8"/>
+            <rect x="150" y="80" width="40" height="32" fill="rgba(40,40,50,0.4)"/>
+            <!-- Photo content hint -->
+            <line x1="152" y1="104" x2="188" y2="80" stroke="rgba(80,80,80,0.3)" stroke-width="0.5"/>
+          </g>
+
+          <!-- Red "CLASSIFIED" stamp diagonal -->
+          <text x="115" y="155" font-family="'IBM Plex Mono',monospace" font-size="19" font-weight="700"
+            fill="rgba(160,30,20,0.55)" text-anchor="middle" transform="rotate(-22,115,145)" letter-spacing="1.5">سري</text>
+          <rect x="50" y="134" width="130" height="26" fill="none" stroke="rgba(160,30,20,0.42)" stroke-width="1.5" transform="rotate(-22,115,147)"/>
+
+          <!-- Handwritten note on page corner -->
+          <text x="20" y="182" font-family="serif" font-size="8" fill="rgba(80,50,20,0.65)" transform="rotate(-3,60,182)">ملاحظة: راجع الشاهد</text>
+        </g>
+
+        <!-- ═══ MAGNIFYING GLASS (realistic) ═══ -->
+        <g transform="translate(300,290)" filter="url(#dropshadow)">
+          <!-- Glass body rim (metal, dark chrome) -->
+          <circle cx="68" cy="68" r="58" fill="rgba(30,25,15,0.6)" stroke="rgba(160,140,80,0.7)" stroke-width="5"/>
+          <!-- Outer rim detail -->
+          <circle cx="68" cy="68" r="55" fill="none" stroke="rgba(200,175,90,0.25)" stroke-width="1.5"/>
+          <!-- Glass surface -->
+          <circle cx="68" cy="68" r="52" fill="url(#glass)"/>
+          <!-- Glass internal reflection arcs -->
+          <path d="M38,38 Q48,30 62,35" fill="none" stroke="rgba(255,255,255,0.28)" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M34,50 Q40,44 50,46" fill="none" stroke="rgba(255,255,255,0.14)" stroke-width="1.5" stroke-linecap="round"/>
+          <!-- Magnified content inside glass (blurred document) -->
+          <circle cx="68" cy="68" r="51" fill="rgba(235,225,195,0.06)"/>
+          <line x1="30" y1="58" x2="106" y2="56" stroke="rgba(40,25,8,0.18)" stroke-width="2"/>
+          <line x1="28" y1="66" x2="108" y2="64" stroke="rgba(40,25,8,0.14)" stroke-width="2"/>
+          <line x1="30" y1="74" x2="104" y2="72" stroke="rgba(40,25,8,0.12)" stroke-width="2"/>
+          <line x1="34" y1="82" x2="102" y2="80" stroke="rgba(40,25,8,0.1)" stroke-width="1.5"/>
+          <!-- Cross-hair inside -->
+          <line x1="68" y1="25" x2="68" y2="111" stroke="rgba(201,168,76,0.12)" stroke-width="0.8"/>
+          <line x1="25" y1="68" x2="111" y2="68" stroke="rgba(201,168,76,0.12)" stroke-width="0.8"/>
+          <!-- Rim screws (realistic detail) -->
+          <circle cx="68" cy="16" r="3" fill="rgba(140,120,60,0.7)" stroke="rgba(100,80,40,0.5)" stroke-width="0.8"/>
+          <circle cx="120" cy="68" r="3" fill="rgba(140,120,60,0.7)" stroke="rgba(100,80,40,0.5)" stroke-width="0.8"/>
+          <circle cx="16" cy="68" r="3" fill="rgba(140,120,60,0.7)" stroke="rgba(100,80,40,0.5)" stroke-width="0.8"/>
+          <!-- Handle (realistic metal/wood) -->
+          <path d="M112,112 L158,158" stroke="rgba(100,80,40,0.9)" stroke-width="14" stroke-linecap="round"/>
+          <path d="M112,112 L158,158" stroke="rgba(140,110,50,0.6)" stroke-width="10" stroke-linecap="round"/>
+          <path d="M112,112 L158,158" stroke="rgba(180,145,70,0.25)" stroke-width="5" stroke-linecap="round"/>
+          <!-- Handle grip ridges -->
+          <path d="M122,122 L130,130" stroke="rgba(80,60,25,0.5)" stroke-width="2" stroke-linecap="round"/>
+          <path d="M130,130 L138,138" stroke="rgba(80,60,25,0.5)" stroke-width="2" stroke-linecap="round"/>
+          <path d="M138,138 L146,146" stroke="rgba(80,60,25,0.5)" stroke-width="2" stroke-linecap="round"/>
+          <!-- Handle shadow -->
+          <path d="M113,113 L159,159" stroke="rgba(0,0,0,0.35)" stroke-width="18" stroke-linecap="round" opacity="0.5"/>
+        </g>
+
+        <!-- ═══ SCATTERED EVIDENCE PHOTOS ═══ -->
+        <!-- Photo 1 -->
+        <g transform="translate(60,440) rotate(-8,50,38)" filter="url(#papershadow)">
+          <rect x="0" y="0" width="82" height="62" fill="#e8e0c8" rx="1"/>
+          <rect x="4" y="4" width="74" height="46" fill="rgba(60,55,50,0.45)"/>
+          <!-- Photo content suggestion -->
+          <line x1="6" y1="44" x2="76" y2="6" stroke="rgba(80,75,70,0.2)" stroke-width="0.8"/>
+          <rect x="4" y="52" width="74" height="7" fill="rgba(240,230,200,0.8)"/>
+          <text x="41" y="58" font-family="'IBM Plex Mono',monospace" font-size="5.5" fill="rgba(60,40,20,0.65)" text-anchor="middle">دليل أ</text>
+        </g>
+        <!-- Photo 2 -->
+        <g transform="translate(162,452) rotate(5,44,34)" filter="url(#papershadow)">
+          <rect x="0" y="0" width="72" height="52" fill="#dfd7b8" rx="1"/>
+          <rect x="3" y="3" width="66" height="38" fill="rgba(55,52,48,0.4)"/>
+          <rect x="3" y="43" width="66" height="7" fill="rgba(225,215,185,0.8)"/>
+          <text x="36" y="49" font-family="'IBM Plex Mono',monospace" font-size="5" fill="rgba(60,40,20,0.6)" text-anchor="middle">دليل ب</text>
+        </g>
+
+        <!-- ═══ SMALL NOTEBOOK ═══ -->
+        <g transform="translate(355,370) rotate(4,55,70)" filter="url(#papershadow)">
+          <!-- Notebook cover -->
+          <rect x="0" y="0" width="110" height="140" fill="rgba(20,15,8,0.9)" rx="2" stroke="rgba(60,45,20,0.6)" stroke-width="1"/>
+          <!-- Spiral binding -->
+          <g opacity="0.6">
+            <circle cx="8" cy="14" r="4" fill="none" stroke="rgba(140,120,60,0.7)" stroke-width="1.2"/>
+            <circle cx="8" cy="28" r="4" fill="none" stroke="rgba(140,120,60,0.7)" stroke-width="1.2"/>
+            <circle cx="8" cy="42" r="4" fill="none" stroke="rgba(140,120,60,0.7)" stroke-width="1.2"/>
+            <circle cx="8" cy="56" r="4" fill="none" stroke="rgba(140,120,60,0.7)" stroke-width="1.2"/>
+            <circle cx="8" cy="70" r="4" fill="none" stroke="rgba(140,120,60,0.7)" stroke-width="1.2"/>
+            <circle cx="8" cy="84" r="4" fill="none" stroke="rgba(140,120,60,0.7)" stroke-width="1.2"/>
+            <circle cx="8" cy="98" r="4" fill="none" stroke="rgba(140,120,60,0.7)" stroke-width="1.2"/>
+            <circle cx="8" cy="112" r="4" fill="none" stroke="rgba(140,120,60,0.7)" stroke-width="1.2"/>
+            <circle cx="8" cy="126" r="4" fill="none" stroke="rgba(140,120,60,0.7)" stroke-width="1.2"/>
+          </g>
+          <!-- Open page -->
+          <rect x="16" y="5" width="88" height="130" fill="rgba(245,238,215,0.92)" rx="1"/>
+          <!-- Handwritten notes lines -->
+          <g opacity="0.55">
+            <rect x="22" y="16" width="70" height="2" fill="rgba(40,25,8,0.7)" rx="1"/>
+            <rect x="22" y="24" width="65" height="1.5" fill="rgba(40,25,8,0.45)" rx="1"/>
+            <rect x="22" y="31" width="72" height="1.5" fill="rgba(40,25,8,0.4)" rx="1"/>
+            <rect x="22" y="38" width="58" height="1.5" fill="rgba(40,25,8,0.38)" rx="1"/>
+            <rect x="22" y="45" width="68" height="1.5" fill="rgba(40,25,8,0.35)" rx="1"/>
+            <rect x="22" y="52" width="62" height="1.5" fill="rgba(40,25,8,0.32)" rx="1"/>
+            <!-- Circled word -->
+            <ellipse cx="50" cy="65" rx="22" ry="8" fill="none" stroke="rgba(192,57,43,0.5)" stroke-width="1.2"/>
+            <rect x="30" y="62" width="40" height="2" fill="rgba(40,25,8,0.4)" rx="1"/>
+            <rect x="22" y="76" width="70" height="1.5" fill="rgba(40,25,8,0.3)" rx="1"/>
+            <rect x="22" y="83" width="55" height="1.5" fill="rgba(40,25,8,0.28)" rx="1"/>
+          </g>
+          <!-- Pen on notebook -->
+          <rect x="85" y="8" width="4" height="118" fill="rgba(30,30,80,0.8)" rx="2" transform="rotate(3,87,67)"/>
+          <path d="M84,120 L90,128 L87,128 Z" fill="rgba(200,160,40,0.7)" transform="rotate(3,87,67)"/>
+        </g>
+
+        <!-- ═══ BULLET CASINGS (3 realistic) ═══ -->
+        <g filter="url(#softglow)">
+          <!-- Casing 1 -->
+          <g transform="translate(240,462) rotate(18)">
+            <rect x="0" y="0" width="7" height="18" fill="rgba(210,165,50,0.85)" rx="1"/>
+            <rect x="0.5" y="0" width="6" height="4" fill="rgba(230,185,70,0.9)" rx="1"/>
+            <ellipse cx="3.5" cy="0" rx="3.5" ry="2" fill="rgba(180,135,40,0.8)"/>
+          </g>
+          <!-- Casing 2 -->
+          <g transform="translate(254,470) rotate(-12)">
+            <rect x="0" y="0" width="6" height="16" fill="rgba(205,160,45,0.8)" rx="1"/>
+            <rect x="0.5" y="0" width="5" height="3.5" fill="rgba(225,180,65,0.85)" rx="1"/>
+            <ellipse cx="3" cy="0" rx="3" ry="1.8" fill="rgba(175,130,38,0.75)"/>
+          </g>
+          <!-- Casing 3 (on its side) -->
+          <g transform="translate(228,474) rotate(82)">
+            <rect x="0" y="0" width="6" height="14" fill="rgba(200,155,42,0.75)" rx="1"/>
+            <ellipse cx="3" cy="0" rx="3" ry="1.8" fill="rgba(170,128,36,0.7)"/>
+          </g>
+        </g>
+
+        <!-- ═══ EVIDENCE MARKER TAGS ═══ -->
+        <g filter="url(#softglow)" opacity="0.72">
+          <polygon points="148,498 158,476 168,498" fill="rgba(201,168,76,0.92)"/>
+          <text x="158" y="495" font-family="'IBM Plex Mono',monospace" font-size="9" fill="rgba(0,0,0,0.9)" text-anchor="middle" font-weight="700">1</text>
+          <polygon points="295,502 305,480 315,502" fill="rgba(201,168,76,0.86)"/>
+          <text x="305" y="499" font-family="'IBM Plex Mono',monospace" font-size="9" fill="rgba(0,0,0,0.9)" text-anchor="middle" font-weight="700">2</text>
+          <polygon points="420,494 430,472 440,494" fill="rgba(201,168,76,0.8)"/>
+          <text x="430" y="491" font-family="'IBM Plex Mono',monospace" font-size="9" fill="rgba(0,0,0,0.9)" text-anchor="middle" font-weight="700">3</text>
+        </g>
+
+        <!-- ═══ RED CONNECTING STRINGS ═══ -->
+        <g opacity="0.4" filter="url(#softglow)">
+          <line x1="160" y1="385" x2="330" y2="340" stroke="rgba(192,57,43,0.65)" stroke-width="1.2" stroke-dasharray="5,3"/>
+          <line x1="200" y1="380" x2="370" y2="360" stroke="rgba(192,57,43,0.45)" stroke-width="1" stroke-dasharray="4,3"/>
+          <circle cx="160" cy="385" r="4" fill="rgba(192,57,43,0.7)"/>
+          <circle cx="330" cy="340" r="4" fill="rgba(192,57,43,0.7)"/>
+          <circle cx="200" cy="380" r="3" fill="rgba(192,57,43,0.5)"/>
+          <circle cx="370" cy="360" r="3" fill="rgba(192,57,43,0.5)"/>
+          <!-- Push pins -->
+          <circle cx="160" cy="385" r="6" fill="none" stroke="rgba(210,80,60,0.6)" stroke-width="1.2"/>
+          <circle cx="330" cy="340" r="6" fill="none" stroke="rgba(210,80,60,0.6)" stroke-width="1.2"/>
+        </g>
+
+        <!-- ═══ DESK LAMP LIGHT POOL ═══ -->
+        <ellipse cx="310" cy="290" rx="180" ry="24" fill="rgba(255,245,180,0.07)" filter="url(#softglow)"/>
+        <ellipse cx="310" cy="290" rx="100" ry="12" fill="rgba(255,248,200,0.06)"/>
+
+        <!-- ═══ OVERALL SPOTLIGHT ═══ -->
+        <rect x="0" y="0" width="520" height="540" fill="url(#spot)" opacity="0.85"/>
+
+        <!-- ═══ SHADOWS & DEPTH ═══ -->
+        <!-- Shadow under magnifier -->
+        <ellipse cx="352" cy="460" rx="68" ry="12" fill="rgba(0,0,0,0.5)"/>
+        <!-- Shadow under file folder -->
+        <ellipse cx="175" cy="488" rx="90" ry="8" fill="rgba(0,0,0,0.45)"/>
+        <!-- Shadow under notebook -->
+        <ellipse cx="410" cy="516" rx="58" ry="7" fill="rgba(0,0,0,0.4)"/>
+
+        <!-- Bottom fog fade -->
+        <rect x="0" y="480" width="520" height="60" fill="url(#fb)" opacity="0.85"/>
+      </svg>
+    </div>
+  </div><!-- end hero-inner -->
+  <div class="scroll-hint">اكتشف</div>
+</section>
+
+<!-- URGENCY -->
+<div class="urgency">
+  <div class="urg-dot"></div>
+  <span class="urg-t">مقاعد وكلاء 187 المتبقية:</span>
+  <span class="urg-n">187</span>
+  <span class="urg-l">مقعداً • للأسطورة الأولى فقط</span>
+</div>
+
+<!-- HOW -->
+<div class="sec-dk" id="how">
+  <div class="sec">
+    <div class="shdr rv" style="text-align:center">
+      <div class="stag">آلية العمل</div>
+      <h2 class="stitle">من المشاهدة إلى <span>قائمة الشرف</span></h2>
+    </div>
+    <div class="steps">
+      <div class="step rv d1"><span class="sn">01</span><span class="si">🎬</span><div class="st">شاهد الحلقة</div><p class="sd">13 دقيقة من الأدلة الظاهرة والمخفية</p></div>
+      <div class="step rv d2"><span class="sn">02</span><span class="si">🔍</span><div class="st">حلل واستنتج</div><p class="sd">سجّل دخولك وأرسل إجابتك: القاتل، السلاح، الدافع</p></div>
+      <div class="step rv d3"><span class="sn">03</span><span class="si">⏳</span><div class="st">5 أيام توتر</div><p class="sd">دليل مفاجئ في اليوم الثالث</p></div>
+      <div class="step rv d4"><span class="sn">04</span><span class="si">🏆</span><div class="st">قائمة الشرف</div><p class="sd">أفضل 5 محققين تُذاع أسماؤهم في الحلقة الثانية</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- TIMING -->
+<div class="sec" id="timing">
+  <div class="shdr rv" style="text-align:center">
+    <div class="stag">دورة حياة القضية</div>
+    <h2 class="stitle">متى <span>تحصل</span> على نقاطك؟</h2>
+  </div>
+  <div class="lifecycle">
+    <div class="phase rv d1">
+      <span class="phase-icon">🟡</span>
+      <div class="phase-title pa">القضية مفتوحة</div>
+      <p class="phase-desc">النافذة الذهبية لمدة 5 أيام — الإجابات تُحتسب بالكامل. كلما أسرعت، زادت نقاطك الإضافية.</p>
+      <span class="pbadge pb-g">✅ النقاط كاملة</span>
+    </div>
+    <div class="phase rv d2">
+      <span class="phase-icon">🔴</span>
+      <div class="phase-title pw">بعد الجزء الثاني</div>
+      <p class="phase-desc">عند نزول الحلقة الثانية يُغلق الملف رسمياً. الإجابات بعدها لا تُحتسب — الكشف حدث.</p>
+      <span class="pbadge pb-r">❌ لا نقاط</span>
+    </div>
+    <div class="phase rv d3">
+      <span class="phase-icon">🔵</span>
+      <div class="phase-title pc">الملف البارد</div>
+      <p class="phase-desc">القضايا المغلقة لا تُحذف. تتحول لملفات باردة يمكن ربطها بقضايا جديدة لنقاط مكافأة.</p>
+      <span class="pbadge pb-b">🔗 ربط = نقاط</span>
+    </div>
+  </div>
+  <div class="cold-box rv">
+    <div class="cold-box-t"><strong>سر الملفات الباردة 🔵</strong><br>إذا ربطت ملفاً بارداً بقضية حالية — وكان الربط صحيحاً — تحصل على مكافأة فورية. <strong>إعادة مشاهدة الحلقات القديمة = استثمار في نقاط مستقبلية.</strong></div>
+    <div class="cold-n">+50<br><span style="font-size:10px;color:var(--smoke);font-family:'Tajawal',sans-serif">نقطة ربط</span></div>
+  </div>
+  <div class="rw-box rv">
+    <div class="rw-icon">♻️</div>
+    <div class="rw-t"><strong>لماذا تُعيد المشاهدة؟</strong><p>كل حلقة قديمة قد تخفي دليلاً يفتح قضية جديدة. الذي يتذكر التفاصيل = الذي يتصدر قائمة الشرف.</p></div>
+  </div>
+</div>
+
+<!-- EPISODE -->
+<div class="sec-dk">
+  <div class="sec" id="episode">
+    <div class="shdr rv">
+      <div class="stag">الحلقة الأخيرة</div>
+      <h2 class="stitle">القضية <span>الجديدة</span></h2>
+    </div>
+    <div class="ep-grid rv">
+      <div class="vid-box">
+        <div class="vid-ph">
+          <span>🎬</span>
+          <p>الحلقة الأولى قادمة قريباً<br>اشترك في القناة لتكون أول من يعلم</p>
+        </div>
+      </div>
+      <div>
+        <span class="epbadge">قادمة</span>
+        <div class="eptitle">القضية الأولى<br>الملف البني</div>
+        <p class="epdesc">أول قضية في سجل الجريمة 187 — مستوى مبتدئ، لكن الأدلة ليست بسيطة كما تبدو.</p>
+        <div class="ep-timer">
+          <div class="tblock"><span class="tnum" id="t-d">--</span><span class="tlbl">يوم</span></div>
+          <div class="tblock"><span class="tnum" id="t-h">--</span><span class="tlbl">ساعة</span></div>
+          <div class="tblock"><span class="tnum" id="t-m">--</span><span class="tlbl">دقيقة</span></div>
+        </div>
+        <button class="ep-cta" onclick="window.open('https://youtube.com/@m.crime09','_blank')">🎬 اشترك في القناة</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CASES -->
+<div class="sec" id="cases">
+  <div class="shdr rv">
+    <div class="stag">الملفات الجنائية</div>
+    <h2 class="stitle">القضايا <span>المفتوحة</span></h2>
+  </div>
+  <div class="cases-list">
+    <div class="crow rv">
+      <div class="folder f1">📁</div>
+      <div>
+        <div class="ccode">ملف-001 — المستوى البني</div>
+        <div class="cname">القضية الأولى — قريباً</div>
+        <div class="cmeta"><span>📍 الرياض</span><span>🕐 لم تُفتح</span><span>⏱ 5 أيام للإجابة</span></div>
+      </div>
+      <div class="cpts"><span>150</span>نقطة</div>
+      <span class="cbadge cb-s">قادمة</span>
+    </div>
+    <div class="cempty rv">📂 سجّل الآن لتكون أول المحققين عند فتح الملف الأول</div>
   </div>
 
-  <div style="text-align:center;padding:40px;color:#9a9ab0;font-size:14px">
-    سجّل الآن لتكون أول من يعلم عند فتح القضية الأولى
+  <!-- HIDDEN LEVELS TEASER -->
+  <div class="levels-teaser rv">
+    <div class="levels-teaser-text">
+      <strong>مستويات الصعوبة القادمة</strong><br>
+      الملف البني هو البداية فقط — مع تقدم القناة ستُكشف مستويات جديدة بألوان مختلفة.
+    </div>
+    <div class="levels-icons">
+      <div class="lvl-dot visible">◼</div>
+      <div class="lvl-dot hidden"></div>
+      <div class="lvl-dot hidden"></div>
+      <div class="lvl-dot hidden"></div>
+    </div>
   </div>
 </div>
 
-<div class="section" id="ranks">
-  <div class="section-title">رتب المحققين</div>
-  <div class="section-sub">ستة مستويات — هل ستصل للأسطورة؟</div>
-  <div class="ranks">
-    <div class="rank-card"><div class="rank-icon">👁️</div><div class="rank-name">مُلاحِظ</div><div class="rank-pts">0 — 149 نقطة</div></div>
-    <div class="rank-card"><div class="rank-icon">🔍</div><div class="rank-name">مُحقق مبتدئ</div><div class="rank-pts">150 — 499 نقطة</div></div>
-    <div class="rank-card"><div class="rank-icon">🕵️</div><div class="rank-name">مُحقق محترف</div><div class="rank-pts">500 — 1,199 نقطة</div></div>
-    <div class="rank-card"><div class="rank-icon">🧬</div><div class="rank-name">مُحلل جنائي</div><div class="rank-pts">1,200 — 2,799 نقطة</div></div>
-    <div class="rank-card"><div class="rank-icon">⚖️</div><div class="rank-name">خبير جرائم</div><div class="rank-pts">2,800 — 5,999 نقطة</div></div>
-    <div class="rank-card" style="border-color:#c9a84c40;background:rgba(201,168,76,0.05)"><div class="rank-icon">💀</div><div class="rank-name" style="color:#c0392b">وكلاء 187</div><div class="rank-pts">10,000+ نقطة • 187 مقعداً فقط</div></div>
+<!-- RANKS -->
+<div class="sec-dk">
+  <div class="sec" id="ranks">
+    <div class="shdr rv">
+      <div class="stag">رتب المحققين</div>
+      <h2 class="stitle">6 رتب <span>تنتظرك</span></h2>
+      <p style="color:var(--smoke);font-size:13px;margin-top:10px;font-weight:300">رتبتك تُكشف تلقائياً عند وصول نقاطك</p>
+    </div>
+    <div class="ranks-grid">
+      <div class="rcard unlocked rv d1">
+        <svg class="rbadge" viewBox="0 0 58 66"><path d="M29 2L54 14V37C54 51 42 63 29 66C16 63 4 51 4 37V14L29 2Z" stroke="rgba(201,168,76,0.65)" stroke-width="2" fill="rgba(201,168,76,0.07)"/><text x="29" y="41" font-family="serif" font-size="21" fill="rgba(201,168,76,0.78)" text-anchor="middle">👁</text></svg>
+        <div class="rname">مُلاحِظ</div><div class="rpts">0 — 149 نقطة</div>
+      </div>
+      <div class="rcard rv d2">
+        <svg class="rbadge" viewBox="0 0 58 66"><path d="M29 2L54 14V37C54 51 42 63 29 66C16 63 4 51 4 37V14L29 2Z" stroke="rgba(201,168,76,0.26)" stroke-width="2" fill="rgba(201,168,76,0.025)"/><text x="29" y="43" font-size="21" fill="rgba(201,168,76,0.28)" text-anchor="middle">🔒</text></svg>
+        <div class="rname">• • • • •</div><div class="rpts">150 — 499 نقطة</div>
+      </div>
+      <div class="rcard rv d3">
+        <svg class="rbadge" viewBox="0 0 58 66"><path d="M29 2L54 14V37C54 51 42 63 29 66C16 63 4 51 4 37V14L29 2Z" stroke="rgba(201,168,76,0.2)" stroke-width="2" fill="rgba(201,168,76,0.02)"/><text x="29" y="43" font-size="21" fill="rgba(201,168,76,0.22)" text-anchor="middle">🔒</text></svg>
+        <div class="rname">• • • • •</div><div class="rpts">500 — 1,199 نقطة</div>
+      </div>
+      <div class="rcard rv d1">
+        <svg class="rbadge" viewBox="0 0 58 66"><path d="M29 2L54 14V37C54 51 42 63 29 66C16 63 4 51 4 37V14L29 2Z" stroke="rgba(201,168,76,0.16)" stroke-width="2" fill="rgba(201,168,76,0.015)"/><text x="29" y="43" font-size="21" fill="rgba(201,168,76,0.18)" text-anchor="middle">🔒</text></svg>
+        <div class="rname">• • • • •</div><div class="rpts">1,200 — 2,799 نقطة</div>
+      </div>
+      <div class="rcard rv d2">
+        <svg class="rbadge" viewBox="0 0 58 66"><path d="M29 2L54 14V37C54 51 42 63 29 66C16 63 4 51 4 37V14L29 2Z" stroke="rgba(201,168,76,0.13)" stroke-width="2" fill="rgba(201,168,76,0.01)"/><text x="29" y="43" font-size="21" fill="rgba(201,168,76,0.14)" text-anchor="middle">🔒</text></svg>
+        <div class="rname">• • • • •</div><div class="rpts">2,800 — 9,999 نقطة</div>
+      </div>
+      <div class="rcard legend rv d3">
+        <svg class="rbadge" viewBox="0 0 58 66"><path d="M29 2L56 14V39C56 54 43 65 29 68C15 65 2 54 2 39V14L29 2Z" stroke="rgba(201,168,76,0.8)" stroke-width="2.5" fill="rgba(201,168,76,0.07)"/><path d="M29 9L48 19V36C48 48 39 58 29 61C19 58 10 48 10 36V19L29 9Z" stroke="rgba(201,168,76,0.28)" stroke-width="1" fill="none"/><text x="29" y="43" font-size="21" fill="rgba(201,168,76,0.65)" text-anchor="middle">💀</text></svg>
+        <div class="rname">وكلاء 187</div><div class="rpts">10,000+ نقطة</div>
+        <div class="rlimit">⚠ 187 مقعداً فقط في التاريخ</div>
+      </div>
+    </div>
+    <div class="ranks-note rv">🔒 اكتشف رتبتك بنفسك — الشارات الخمس المخفية تنتظرك</div>
   </div>
 </div>
 
-<div class="login-section" id="login">
-  <h2>انضم لفريق المحققين</h2>
-  <p style="color:#9a9ab0">سجّل بحسابك في Google واختر اسمك المستعار كمحقق</p>
-  <button class="google-btn">
-    <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-    سجّل الدخول بـ Google
-  </button>
-  <p style="color:#9a9ab0;font-size:12px;margin-top:16px">🔒 بياناتك آمنة — نحفظ فقط اسمك المستعار ونقاطك</p>
+<!-- POINTS -->
+<div class="sec" id="points">
+  <div class="shdr rv" style="text-align:center">
+    <div class="stag">نظام النقاط</div>
+    <h2 class="stitle">كيف <span>تكسب</span> وكيف تخسر</h2>
+  </div>
+  <div class="pts-grid">
+    <div class="pcard rv d1">
+      <div class="phead earn">✅ كسب النقاط</div>
+      <div class="prow"><span class="plbl">إجابة صحيحة كاملة</span><span class="pval pos">+100</span></div>
+      <div class="prow"><span class="plbl">+ السلاح + الدافع</span><span class="pval pos">+40</span></div>
+      <div class="prow"><span class="plbl">الثلاثة معاً (مكافأة)</span><span class="pval pos">150</span></div>
+      <div class="prow"><span class="plbl">أوائل 48 ساعة</span><span class="pval pos">+30</span></div>
+      <div class="prow"><span class="plbl">رهان "واثق جداً" وصح</span><span class="pval pos">×1.5</span></div>
+      <div class="prow"><span class="plbl">ربط بملف بارد</span><span class="pval neu">+50</span></div>
+      <div class="prow"><span class="plbl">3 قضايا متتالية</span><span class="pval pos">+40</span></div>
+    </div>
+    <div class="pcard rv d2">
+      <div class="phead lose">⚠️ خصم النقاط</div>
+      <div class="prow"><span class="plbl">الوقوع في الدليل الفخ</span><span class="pval neg">-20</span></div>
+      <div class="prow"><span class="plbl">نسخ إجابة شخص آخر</span><span class="pval neg">-30</span></div>
+      <div class="prow"><span class="plbl">إجابة عشوائية واضحة</span><span class="pval neg">-20</span></div>
+      <div class="prow"><span class="plbl">رهان "واثق جداً" وأخطأ</span><span class="pval neg">-40</span></div>
+      <div class="prow"><span class="plbl">أقصى خصم لكل قضية</span><span class="pval neg">-50</span></div>
+      <div class="safe"><p>✅ لا خصم على الغياب أو التأخر<br>✅ شارك بأمان في أي وقت</p></div>
+    </div>
+  </div>
 </div>
 
-<div class="footer">
-  <div style="font-size:20px;color:#c9a84c40;letter-spacing:4px;margin-bottom:8px">187</div>
-  جميع القصص خيالية بالكامل — أي تشابه مع الواقع محض مصادفة
-</div>
+<!-- CTA -->
+<section class="cta-sec" id="join">
+  <div class="cta-inner">
+    <h2>هل أنت مستعد<br>لفتح <span>الملف؟</span></h2>
+    <p>انضم للمحققين العرب. اختر اسمك المستعار وابدأ رحلتك نحو رتبة لا يعلمها أحد.</p>
+    <button class="gbtn">
+      <svg width="22" height="22" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+      سجّل الدخول بـ Google
+    </button>
+    <div class="cta-note">بياناتك محمية — نحفظ فقط اسمك المستعار ونقاطك</div>
+  </div>
+</section>
 
+<footer class="footer">
+  <div class="flogo">سجل الجريمة</div>
+  <div class="fdisc">جميع القصص خيالية بالكامل — أي تشابه مع الواقع محض مصادفة</div>
+  <div class="fnum">187</div>
+</footer>
+
+<script>
+const rvs=document.querySelectorAll('.rv');
+const ob=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('show')})},{threshold:0.06});
+rvs.forEach(r=>ob.observe(r));
+document.addEventListener('mousemove',e=>{
+  const g=document.querySelector('.hero-ghost');if(!g)return;
+  const x=(e.clientX/innerWidth-.5)*13,y=(e.clientY/innerHeight-.5)*7;
+  g.style.transform=`translate(calc(-50% + ${x}px),calc(-54% + ${y}px))`;
+});
+function tick(){
+  const l=new Date('2025-04-20T20:00:00+03:00'),n=new Date(),d=l-n;
+  if(d<=0){['t-d','t-h','t-m'].forEach(i=>document.getElementById(i).textContent='00');return;}
+  document.getElementById('t-d').textContent=String(Math.floor(d/864e5)).padStart(2,'0');
+  document.getElementById('t-h').textContent=String(Math.floor((d%864e5)/36e5)).padStart(2,'0');
+  document.getElementById('t-m').textContent=String(Math.floor((d%36e5)/6e4)).padStart(2,'0');
+}
+tick();setInterval(tick,60000);
+</script>
 </body>
 </html>
