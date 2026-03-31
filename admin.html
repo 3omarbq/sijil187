@@ -351,7 +351,17 @@ tr:hover td{background:rgba(255,255,255,0.015)}
 const SUPABASE_URL = 'https://lfvtqfusxwatgsehtccd.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_70F2-jlvujCTWy1oLgli0Q_DUxFCJVT';
 const ADMIN_EMAIL  = '3omarbq@gmail.com';
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);sb.auth.onAuthStateChange((ev, sess) => {
+  if (ev === 'SIGNED_IN' && sess?.access_token) {
+    const exp = new Date(sess.expires_at * 1000).toUTCString()
+    document.cookie = `sijil187_auth=${sess.access_token}; path=/; expires=${exp}; samesite=lax`
+  } else if (ev === 'SIGNED_OUT') {
+    document.cookie = 'sijil187_auth=; path=/; max-age=0'
+  } else if (ev === 'TOKEN_REFRESHED' && sess?.access_token) {
+    const exp = new Date(sess.expires_at * 1000).toUTCString()
+    document.cookie = `sijil187_auth=${sess.access_token}; path=/; expires=${exp}; samesite=lax`
+  }
+})
 
 let allTheories = [];
 let allUsers = [];
