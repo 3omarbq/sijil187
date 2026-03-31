@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لوحة التحكم — سجل الجريمة 187</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --black:#01010a;--dark:#06060f;--card:#0d0d1c;
+  --border:rgba(201,168,76,0.09);--gold:#c9a84c;--gold-dim:#7a6530;
+  --red:#c0392b;--smoke:#686882;--white:#ede9e0;
+  --green:#4caf82;--blue:#3a8fd4;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--black);color:var(--white);font-family:'Tajawal',sans-serif;min-height:100vh}
+
+/* ══ LOADING ══ */
+#loading{position:fixed;inset:0;background:var(--black);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;gap:16px}
+#loading .logo{font-size:32px;font-weight:900;font-family:'IBM Plex Mono',monospace;color:var(--gold)}
+#loading p{color:var(--smoke);font-size:14px}
+
+/* ══ ACCESS DENIED ══ */
+#denied{position:fixed;inset:0;background:var(--black);display:none;flex-direction:column;align-items:center;justify-content:center;gap:16px;z-index:999}
+#denied h1{font-size:48px;color:var(--red)}
+#denied p{color:var(--smoke);font-size:16px}
+#denied a{color:var(--gold);text-decoration:none;font-size:14px;border:1px solid var(--gold-dim);padding:10px 24px;margin-top:8px}
+
+/* ══ MAIN ══ */
+#app{display:none}
+
+/* ══ SIDEBAR ══ */
+.sidebar{position:fixed;top:0;right:0;bottom:0;width:220px;background:var(--dark);border-left:1px solid var(--border);padding:24px 0;display:flex;flex-direction:column;z-index:100}
+.sidebar-logo{padding:0 24px 24px;border-bottom:1px solid var(--border);margin-bottom:16px}
+.sidebar-logo span{font-size:13px;font-weight:900;color:var(--gold);font-family:'IBM Plex Mono',monospace;display:block}
+.sidebar-logo small{font-size:10px;color:var(--smoke);letter-spacing:2px;text-transform:uppercase}
+.nav-item{display:flex;align-items:center;gap:10px;padding:12px 24px;font-size:14px;font-weight:600;color:var(--smoke);cursor:pointer;transition:all .2s;border-right:2px solid transparent}
+.nav-item:hover{color:var(--white);background:rgba(201,168,76,0.04)}
+.nav-item.active{color:var(--gold);border-right-color:var(--gold);background:rgba(201,168,76,0.06)}
+.nav-item .icon{font-size:16px;width:20px;text-align:center}
+.sidebar-bottom{margin-top:auto;padding:16px 24px;border-top:1px solid var(--border)}
+.admin-info{font-size:11px;color:var(--smoke);margin-bottom:10px;line-height:1.6}
+.admin-info strong{color:var(--gold);display:block;font-size:12px}
+.signout-btn{width:100%;background:transparent;color:var(--smoke);border:1px solid rgba(201,168,76,0.2);padding:8px;font-family:'Tajawal',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s}
+.signout-btn:hover{color:var(--red);border-color:var(--red)}
+
+/* ══ CONTENT ══ */
+.content{margin-right:220px;padding:32px;min-height:100vh}
+.page{display:none}
+.page.active{display:block}
+
+/* ══ HEADER ══ */
+.page-header{margin-bottom:28px}
+.page-title{font-size:24px;font-weight:900;letter-spacing:-0.5px;margin-bottom:4px}
+.page-title span{color:var(--gold)}
+.page-sub{font-size:13px;color:var(--smoke)}
+
+/* ══ STATS ══ */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:28px}
+.stat-card{background:var(--card);border:1px solid var(--border);padding:20px;position:relative;overflow:hidden}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.stat-card.gold::before{background:var(--gold)}
+.stat-card.green::before{background:var(--green)}
+.stat-card.red::before{background:var(--red)}
+.stat-card.blue::before{background:var(--blue)}
+.stat-n{font-family:'IBM Plex Mono',monospace;font-size:32px;font-weight:700;line-height:1;margin-bottom:4px}
+.stat-card.gold .stat-n{color:var(--gold)}
+.stat-card.green .stat-n{color:var(--green)}
+.stat-card.red .stat-n{color:var(--red)}
+.stat-card.blue .stat-n{color:var(--blue)}
+.stat-l{font-size:12px;color:var(--smoke)}
+
+/* ══ TABLE ══ */
+.table-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px}
+.table-title{font-size:16px;font-weight:800}
+.search-box{background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--white);padding:8px 14px;font-family:'Tajawal',sans-serif;font-size:13px;outline:none;width:220px;transition:border-color .2s}
+.search-box:focus{border-color:rgba(201,168,76,0.3)}
+.search-box::placeholder{color:var(--smoke)}
+.table-wrap{background:var(--card);border:1px solid var(--border);overflow:hidden}
+table{width:100%;border-collapse:collapse}
+th{background:rgba(201,168,76,0.05);border-bottom:1px solid var(--border);padding:12px 16px;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--smoke);text-align:right}
+td{padding:14px 16px;font-size:13px;border-bottom:1px solid rgba(201,168,76,0.05);vertical-align:top}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,0.015)}
+.td-mono{font-family:'IBM Plex Mono',monospace;font-size:12px}
+.badge{display:inline-block;padding:3px 10px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase}
+.badge-pending{background:rgba(201,168,76,0.1);color:var(--gold);border:1px solid var(--gold-dim)}
+.badge-graded{background:rgba(76,175,130,0.1);color:var(--green);border:1px solid rgba(76,175,130,0.3)}
+.badge-rejected{background:rgba(192,57,43,0.1);color:var(--red);border:1px solid rgba(192,57,43,0.3)}
+.action-btn{background:transparent;border:1px solid rgba(255,255,255,0.08);color:var(--smoke);padding:5px 10px;font-family:'Tajawal',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;margin-left:4px}
+.action-btn:hover{border-color:var(--gold);color:var(--gold)}
+.action-btn.danger:hover{border-color:var(--red);color:var(--red)}
+.empty-state{text-align:center;padding:48px;color:var(--smoke);font-size:14px}
+.empty-state span{font-size:32px;display:block;margin-bottom:10px;opacity:.4}
+.loading-row td{text-align:center;color:var(--smoke);font-size:13px;padding:32px}
+
+/* ══ MODAL ══ */
+.modal-overlay{position:fixed;inset:0;background:rgba(1,1,10,0.9);z-index:500;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal-box{background:var(--card);border:1px solid rgba(201,168,76,0.2);padding:32px;max-width:480px;width:90%;position:relative}
+.modal-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.modal-title{font-size:18px;font-weight:900;margin-bottom:8px}
+.modal-body{font-size:14px;color:var(--smoke);line-height:1.8;margin-bottom:24px}
+.modal-body strong{color:var(--white)}
+.modal-footer{display:flex;gap:10px;justify-content:flex-end}
+.btn-cancel{background:transparent;border:1px solid var(--border);color:var(--smoke);padding:10px 22px;font-family:'Tajawal',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s}
+.btn-cancel:hover{border-color:var(--gold);color:var(--gold)}
+.btn-danger{background:var(--red);border:none;color:white;padding:10px 22px;font-family:'Tajawal',sans-serif;font-size:14px;font-weight:800;cursor:pointer;transition:opacity .2s}
+.btn-danger:hover{opacity:.85}
+.btn-primary{background:var(--gold);border:none;color:var(--black);padding:10px 22px;font-family:'Tajawal',sans-serif;font-size:14px;font-weight:800;cursor:pointer;transition:opacity .2s}
+.btn-primary:hover{opacity:.85}
+
+/* ══ THEORY DETAIL ══ */
+.theory-detail{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.detail-item{background:rgba(255,255,255,0.03);border:1px solid var(--border);padding:12px}
+.detail-label{font-size:10px;color:var(--smoke);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
+.detail-value{font-size:14px;font-weight:600}
+.detail-item.full{grid-column:1/-1}
+
+/* ══ TOAST ══ */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--card);border:1px solid rgba(201,168,76,0.3);padding:12px 24px;font-size:14px;font-weight:600;opacity:0;transition:all .3s;z-index:600;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.success{border-color:rgba(76,175,130,0.5);color:var(--green)}
+.toast.error{border-color:rgba(192,57,43,0.5);color:var(--red)}
+
+/* ══ BLOCK FORM ══ */
+.block-form{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap}
+.block-input{flex:1;background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--white);padding:10px 14px;font-family:'Tajawal',sans-serif;font-size:14px;outline:none;min-width:200px}
+.block-input:focus{border-color:rgba(201,168,76,0.3)}
+.block-input::placeholder{color:var(--smoke)}
+.btn-block{background:var(--red);border:none;color:white;padding:10px 20px;font-family:'Tajawal',sans-serif;font-size:14px;font-weight:800;cursor:pointer;white-space:nowrap}
+
+@media(max-width:768px){
+  .sidebar{display:none}
+  .content{margin-right:0;padding:20px}
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .theory-detail{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- Loading -->
+<div id="loading">
+  <div class="logo">187</div>
+  <p>جاري التحقق من الصلاحيات...</p>
+</div>
+
+<!-- Access Denied -->
+<div id="denied">
+  <h1>⛔</h1>
+  <h2 style="color:var(--red)">غير مصرح</h2>
+  <p>هذه الصفحة للمسؤول فقط</p>
+  <a href="/">العودة للموقع</a>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- App -->
+<div id="app">
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <span>سجل الجريمة 187</span>
+      <small>⚙️ لوحة التحكم</small>
+    </div>
+    <div class="nav-item active" onclick="showPage('dashboard')" id="nav-dashboard">
+      <span class="icon">📊</span> الإحصائيات
+    </div>
+    <div class="nav-item" onclick="showPage('theories')" id="nav-theories">
+      <span class="icon">🔍</span> النظريات
+    </div>
+    <div class="nav-item" onclick="showPage('users')" id="nav-users">
+      <span class="icon">👥</span> المستخدمون
+    </div>
+    <div class="nav-item" onclick="showPage('blocked')" id="nav-blocked">
+      <span class="icon">🚫</span> المحظورون
+    </div>
+    <div class="sidebar-bottom">
+      <div class="admin-info">
+        <strong id="adminName">...</strong>
+        <span id="adminEmail">...</span>
+      </div>
+      <button class="signout-btn" onclick="signOut()">تسجيل الخروج</button>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+
+    <!-- Dashboard -->
+    <div class="page active" id="page-dashboard">
+      <div class="page-header">
+        <div class="page-title">لوحة <span>التحكم</span></div>
+        <div class="page-sub">مرحباً بك يا أدمن — نظرة عامة على المشروع</div>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card gold">
+          <div class="stat-n" id="stat-theories">-</div>
+          <div class="stat-l">نظرية واردة</div>
+        </div>
+        <div class="stat-card green">
+          <div class="stat-n" id="stat-users">-</div>
+          <div class="stat-l">مستخدم مسجل</div>
+        </div>
+        <div class="stat-card blue">
+          <div class="stat-n" id="stat-pending">-</div>
+          <div class="stat-l">بانتظار التقييم</div>
+        </div>
+        <div class="stat-card red">
+          <div class="stat-n" id="stat-blocked">-</div>
+          <div class="stat-l">مستخدم محظور</div>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>آخر النظريات الواردة</th>
+              <th>الحلقة</th>
+              <th>القاتل المشتبه</th>
+              <th>الحالة</th>
+              <th>الوقت</th>
+            </tr>
+          </thead>
+          <tbody id="recent-theories">
+            <tr class="loading-row"><td colspan="5">جاري التحميل...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Theories -->
+    <div class="page" id="page-theories">
+      <div class="page-header">
+        <div class="page-title">إدارة <span>النظريات</span></div>
+        <div class="page-sub">عرض وتقييم وحذف النظريات الواردة</div>
+      </div>
+      <div class="table-header">
+        <div class="table-title">جميع النظريات</div>
+        <input class="search-box" placeholder="🔍 بحث بالاسم أو الحلقة..." oninput="filterTheories(this.value)" id="theoriesSearch">
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>المحقق</th>
+              <th>الحلقة</th>
+              <th>القاتل</th>
+              <th>الثقة</th>
+              <th>الحالة</th>
+              <th>التاريخ</th>
+              <th>إجراءات</th>
+            </tr>
+          </thead>
+          <tbody id="theories-table">
+            <tr class="loading-row"><td colspan="7">جاري التحميل...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Users -->
+    <div class="page" id="page-users">
+      <div class="page-header">
+        <div class="page-title">إدارة <span>المستخدمين</span></div>
+        <div class="page-sub">عرض المحققين المسجلين وإدارتهم</div>
+      </div>
+      <div class="table-header">
+        <div class="table-title">المحققون المسجلون</div>
+        <input class="search-box" placeholder="🔍 بحث بالاسم..." oninput="filterUsers(this.value)" id="usersSearch">
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>اسم المحقق</th>
+              <th>النقاط</th>
+              <th>القضايا</th>
+              <th>تاريخ التسجيل</th>
+              <th>إجراءات</th>
+            </tr>
+          </thead>
+          <tbody id="users-table">
+            <tr class="loading-row"><td colspan="5">جاري التحميل...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Blocked -->
+    <div class="page" id="page-blocked">
+      <div class="page-header">
+        <div class="page-title">المستخدمون <span>المحظورون</span></div>
+        <div class="page-sub">إدارة قائمة الحظر</div>
+      </div>
+      <div class="block-form">
+        <input class="block-input" id="blockEmail" placeholder="أدخل الإيميل للحظر..." type="email">
+        <input class="block-input" id="blockReason" placeholder="سبب الحظر (اختياري)..." style="max-width:220px">
+        <button class="btn-block" onclick="blockUser()">🚫 حظر</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>الإيميل</th>
+              <th>السبب</th>
+              <th>تاريخ الحظر</th>
+              <th>إجراءات</th>
+            </tr>
+          </thead>
+          <tbody id="blocked-table">
+            <tr class="loading-row"><td colspan="4">جاري التحميل...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Theory Detail Modal -->
+<div class="modal-overlay" id="theoryModal">
+  <div class="modal-box" style="max-width:600px">
+    <div class="modal-title">🔍 تفاصيل النظرية</div>
+    <div id="theoryDetails" style="margin:16px 0"></div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal('theoryModal')">إغلاق</button>
+      <button class="btn-danger" id="deleteTheoryBtn">حذف النظرية</button>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm Modal -->
+<div class="modal-overlay" id="confirmModal">
+  <div class="modal-box">
+    <div class="modal-title" id="confirmTitle">تأكيد</div>
+    <div class="modal-body" id="confirmBody"></div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal('confirmModal')">إلغاء</button>
+      <button class="btn-danger" id="confirmBtn">تأكيد</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+const SUPABASE_URL = 'https://lfvtqfusxwatgsehtccd.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_70F2-jlvujCTWy1oLgli0Q_DUxFCJVT';
+const ADMIN_EMAIL  = '3omarbq@gmail.com';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let allTheories = [];
+let allUsers = [];
+let currentTheoryId = null;
+
+// ══ TOAST ══
+function toast(msg, type='success') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = `toast ${type} show`;
+  setTimeout(() => t.className = 'toast', 3000);
+}
+
+// ══ MODAL ══
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+}
+
+function confirm(title, body, onConfirm, danger=true) {
+  document.getElementById('confirmTitle').textContent = title;
+  document.getElementById('confirmBody').innerHTML = body;
+  const btn = document.getElementById('confirmBtn');
+  btn.className = danger ? 'btn-danger' : 'btn-primary';
+  btn.textContent = 'تأكيد';
+  btn.onclick = () => { closeModal('confirmModal'); onConfirm(); };
+  document.getElementById('confirmModal').classList.add('open');
+}
+
+// ══ NAV ══
+function showPage(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  document.getElementById('nav-' + page).classList.add('active');
+  if (page === 'theories') loadTheories();
+  if (page === 'users') loadUsers();
+  if (page === 'blocked') loadBlocked();
+}
+
+// ══ FORMAT DATE ══
+function fmtDate(d) {
+  if (!d) return '-';
+  return new Date(d).toLocaleDateString('ar-SA', { year:'numeric', month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' });
+}
+
+// ══ DASHBOARD ══
+async function loadDashboard() {
+  const [t, u, p, b] = await Promise.all([
+    sb.from('theories').select('*', {count:'exact', head:true}),
+    sb.from('profiles').select('*', {count:'exact', head:true}),
+    sb.from('theories').select('*', {count:'exact', head:true}).eq('status','pending'),
+    sb.from('blocked_users').select('*', {count:'exact', head:true})
+  ]);
+  document.getElementById('stat-theories').textContent = t.count ?? 0;
+  document.getElementById('stat-users').textContent = u.count ?? 0;
+  document.getElementById('stat-pending').textContent = p.count ?? 0;
+  document.getElementById('stat-blocked').textContent = b.count ?? 0;
+
+  const { data: recent } = await sb.from('theories').select('*').order('created_at', {ascending:false}).limit(5);
+  const tbody = document.getElementById('recent-theories');
+  if (!recent?.length) {
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--smoke);padding:24px">لا توجد نظريات بعد</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = recent.map(t => `
+    <tr>
+      <td class="td-mono">${t.user_nickname || '-'}</td>
+      <td class="td-mono">${t.episode_id || '-'}</td>
+      <td>${t.killer || '-'}</td>
+      <td><span class="badge badge-${t.status}">${t.status}</span></td>
+      <td class="td-mono" style="color:var(--smoke);font-size:11px">${fmtDate(t.created_at)}</td>
+    </tr>`).join('');
+}
+
+// ══ THEORIES ══
+async function loadTheories() {
+  document.getElementById('theories-table').innerHTML = `<tr class="loading-row"><td colspan="7">جاري التحميل...</td></tr>`;
+  const { data } = await sb.from('theories').select('*').order('created_at', {ascending:false});
+  allTheories = data || [];
+  renderTheories(allTheories);
+}
+
+function renderTheories(list) {
+  const tbody = document.getElementById('theories-table');
+  if (!list.length) {
+    tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state"><span>📭</span>لا توجد نظريات</div></td></tr>`;
+    return;
+  }
+  tbody.innerHTML = list.map(t => `
+    <tr>
+      <td><strong>${t.user_nickname || '-'}</strong><br><small style="color:var(--smoke);font-size:11px">${t.user_email || ''}</small></td>
+      <td class="td-mono">${t.episode_id || '-'}</td>
+      <td>${t.killer || '-'}</td>
+      <td style="text-align:center"><span style="font-family:'IBM Plex Mono',monospace;color:var(--gold)">${t.confidence_scale || '-'}/5</span></td>
+      <td><span class="badge badge-${t.status}">${t.status}</span></td>
+      <td class="td-mono" style="color:var(--smoke);font-size:11px">${fmtDate(t.created_at)}</td>
+      <td>
+        <button class="action-btn" onclick="viewTheory('${t.id}')">عرض</button>
+        <button class="action-btn danger" onclick="deleteTheory('${t.id}', '${(t.user_nickname||'').replace(/'/g,"\\'")}')">حذف</button>
+      </td>
+    </tr>`).join('');
+}
+
+function filterTheories(q) {
+  const f = allTheories.filter(t =>
+    (t.user_nickname||'').includes(q) ||
+    (t.episode_id||'').includes(q) ||
+    (t.killer||'').includes(q)
+  );
+  renderTheories(f);
+}
+
+function viewTheory(id) {
+  const t = allTheories.find(x => x.id === id);
+  if (!t) return;
+  currentTheoryId = id;
+  document.getElementById('theoryDetails').innerHTML = `
+    <div class="theory-detail">
+      <div class="detail-item"><div class="detail-label">المحقق</div><div class="detail-value">${t.user_nickname||'-'}</div></div>
+      <div class="detail-item"><div class="detail-label">الحلقة</div><div class="detail-value td-mono">${t.episode_id||'-'}</div></div>
+      <div class="detail-item"><div class="detail-label">القاتل</div><div class="detail-value">${t.killer||'-'}</div></div>
+      <div class="detail-item"><div class="detail-label">السلاح</div><div class="detail-value">${t.weapon||'-'}</div></div>
+      <div class="detail-item"><div class="detail-label">الدافع</div><div class="detail-value">${t.motive||'-'}</div></div>
+      <div class="detail-item"><div class="detail-label">أسلوب التنفيذ</div><div class="detail-value">${t.execution_method||'-'}</div></div>
+      <div class="detail-item"><div class="detail-label">مكان الجريمة</div><div class="detail-value">${t.crime_scene_location||'-'}</div></div>
+      <div class="detail-item"><div class="detail-label">الشاهد الصامت</div><div class="detail-value">${t.silent_witness||'-'}</div></div>
+      <div class="detail-item full"><div class="detail-label">نص النظرية</div><div class="detail-value" style="font-weight:400;line-height:1.7;color:var(--smoke)">${t.theory_narrative||'-'}</div></div>
+      <div class="detail-item"><div class="detail-label">مستوى الثقة</div><div class="detail-value td-mono" style="color:var(--gold)">${t.confidence_scale||'-'}/5</div></div>
+      <div class="detail-item"><div class="detail-label">رهان واثق</div><div class="detail-value">${t.is_confident_bet ? '✅ نعم' : '❌ لا'}</div></div>
+      <div class="detail-item"><div class="detail-label">إرسال مبكر</div><div class="detail-value">${t.is_early_submission ? '✅ نعم' : '❌ لا'}</div></div>
+      <div class="detail-item"><div class="detail-label">الحالة</div><div class="detail-value"><span class="badge badge-${t.status}">${t.status}</span></div></div>
+    </div>`;
+  document.getElementById('deleteTheoryBtn').onclick = () => {
+    closeModal('theoryModal');
+    deleteTheory(id, t.user_nickname);
+  };
+  document.getElementById('theoryModal').classList.add('open');
+}
+
+async function deleteTheory(id, name) {
+  confirm(
+    'حذف النظرية',
+    `هل أنت متأكد من حذف نظرية <strong>${name}</strong>؟ لا يمكن التراجع.`,
+    async () => {
+      const { error } = await sb.from('theories').delete().eq('id', id);
+      if (error) { toast('حدث خطأ', 'error'); return; }
+      toast('تم حذف النظرية ✅');
+      loadTheories();
+      loadDashboard();
+    }
+  );
+}
+
+// ══ USERS ══
+async function loadUsers() {
+  document.getElementById('users-table').innerHTML = `<tr class="loading-row"><td colspan="5">جاري التحميل...</td></tr>`;
+  const { data } = await sb.from('profiles').select('*').order('total_points', {ascending:false});
+  allUsers = data || [];
+  renderUsers(allUsers);
+}
+
+function renderUsers(list) {
+  const tbody = document.getElementById('users-table');
+  if (!list.length) {
+    tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state"><span>👥</span>لا يوجد مستخدمون بعد</div></td></tr>`;
+    return;
+  }
+  tbody.innerHTML = list.map(u => `
+    <tr>
+      <td><strong>${u.detective_name||'-'}</strong></td>
+      <td class="td-mono" style="color:var(--gold)">${u.total_points||0}</td>
+      <td class="td-mono">${u.cases_solved||0}</td>
+      <td class="td-mono" style="color:var(--smoke);font-size:11px">${fmtDate(u.created_at)}</td>
+      <td>
+        <button class="action-btn danger" onclick="blockByUserId('${u.id}', '${(u.detective_name||'').replace(/'/g,"\\'")}')">🚫 حظر</button>
+      </td>
+    </tr>`).join('');
+}
+
+function filterUsers(q) {
+  const f = allUsers.filter(u => (u.detective_name||'').includes(q));
+  renderUsers(f);
+}
+
+async function blockByUserId(userId, name) {
+  confirm(
+    'حظر المستخدم',
+    `هل تريد حظر المحقق <strong>${name}</strong>؟ لن يتمكن من إرسال نظريات.`,
+    async () => {
+      const { error } = await sb.from('blocked_users').insert({ user_id: userId, email: name, reason: 'حظر يدوي' });
+      if (error) { toast('حدث خطأ', 'error'); return; }
+      toast(`تم حظر ${name} ✅`);
+      loadUsers();
+    }
+  );
+}
+
+// ══ BLOCKED ══
+async function loadBlocked() {
+  document.getElementById('blocked-table').innerHTML = `<tr class="loading-row"><td colspan="4">جاري التحميل...</td></tr>`;
+  const { data } = await sb.from('blocked_users').select('*').order('blocked_at', {ascending:false});
+  const tbody = document.getElementById('blocked-table');
+  if (!data?.length) {
+    tbody.innerHTML = `<tr><td colspan="4"><div class="empty-state"><span>✅</span>لا يوجد مستخدمون محظورون</div></td></tr>`;
+    return;
+  }
+  tbody.innerHTML = data.map(b => `
+    <tr>
+      <td class="td-mono">${b.email||'-'}</td>
+      <td style="color:var(--smoke)">${b.reason||'-'}</td>
+      <td class="td-mono" style="color:var(--smoke);font-size:11px">${fmtDate(b.blocked_at)}</td>
+      <td><button class="action-btn" onclick="unblock('${b.id}', '${(b.email||'').replace(/'/g,"\\'")}')">رفع الحظر</button></td>
+    </tr>`).join('');
+}
+
+async function blockUser() {
+  const email = document.getElementById('blockEmail').value.trim();
+  const reason = document.getElementById('blockReason').value.trim();
+  if (!email) { toast('أدخل إيميلاً', 'error'); return; }
+  const { error } = await sb.from('blocked_users').insert({ email, reason: reason || 'حظر يدوي' });
+  if (error) { toast('حدث خطأ', 'error'); return; }
+  toast(`تم حظر ${email} ✅`);
+  document.getElementById('blockEmail').value = '';
+  document.getElementById('blockReason').value = '';
+  loadBlocked();
+  loadDashboard();
+}
+
+async function unblock(id, email) {
+  confirm('رفع الحظر', `هل تريد رفع الحظر عن <strong>${email}</strong>؟`, async () => {
+    const { error } = await sb.from('blocked_users').delete().eq('id', id);
+    if (error) { toast('حدث خطأ', 'error'); return; }
+    toast(`تم رفع الحظر ✅`);
+    loadBlocked();
+    loadDashboard();
+  }, false);
+}
+
+// ══ SIGN OUT ══
+async function signOut() {
+  await sb.auth.signOut();
+  window.location.href = '/';
+}
+
+// ══ INIT ══
+async function init() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session?.user || session.user.email !== ADMIN_EMAIL) {
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('denied').style.display = 'flex';
+    return;
+  }
+  document.getElementById('adminName').textContent = '🕵️ ' + (session.user.user_metadata?.full_name || 'أدمن');
+  document.getElementById('adminEmail').textContent = session.user.email;
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  loadDashboard();
+}
+
+init();
+</script>
+</body>
+</html>
