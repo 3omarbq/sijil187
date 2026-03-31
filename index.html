@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>سجل الجريمة 187</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --black:#01010a;--dark:#06060f;--card:#0d0d1c;
+  --border:rgba(201,168,76,0.09);--gold:#c9a84c;--gold-dim:#7a6530;
+  --red-bright:#c0392b;--smoke:#686882;--white:#ede9e0;
+  --cold-bright:#3a8fd4;
+  --blue-file:#1a4a7a;--blue-file-bright:#3a8fd4;
+}
+*{margin:0;padding:0;box-sizing:border-box;cursor:crosshair}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--white);font-family:'Tajawal',sans-serif;overflow-x:hidden}
+
+/* ══ NAV ══ */
+.nav{position:fixed;top:0;inset-inline:0;z-index:400;padding:18px 52px;
+  display:flex;align-items:center;justify-content:space-between;
+  background:linear-gradient(180deg,rgba(1,1,10,0.97) 0%,transparent 100%)}
+.logo{font-size:19px;font-weight:900}
+.logo em{color:var(--gold);font-style:normal;font-family:'IBM Plex Mono',monospace}
+.nav-links{display:flex;gap:30px;list-style:none}
+.nav-links a{color:var(--smoke);text-decoration:none;font-size:12px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;transition:color .2s}
+.nav-links a:hover{color:var(--gold)}
+.nav-btn{background:var(--gold);color:var(--black);border:none;padding:10px 28px;font-family:'Tajawal',sans-serif;font-size:13px;font-weight:800;letter-spacing:1px;transition:opacity .2s,transform .15s}
+.nav-btn:hover{opacity:.88;transform:translateY(-1px)}
+.nav-user{display:flex;align-items:center;gap:10px}
+.nav-user-name{color:var(--gold);font-size:13px;font-weight:700;font-family:'IBM Plex Mono',monospace}
+.nav-signout{background:transparent;color:var(--smoke);border:1px solid rgba(201,168,76,0.2);padding:8px 16px;font-family:'Tajawal',sans-serif;font-size:12px;font-weight:700;transition:all .2s}
+.nav-signout:hover{color:var(--gold);border-color:var(--gold)}
+
+/* ══ MODAL OVERLAY ══ */
+.modal-overlay{position:fixed;inset:0;z-index:900;background:rgba(1,1,10,0.96);display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity .3s}
+.modal-overlay.active{opacity:1;pointer-events:all}
+.modal{background:var(--card);border:1px solid rgba(201,168,76,0.2);padding:48px 40px;max-width:440px;width:90%;text-align:center;position:relative}
+.modal::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.modal-icon{font-size:42px;margin-bottom:16px;display:block}
+.modal-title{font-size:22px;font-weight:900;margin-bottom:8px;letter-spacing:-0.5px}
+.modal-title span{color:var(--gold)}
+.modal-sub{font-size:14px;color:var(--smoke);line-height:1.8;margin-bottom:28px}
+.modal-input{width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(201,168,76,0.2);color:var(--white);padding:14px 18px;font-family:'Tajawal',sans-serif;font-size:16px;font-weight:600;text-align:center;outline:none;transition:border-color .2s;direction:rtl}
+.modal-input:focus{border-color:var(--gold)}
+.modal-input::placeholder{color:var(--smoke)}
+.modal-hint{font-size:11px;color:var(--smoke);margin:10px 0 24px;letter-spacing:0.5px}
+.modal-btn{width:100%;background:var(--gold);color:var(--black);border:none;padding:14px;font-family:'Tajawal',sans-serif;font-size:16px;font-weight:800;letter-spacing:1px;transition:opacity .2s,transform .2s}
+.modal-btn:hover{opacity:.88;transform:translateY(-1px)}
+.modal-btn:disabled{opacity:.4;transform:none}
+.modal-error{color:#e57373;font-size:12px;margin-top:10px;display:none}
+
+/* ══ TOAST ══ */
+.toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(20px);z-index:999;background:var(--card);border:1px solid rgba(201,168,76,0.3);padding:14px 28px;font-size:14px;font-weight:600;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.success{border-color:rgba(76,175,130,0.5);color:#4caf82}
+.toast.error{border-color:rgba(192,57,43,0.5);color:#e57373}
+
+/* ══ HERO ══ */
+.hero{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.hero-atmo{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 72% 60%, rgba(90,5,5,0.22) 0%, transparent 60%),radial-gradient(ellipse 60% 80% at 20% 50%, rgba(15,8,3,0.5) 0%, transparent 70%),radial-gradient(ellipse 100% 100% at 50% 50%, #080410 0%, #030209 50%, #010108 100%)}
+.hero-ghost{position:absolute;font-family:'IBM Plex Mono',monospace;font-size:clamp(280px,44vw,660px);font-weight:700;color:transparent;-webkit-text-stroke:1px rgba(201,168,76,0.032);letter-spacing:-30px;user-select:none;pointer-events:none;top:50%;left:50%;transform:translate(-50%,-54%);white-space:nowrap;z-index:0}
+.hero-inner{position:relative;z-index:10;width:100%;max-width:1240px;margin:0 auto;padding:110px 52px 70px;display:grid;grid-template-columns:1fr 1.1fr;gap:48px;align-items:center}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:12px;margin-bottom:18px;color:var(--gold);font-size:10px;font-weight:700;letter-spacing:5px;text-transform:uppercase}
+.hero-eyebrow::before,.hero-eyebrow::after{content:'';width:28px;height:1px;background:var(--gold);opacity:0.32}
+.hero-h1{font-size:clamp(44px,5.5vw,78px);font-weight:900;line-height:.98;letter-spacing:-2px;margin-bottom:4px}
+.hero-h1-num{display:block;font-family:'IBM Plex Mono',monospace;font-size:clamp(58px,9vw,126px);letter-spacing:-4px;-webkit-text-stroke:2px var(--gold);color:transparent;animation:flicker 10s infinite;filter:drop-shadow(0 0 22px rgba(201,168,76,0.2))}
+@keyframes flicker{0%,91%,100%{opacity:1}92%{opacity:.18}93%{opacity:1}96.5%{opacity:.48}97%{opacity:1}}
+.hero-sub{font-size:16px;color:var(--smoke);max-width:400px;margin:16px 0 34px;line-height:1.95;font-weight:300}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap}
+.btn-g{background:var(--gold);color:var(--black);border:none;padding:14px 38px;font-family:'Tajawal',sans-serif;font-size:15px;font-weight:800;letter-spacing:1px;transition:transform .2s,box-shadow .2s}
+.btn-g:hover{transform:translateY(-3px);box-shadow:0 12px 36px rgba(201,168,76,0.2)}
+.btn-o{background:transparent;color:var(--white);border:1px solid rgba(255,255,255,0.1);padding:14px 38px;font-family:'Tajawal',sans-serif;font-size:15px;font-weight:700;transition:border-color .2s,color .2s}
+.btn-o:hover{border-color:var(--gold);color:var(--gold)}
+
+/* ══ DESK ══ */
+.desk-visual{position:relative;height:540px;display:flex;align-items:flex-end;justify-content:center}
+.desk-scene{width:100%;height:100%;position:relative}
+.desk-svg{width:100%;height:100%;overflow:visible}
+.scroll-hint{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:5px;color:var(--smoke);font-size:9px;letter-spacing:4px;text-transform:uppercase;animation:bob 2.5s infinite;z-index:10}
+.scroll-hint::after{content:'';width:1px;height:40px;background:linear-gradient(180deg,var(--gold),transparent)}
+@keyframes bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(7px)}}
+
+/* ══ URGENCY ══ */
+.urgency{background:rgba(139,26,26,0.1);border-top:1px solid rgba(192,57,43,0.18);border-bottom:1px solid rgba(192,57,43,0.18);padding:12px 52px;display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap}
+.urg-dot{width:7px;height:7px;border-radius:50%;background:var(--red-bright);animation:pdot 1.5s infinite}
+@keyframes pdot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.65)}}
+.urg-t{font-size:13px;font-weight:600}
+.urg-n{font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:700;color:var(--gold);line-height:1}
+.urg-l{font-size:10px;color:var(--smoke);letter-spacing:2px;text-transform:uppercase}
+
+/* ══ SECTIONS ══ */
+.sec{padding:80px 52px;max-width:1100px;margin:0 auto}
+.sec-dk{background:var(--dark);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.stag{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--gold);letter-spacing:4px;text-transform:uppercase;margin-bottom:10px}
+.stitle{font-size:clamp(26px,4vw,46px);font-weight:900;letter-spacing:-1px;line-height:1.1}
+.stitle span{color:var(--gold)}
+.shdr{margin-bottom:48px}
+
+/* ══ HOW ══ */
+.steps{display:grid;grid-template-columns:repeat(4,1fr)}
+.step{padding:34px 22px;text-align:center;position:relative}
+.step:not(:last-child)::after{content:'←';position:absolute;left:0;top:42%;color:var(--gold-dim);font-size:20px;transform:translateY(-50%)}
+.sn{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--gold-dim);letter-spacing:2px;display:block;margin-bottom:10px}
+.si{font-size:34px;display:block;margin-bottom:10px}
+.st{font-size:15px;font-weight:800;margin-bottom:7px}
+.sd{font-size:13px;color:var(--smoke);line-height:1.7}
+
+/* ══ TIMING ══ */
+.lifecycle{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:44px;position:relative}
+.lifecycle::before{content:'';position:absolute;top:68px;left:16%;right:16%;height:2px;background:linear-gradient(90deg,var(--gold) 0%,rgba(201,168,76,0.4) 50%,var(--cold-bright) 100%);z-index:0}
+.phase{background:var(--card);border:1px solid var(--border);padding:26px 18px;text-align:center;position:relative;z-index:1}
+.phase:first-child{border-left:1px solid var(--border)}
+.phase-icon{font-size:30px;display:block;margin-bottom:10px}
+.phase-title{font-size:15px;font-weight:800;margin-bottom:7px}
+.pa{color:var(--gold)}.pw{color:#e57373}.pc{color:var(--cold-bright)}
+.phase-desc{font-size:13px;color:var(--smoke);line-height:1.7;margin-bottom:12px}
+.pbadge{display:inline-block;padding:4px 12px;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase}
+.pb-g{background:rgba(201,168,76,0.08);color:var(--gold);border:1px solid var(--gold-dim)}
+.pb-r{background:rgba(192,57,43,0.1);color:#e57373;border:1px solid rgba(192,57,43,0.35)}
+.pb-b{background:rgba(58,143,212,0.1);color:var(--cold-bright);border:1px solid rgba(58,143,212,0.28)}
+.cold-box{margin-top:24px;background:rgba(26,58,92,0.22);border:1px solid rgba(58,143,212,0.18);padding:18px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.cold-box-t{font-size:13px;line-height:1.75}
+.cold-box-t strong{color:var(--cold-bright)}
+.cold-n{font-family:'IBM Plex Mono',monospace;font-size:26px;font-weight:700;color:var(--cold-bright);flex-shrink:0}
+.rw-box{margin-top:16px;background:rgba(201,168,76,0.03);border:1px solid rgba(201,168,76,0.12);padding:18px 22px;display:flex;gap:14px;align-items:flex-start}
+.rw-icon{font-size:26px;flex-shrink:0;margin-top:2px}
+.rw-t strong{color:var(--gold);font-size:14px;display:block;margin-bottom:3px}
+.rw-t p{font-size:13px;color:var(--smoke);line-height:1.7}
+
+/* ══ CASES ══ */
+.cases-list{display:grid;gap:2px;margin-top:40px}
+.crow{background:var(--card);border:1px solid var(--border);padding:22px 26px;display:grid;grid-template-columns:56px 1fr auto auto;align-items:center;gap:18px;transition:border-color .3s,background .3s;position:relative;overflow:hidden}
+.crow::before{content:'';position:absolute;right:0;top:0;bottom:0;width:3px;background:transparent;transition:background .3s}
+.crow:hover{border-color:rgba(201,168,76,0.2);background:#0e0e1d}
+.crow:hover::before{background:var(--gold)}
+.folder{width:56px;height:62px;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0}
+.f-blue{background:rgba(26,74,122,0.35);border:1px solid rgba(58,143,212,0.5)}
+.f-brown{background:rgba(92,61,46,0.35);border:1px solid rgba(92,61,46,0.5)}
+.f-red{background:rgba(120,20,20,0.4);border:1px solid rgba(192,57,43,0.5)}
+.f-black{background:rgba(10,10,10,0.8);border:1px solid rgba(80,80,80,0.4)}
+.ccode{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--gold-dim);letter-spacing:2px;margin-bottom:4px;text-transform:uppercase}
+.cname{font-size:18px;font-weight:700;margin-bottom:5px}
+.cmeta{font-size:12px;color:var(--smoke);display:flex;gap:14px;flex-wrap:wrap}
+.cpts{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--gold);text-align:center;flex-shrink:0}
+.cpts span{display:block;font-size:24px;font-weight:700}
+.cbadge{padding:5px 12px;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;flex-shrink:0}
+.cb-s{background:rgba(201,168,76,0.07);color:var(--gold);border:1px solid var(--gold-dim)}
+.cempty{background:var(--card);border:1px dashed rgba(201,168,76,0.1);padding:38px;text-align:center;color:var(--smoke);font-size:13px;letter-spacing:1px}
+.levels-teaser{margin-top:24px;background:rgba(201,168,76,0.03);border:1px dashed rgba(201,168,76,0.15);padding:20px 24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.levels-teaser-text{font-size:13px;color:var(--smoke);line-height:1.7;flex:1}
+.levels-teaser-text strong{color:var(--gold)}
+.levels-icons{display:flex;gap:8px;flex-shrink:0}
+.lvl-dot{width:28px;height:28px;border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;font-family:'IBM Plex Mono',monospace;position:relative}
+.lvl-dot.blue{background:rgba(26,74,122,0.5);border:1px solid rgba(58,143,212,0.7);color:rgba(58,143,212,0.9)}
+.lvl-dot.brown{background:rgba(92,61,46,0.5);border:1px solid rgba(92,61,46,0.7);color:rgba(200,160,100,0.8)}
+.lvl-dot.hidden{background:rgba(20,20,30,0.8);border:1px dashed rgba(201,168,76,0.15);color:rgba(201,168,76,0.2)}
+.lvl-dot.hidden::after{content:'?';position:absolute;font-size:13px;color:rgba(201,168,76,0.25)}
+.faras-hint{margin-top:16px;background:rgba(201,168,76,0.02);border:1px solid rgba(201,168,76,0.08);padding:14px 18px;display:flex;align-items:center;gap:12px}
+.faras-hint-icon{font-size:20px;flex-shrink:0;opacity:0.6}
+.faras-hint-text{font-size:12px;color:var(--smoke);line-height:1.7}
+.faras-hint-text strong{color:rgba(201,168,76,0.6)}
+
+/* ══ RANKS ══ */
+.ranks-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:38px;max-width:900px}
+.rcard{background:var(--card);border:1px solid var(--border);padding:24px 16px;text-align:center;transition:transform .2s,border-color .2s}
+.rcard:hover{transform:translateY(-3px);border-color:rgba(201,168,76,0.14)}
+.rcard.unlocked{border-color:rgba(201,168,76,0.22);background:rgba(201,168,76,0.025)}
+.rcard.legend{border-color:rgba(201,168,76,0.35);background:rgba(201,168,76,0.04)}
+.rbadge{width:58px;height:66px;margin:0 auto 12px;display:block}
+.rname{font-size:14px;font-weight:800;margin-bottom:4px}
+.rcard.unlocked .rname{color:var(--gold)}.rcard.legend .rname{color:var(--gold)}
+.rpts{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--smoke)}
+.rlimit{margin-top:8px;font-size:10px;color:var(--red-bright);font-weight:700;letter-spacing:1px}
+.ranks-note{text-align:center;margin-top:22px;font-size:13px;color:var(--smoke)}
+
+/* ══ POINTS ══ */
+.pts-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:38px}
+.pcard{background:var(--card);border:1px solid var(--border);padding:18px 20px}
+.phead{font-size:13px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.phead.earn{color:#4caf82}.phead.lose{color:#e57373}
+.prow{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--border)}
+.prow:last-child{border-bottom:none}
+.plbl{font-size:13px;color:var(--smoke)}
+.pval{font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:700}
+.pos{color:#4caf82}.neg{color:#e57373}.neu{color:var(--gold)}
+.safe{margin-top:14px;padding:12px 16px;background:rgba(26,122,74,0.07);border:1px solid rgba(26,122,74,0.16)}
+.safe p{font-size:12px;color:#4caf82;line-height:1.7}
+
+/* ══ EPISODE ══ */
+.ep-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:28px;align-items:center;margin-top:38px}
+.vid-box{position:relative;padding-bottom:56.25%;background:#000;overflow:hidden}
+.vid-box iframe{position:absolute;inset:0;width:100%;height:100%;border:none}
+.vid-ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--card);border:1px solid var(--border);gap:10px}
+.vid-ph span{font-size:42px;opacity:.32}
+.vid-ph p{font-size:12px;color:var(--smoke);text-align:center;line-height:1.7}
+.epbadge{display:inline-block;background:rgba(192,57,43,0.1);color:#e57373;border:1px solid var(--red-bright);padding:4px 12px;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px}
+.eptitle{font-size:20px;font-weight:800;line-height:1.3;margin-bottom:10px}
+.epdesc{font-size:14px;color:var(--smoke);line-height:1.8;margin-bottom:20px}
+.ep-timer{display:flex;gap:16px;margin-bottom:20px}
+.tblock{text-align:center}
+.tnum{display:block;font-family:'IBM Plex Mono',monospace;font-size:28px;font-weight:700;color:var(--gold);line-height:1}
+.tlbl{font-size:9px;color:var(--smoke);letter-spacing:1px;text-transform:uppercase}
+.ep-cta{background:var(--gold);color:var(--black);border:none;padding:12px 28px;font-family:'Tajawal',sans-serif;font-size:14px;font-weight:800;letter-spacing:1px;transition:opacity .2s}
+.ep-cta:hover{opacity:.85}
+
+/* ══ CTA ══ */
+.cta-sec{position:relative;overflow:hidden;padding:100px 52px;text-align:center;background:radial-gradient(ellipse 60% 80% at 50% 50%,rgba(90,8,8,0.14) 0%,transparent 70%),var(--dark);border-top:1px solid var(--border)}
+.cta-inner{position:relative;z-index:1;max-width:520px;margin:0 auto}
+.cta-inner h2{font-size:clamp(32px,5vw,56px);font-weight:900;line-height:1.1;letter-spacing:-1px;margin-bottom:14px}
+.cta-inner h2 span{color:var(--gold)}
+.cta-inner p{color:var(--smoke);font-size:15px;margin-bottom:32px;line-height:1.9}
+.gbtn{display:inline-flex;align-items:center;gap:14px;background:white;color:#111;border:none;padding:14px 32px;font-family:'Tajawal',sans-serif;font-size:16px;font-weight:700;transition:transform .2s,box-shadow .2s}
+.gbtn:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(0,0,0,0.5)}
+.cta-note{margin-top:12px;font-size:11px;color:var(--smoke);display:flex;align-items:center;justify-content:center;gap:6px}
+.cta-note::before{content:'🔒'}
+.cta-logged{text-align:center}
+.cta-logged-name{font-family:'IBM Plex Mono',monospace;font-size:28px;font-weight:700;color:var(--gold);margin-bottom:8px}
+.cta-logged-msg{font-size:15px;color:var(--smoke);margin-bottom:24px}
+.cta-logged-pts{font-family:'IBM Plex Mono',monospace;font-size:14px;color:var(--gold-dim);margin-bottom:28px}
+.cta-theory-btn{background:var(--gold);color:var(--black);border:none;padding:16px 48px;font-family:'Tajawal',sans-serif;font-size:17px;font-weight:800;letter-spacing:1px;transition:transform .2s,box-shadow .2s;display:inline-block}
+.cta-theory-btn:hover{transform:translateY(-3px);box-shadow:0 12px 36px rgba(201,168,76,0.25)}
+
+/* ══ FOOTER ══ */
+.footer{background:var(--black);border-top:1px solid var(--border);padding:28px 52px;display:flex;align-items:center;justify-content:space-between}
+.flogo{font-size:15px;font-weight:900;color:var(--gold-dim)}
+.fdisc{font-size:11px;color:var(--smoke);text-align:center;max-width:360px}
+.fnum{font-family:'IBM Plex Mono',monospace;font-size:14px;color:rgba(201,168,76,0.13);letter-spacing:6px}
+
+/* ══ REVEAL ══ */
+.rv{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}
+.rv.show{opacity:1;transform:translateY(0)}
+.d1{transition-delay:.07s}.d2{transition-delay:.14s}.d3{transition-delay:.21s}.d4{transition-delay:.28s}
+
+@media(max-width:960px){
+  .nav{padding:14px 20px}.nav-links{display:none}
+  .hero-inner{grid-template-columns:1fr;padding:100px 20px 60px;gap:36px}
+  .desk-visual{height:360px}
+  .steps{grid-template-columns:1fr 1fr}.step:not(:last-child)::after{display:none}
+  .lifecycle{grid-template-columns:1fr}.lifecycle::before{display:none}
+  .ranks-grid{grid-template-columns:1fr 1fr}
+  .pts-grid{grid-template-columns:1fr}
+  .ep-grid{grid-template-columns:1fr}
+  .crow{grid-template-columns:auto 1fr}.cpts,.cbadge{grid-column:2}
+  .footer{flex-direction:column;gap:10px;text-align:center}
+  .sec,.cta-sec{padding:56px 20px}
+  .sec-dk{padding:0}.sec-dk .sec{padding:56px 20px}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ DETECTIVE NAME MODAL ══ -->
+<div class="modal-overlay" id="nameModal">
+  <div class="modal">
+    <span class="modal-icon">🕵️</span>
+    <div class="modal-title">اختر اسمك <span>المستعار</span></div>
+    <p class="modal-sub">هذا الاسم سيظهر في قائمة الشرف وسيعرفك به المحققون الآخرون. اختره بعناية — لن تستطيع تغييره.</p>
+    <input class="modal-input" id="detectiveName" type="text" placeholder="المحقق ..." maxlength="20" autocomplete="off">
+    <div class="modal-hint">من 3 إلى 20 حرف — بدون رموز أو مسافات زائدة</div>
+    <button class="modal-btn" id="saveNameBtn" onclick="saveName()">تأكيد الاسم والدخول 🔍</button>
+    <div class="modal-error" id="nameError">اسم غير صالح — جرب اسماً آخر</div>
+  </div>
+</div>
+
+<!-- ══ TOAST ══ -->
+<div class="toast" id="toast"></div>
+
+<nav class="nav">
+  <div class="logo">سجل الجريمة <em>187</em></div>
+  <ul class="nav-links">
+    <li><a href="#how">كيف يعمل</a></li>
+    <li><a href="#cases">الملفات</a></li>
+    <li><a href="#ranks">الرتب</a></li>
+  </ul>
+  <div id="navAuth">
+    <button class="nav-btn" onclick="signInWithGoogle()">ابدأ التحقيق</button>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-atmo"></div>
+  <div class="hero-ghost">187</div>
+
+  <svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="vg" cx="50%" cy="50%" r="72%"><stop offset="0%" stop-color="transparent"/><stop offset="100%" stop-color="rgba(1,1,10,0.88)"/></radialGradient>
+      <linearGradient id="fb" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="transparent"/><stop offset="100%" stop-color="rgba(1,1,10,0.96)"/></linearGradient>
+    </defs>
+    <g opacity="0.52" transform="rotate(-5.5,720,200)">
+      <rect x="-80" y="148" width="1700" height="21" fill="rgba(201,168,76,0.86)"/>
+      <line x1="-80" y1="148" x2="1620" y2="148" stroke="rgba(4,4,4,0.56)" stroke-width="21" stroke-dasharray="64,64"/>
+      <text x="40" y="163" font-family="'IBM Plex Mono',monospace" font-size="7.5" font-weight="700" fill="rgba(2,2,2,0.68)" letter-spacing="3">CRIME SCENE • DO NOT CROSS • مسرح الجريمة • لا تتخطَّ • CRIME SCENE • DO NOT CROSS • مسرح الجريمة •</text>
+    </g>
+    <g opacity="0.2" transform="rotate(4,720,640)">
+      <rect x="-80" y="618" width="1700" height="17" fill="rgba(201,168,76,0.75)"/>
+      <line x1="-80" y1="618" x2="1620" y2="618" stroke="rgba(4,4,4,0.5)" stroke-width="17" stroke-dasharray="64,64" stroke-dashoffset="32"/>
+    </g>
+    <rect width="1440" height="900" fill="url(#vg)"/>
+    <rect x="0" y="740" width="1440" height="160" fill="url(#fb)"/>
+    <rect x="0" y="0" width="1440" height="130" fill="url(#fb)" transform="rotate(180,720,65)"/>
+  </svg>
+
+  <div class="hero-inner">
+    <div>
+      <div class="hero-eyebrow">قصص خيالية للترفيه فقط</div>
+      <h1 class="hero-h1">كل جريمة<em class="hero-h1-num">187</em></h1>
+      <p class="hero-sub">قصة غامضة تنتظر محققاً ذكياً.<br>شاهد الحلقة، حلل الأدلة، وأثبت أنك الأفضل.</p>
+      <div class="hero-btns">
+        <button class="btn-g" onclick="document.getElementById('join').scrollIntoView({behavior:'smooth'})">ابدأ التحقيق الآن</button>
+        <button class="btn-o" onclick="document.getElementById('cases').scrollIntoView({behavior:'smooth'})">استعرض الملفات</button>
+      </div>
+    </div>
+
+    <div class="desk-visual">
+      <svg class="desk-svg" viewBox="0 0 520 540" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="wood" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#1a0e05"/><stop offset="15%" stop-color="#261508"/><stop offset="30%" stop-color="#1e1108"/><stop offset="45%" stop-color="#2a1a09"/><stop offset="60%" stop-color="#1c1007"/><stop offset="75%" stop-color="#241508"/><stop offset="100%" stop-color="#160d05"/></linearGradient>
+          <linearGradient id="wood2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(255,200,100,0.06)"/><stop offset="40%" stop-color="rgba(180,120,40,0.03)"/><stop offset="100%" stop-color="rgba(0,0,0,0.4)"/></linearGradient>
+          <radialGradient id="spot" cx="75%" cy="5%" r="75%"><stop offset="0%" stop-color="rgba(255,252,220,0.18)"/><stop offset="30%" stop-color="rgba(255,240,180,0.08)"/><stop offset="65%" stop-color="rgba(201,168,76,0.03)"/><stop offset="100%" stop-color="transparent"/></radialGradient>
+          <linearGradient id="paper" x1="0" y1="0" x2="0.1" y2="1"><stop offset="0%" stop-color="#f0e8d0"/><stop offset="100%" stop-color="#e0d4b0"/></linearGradient>
+          <linearGradient id="paper2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#e8dfc8"/><stop offset="100%" stop-color="#d8cca8"/></linearGradient>
+          <radialGradient id="glass" cx="30%" cy="25%" r="60%"><stop offset="0%" stop-color="rgba(180,200,220,0.15)"/><stop offset="50%" stop-color="rgba(120,150,180,0.06)"/><stop offset="100%" stop-color="rgba(40,60,100,0.12)"/></radialGradient>
+          <radialGradient id="lamp-cone" cx="50%" cy="0%" r="100%"><stop offset="0%" stop-color="rgba(255,248,200,0.22)"/><stop offset="50%" stop-color="rgba(255,235,150,0.07)"/><stop offset="100%" stop-color="transparent"/></radialGradient>
+          <filter id="dropshadow"><feDropShadow dx="2" dy="4" stdDeviation="5" flood-color="rgba(0,0,0,0.7)"/></filter>
+          <filter id="softglow"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <filter id="papershadow"><feDropShadow dx="1" dy="3" stdDeviation="4" flood-color="rgba(0,0,0,0.65)"/></filter>
+        </defs>
+        <ellipse cx="360" cy="10" rx="220" ry="380" fill="url(#lamp-cone)" opacity="0.9"/>
+        <g opacity="0.72" transform="translate(390,0)">
+          <path d="M55,20 Q50,60 30,100 Q20,130 25,160" fill="none" stroke="rgba(80,70,55,0.8)" stroke-width="4" stroke-linecap="round"/>
+          <path d="M0,155 Q12,100 55,100 Q72,100 80,155 Z" fill="rgba(45,38,25,0.9)" stroke="rgba(100,85,50,0.5)" stroke-width="1"/>
+          <ellipse cx="40" cy="158" rx="36" ry="8" fill="rgba(255,245,180,0.25)" filter="url(#softglow)"/>
+          <ellipse cx="40" cy="150" rx="8" ry="5" fill="rgba(255,250,200,0.4)"/>
+        </g>
+        <rect x="0" y="285" width="520" height="255" fill="url(#wood)" rx="2"/>
+        <rect x="0" y="285" width="520" height="255" fill="url(#wood2)"/>
+        <line x1="0" y1="285" x2="520" y2="285" stroke="rgba(201,168,76,0.18)" stroke-width="1.5"/>
+        <rect x="55" y="292" width="310" height="200" fill="rgba(15,10,5,0.75)" stroke="rgba(80,60,30,0.4)" stroke-width="1" rx="2" filter="url(#dropshadow)"/>
+        <g transform="translate(62,295)" filter="url(#papershadow)">
+          <rect x="0" y="28" width="230" height="175" fill="rgba(92,55,22,0.95)" rx="2" stroke="rgba(110,70,28,0.6)" stroke-width="1"/>
+          <rect x="10" y="22" width="210" height="170" fill="url(#paper)" rx="1"/>
+          <g opacity="0.65">
+            <rect x="22" y="34" width="120" height="5" fill="rgba(40,25,8,0.9)" rx="1"/>
+            <rect x="22" y="44" width="186" height="2.5" fill="rgba(40,25,8,0.55)" rx="1"/>
+            <rect x="22" y="51" width="170" height="2.5" fill="rgba(40,25,8,0.45)" rx="1"/>
+            <rect x="22" y="58" width="180" height="2.5" fill="rgba(40,25,8,0.45)" rx="1"/>
+          </g>
+          <text x="115" y="155" font-family="'IBM Plex Mono',monospace" font-size="19" font-weight="700" fill="rgba(160,30,20,0.55)" text-anchor="middle" transform="rotate(-22,115,145)" letter-spacing="1.5">سري</text>
+        </g>
+        <g transform="translate(300,290)" filter="url(#dropshadow)">
+          <circle cx="68" cy="68" r="58" fill="rgba(30,25,15,0.6)" stroke="rgba(160,140,80,0.7)" stroke-width="5"/>
+          <circle cx="68" cy="68" r="52" fill="url(#glass)"/>
+          <path d="M112,112 L158,158" stroke="rgba(100,80,40,0.9)" stroke-width="14" stroke-linecap="round"/>
+        </g>
+        <g filter="url(#softglow)" opacity="0.72">
+          <polygon points="148,498 158,476 168,498" fill="rgba(201,168,76,0.92)"/>
+          <text x="158" y="495" font-family="'IBM Plex Mono',monospace" font-size="9" fill="rgba(0,0,0,0.9)" text-anchor="middle" font-weight="700">1</text>
+          <polygon points="295,502 305,480 315,502" fill="rgba(201,168,76,0.86)"/>
+          <text x="305" y="499" font-family="'IBM Plex Mono',monospace" font-size="9" fill="rgba(0,0,0,0.9)" text-anchor="middle" font-weight="700">2</text>
+          <polygon points="420,494 430,472 440,494" fill="rgba(201,168,76,0.8)"/>
+          <text x="430" y="491" font-family="'IBM Plex Mono',monospace" font-size="9" fill="rgba(0,0,0,0.9)" text-anchor="middle" font-weight="700">3</text>
+        </g>
+        <rect x="0" y="480" width="520" height="60" fill="url(#fb)" opacity="0.85"/>
+      </svg>
+    </div>
+  </div>
+  <div class="scroll-hint">اكتشف</div>
+</section>
+
+<!-- URGENCY -->
+<div class="urgency">
+  <div class="urg-dot"></div>
+  <span class="urg-t">مقاعد وكلاء 187 المتبقية:</span>
+  <span class="urg-n">187</span>
+  <span class="urg-l">مقعداً • للأسطورة الأولى فقط</span>
+</div>
+
+<!-- HOW -->
+<div class="sec-dk" id="how">
+  <div class="sec">
+    <div class="shdr rv" style="text-align:center">
+      <div class="stag">آلية العمل</div>
+      <h2 class="stitle">من المشاهدة إلى <span>قائمة الشرف</span></h2>
+    </div>
+    <div class="steps">
+      <div class="step rv d1"><span class="sn">01</span><span class="si">🎬</span><div class="st">شاهد الحلقة</div><p class="sd">13 دقيقة من الأدلة الظاهرة والمخفية</p></div>
+      <div class="step rv d2"><span class="sn">02</span><span class="si">🔍</span><div class="st">حلل واستنتج</div><p class="sd">سجّل دخولك وأرسل إجابتك: القاتل، السلاح، الدافع</p></div>
+      <div class="step rv d3"><span class="sn">03</span><span class="si">⏳</span><div class="st">5 أيام توتر</div><p class="sd">دليل مفاجئ في اليوم الثالث</p></div>
+      <div class="step rv d4"><span class="sn">04</span><span class="si">🏆</span><div class="st">قائمة الشرف</div><p class="sd">أفضل 5 محققين تُذاع أسماؤهم في الحلقة الثانية</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- TIMING -->
+<div class="sec" id="timing">
+  <div class="shdr rv" style="text-align:center">
+    <div class="stag">دورة حياة القضية</div>
+    <h2 class="stitle">متى <span>تحصل</span> على نقاطك؟</h2>
+  </div>
+  <div class="lifecycle">
+    <div class="phase rv d1">
+      <span class="phase-icon">🟡</span>
+      <div class="phase-title pa">القضية مفتوحة</div>
+      <p class="phase-desc">النافذة الذهبية لمدة 5 أيام — الإجابات تُحتسب بالكامل. كلما أسرعت، زادت نقاطك الإضافية.</p>
+      <span class="pbadge pb-g">✅ النقاط كاملة</span>
+    </div>
+    <div class="phase rv d2">
+      <span class="phase-icon">🔴</span>
+      <div class="phase-title pw">بعد الجزء الثاني</div>
+      <p class="phase-desc">عند نزول الحلقة الثانية يُغلق الملف رسمياً. الإجابات بعدها لا تُحتسب — الكشف حدث.</p>
+      <span class="pbadge pb-r">❌ لا نقاط</span>
+    </div>
+    <div class="phase rv d3">
+      <span class="phase-icon">🔵</span>
+      <div class="phase-title pc">الملف البارد</div>
+      <p class="phase-desc">القضايا المغلقة لا تُحذف. تتحول لملفات باردة يمكن ربطها بقضايا جديدة لنقاط مكافأة.</p>
+      <span class="pbadge pb-b">🔗 ربط = نقاط</span>
+    </div>
+  </div>
+  <div class="cold-box rv">
+    <div class="cold-box-t"><strong>سر الملفات الباردة 🔵</strong><br>إذا ربطت ملفاً بارداً بقضية حالية — وكان الربط صحيحاً — تحصل على مكافأة فورية. <strong>إعادة مشاهدة الحلقات القديمة = استثمار في نقاط مستقبلية.</strong></div>
+    <div class="cold-n">+50<br><span style="font-size:10px;color:var(--smoke);font-family:'Tajawal',sans-serif">نقطة ربط</span></div>
+  </div>
+  <div class="rw-box rv">
+    <div class="rw-icon">♻️</div>
+    <div class="rw-t"><strong>لماذا تُعيد المشاهدة؟</strong><p>كل حلقة قديمة قد تخفي دليلاً يفتح قضية جديدة. الذي يتذكر التفاصيل = الذي يتصدر قائمة الشرف.</p></div>
+  </div>
+</div>
+
+<!-- EPISODE -->
+<div class="sec-dk">
+  <div class="sec" id="episode">
+    <div class="shdr rv">
+      <div class="stag">الحلقة الأولى</div>
+      <h2 class="stitle">القضية <span>الجديدة</span></h2>
+    </div>
+    <div class="ep-grid rv">
+      <div class="vid-box">
+        <div class="vid-ph">
+          <span>🎬</span>
+          <p>الحلقة الأولى قادمة قريباً<br>اشترك في القناة لتكون أول من يعلم</p>
+        </div>
+      </div>
+      <div>
+        <span class="epbadge">قادمة</span>
+        <div class="eptitle">القضية الأولى<br><span style="color:var(--blue-file-bright)">الملف الأزرق</span></div>
+        <p class="epdesc">أول قضية في سجل الجريمة 187 — مستوى مبتدئ، لكن الأدلة ليست بسيطة كما تبدو. المحقق خالد بن سعد يفتح الملف.</p>
+        <div class="ep-timer">
+          <div class="tblock"><span class="tnum" id="t-d">--</span><span class="tlbl">يوم</span></div>
+          <div class="tblock"><span class="tnum" id="t-h">--</span><span class="tlbl">ساعة</span></div>
+          <div class="tblock"><span class="tnum" id="t-m">--</span><span class="tlbl">دقيقة</span></div>
+        </div>
+        <button class="ep-cta" onclick="window.open('https://youtube.com/@sijil187','_blank')">🎬 اشترك في القناة</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CASES -->
+<div class="sec" id="cases">
+  <div class="shdr rv">
+    <div class="stag">الملفات الجنائية</div>
+    <h2 class="stitle">القضايا <span>المفتوحة</span></h2>
+  </div>
+  <div class="cases-list">
+    <div class="crow rv">
+      <div class="folder f-blue">📁</div>
+      <div>
+        <div class="ccode">ملف-001 — المستوى الأزرق</div>
+        <div class="cname">القضية الأولى — قريباً</div>
+        <div class="cmeta"><span>📍 الرياض</span><span>🕐 لم تُفتح</span><span>⏱ 5 أيام للإجابة</span></div>
+      </div>
+      <div class="cpts"><span>150</span>نقطة</div>
+      <span class="cbadge cb-s">قادمة</span>
+    </div>
+    <div class="cempty rv">📂 سجّل الآن لتكون أول المحققين عند فتح الملف الأول</div>
+  </div>
+  <div class="levels-teaser rv">
+    <div class="levels-teaser-text">
+      <strong>مستويات الصعوبة — من الأزرق إلى الأسود</strong><br>
+      الملف الأزرق هو البداية فقط. مع تقدم القناة ستُكشف مستويات جديدة — كل لون يعني تحدياً أعمق وأدلة أكثر خداعاً.
+    </div>
+    <div class="levels-icons">
+      <div class="lvl-dot blue" title="الملف الأزرق — مبتدئ">🔵</div>
+      <div class="lvl-dot hidden" title="???"></div>
+      <div class="lvl-dot hidden" title="???"></div>
+      <div class="lvl-dot hidden" title="???"></div>
+    </div>
+  </div>
+  <div class="faras-hint rv">
+    <div class="faras-hint-icon">🕵️</div>
+    <div class="faras-hint-text">
+      المحقق <strong>خالد بن سعد</strong> لا يعمل وحده — فريق التحقيق يتشكّل. تابع القناة لتعرف من سيرافقه في هذه الرحلة.
+    </div>
+  </div>
+</div>
+
+<!-- RANKS -->
+<div class="sec-dk">
+  <div class="sec" id="ranks">
+    <div class="shdr rv" style="text-align:center">
+      <div class="stag">رتب المحققين</div>
+      <h2 class="stitle">6 رتب <span>تنتظرك</span></h2>
+      <p style="color:var(--smoke);font-size:13px;margin-top:10px;font-weight:300">رتبتك تُكشف تلقائياً عند وصول نقاطك</p>
+    </div>
+    <div class="ranks-grid">
+      <div class="rcard unlocked rv d1">
+        <svg class="rbadge" viewBox="0 0 58 66"><path d="M29 2L54 14V37C54 51 42 63 29 66C16 63 4 51 4 37V14L29 2Z" stroke="rgba(201,168,76,0.65)" stroke-width="2" fill="rgba(201,168,76,0.07)"/><text x="29" y="41" font-family="serif" font-size="21" fill="rgba(201,168,76,0.78)" text-anchor="middle">👁</text></svg>
+        <div class="rname">مُلاحِظ</div><div class="rpts">0 — 149 نقطة</div>
+      </div>
+      <div class="rcard rv d2">
+        <svg class="rbadge" viewBox="0 0 58 66"><path d="M29 2L54 14V37C54 51 42 63 29 66C16 63 4 51 4 37V14L29 2Z" stroke="rgba(201,168,76,0.26)" stroke-width="2" fill="rgba(201,168,76,0.025)"/><text x="29" y="43" font-size="21" fill="rgba(201,168,76,0.28)" text-anchor="middle">🔒</text></svg>
+        <div class="rname">• • • • •</div><div class="rpts">150 — 499 نقطة</div>
+      </div>
+      <div class="rcard rv d3">
+        <svg class="rbadge" viewBox="0 0 58 66"><path d="M29 2L54 14V37C54 51 42 63 29 66C16 63 4 51 4 37V14L29 2Z" stroke="rgba(201,168,76,0.2)" stroke-width="2" fill="rgba(201,168,76,0.02)"/><text x="29" y="43" font-size="21" fill="rgba(201,168,76,0.22)" text-anchor="middle">🔒</text></svg>
+        <div class="rname">• • • • •</div><div class="rpts">500 — 1,199 نقطة</div>
+      </div>
+      <div class="rcard rv d1">
+        <svg class="rbadge" viewBox="0 0 58 66"><path d="M29 2L54 14V37C54 51 42 63 29 66C16 63 4 51 4 37V14L29 2Z" stroke="rgba(201,168,76,0.16)" stroke-width="2" fill="rgba(201,168,76,0.015)"/><text x="29" y="43" font-size="21" fill="rgba(201,168,76,0.18)" text-anchor="middle">🔒</text></svg>
+        <div class="rname">• • • • •</div><div class="rpts">1,200 — 2,799 نقطة</div>
+      </div>
+      <div class="rcard rv d2">
+        <svg class="rbadge" viewBox="0 0 58 66"><path d="M29 2L54 14V37C54 51 42 63 29 66C16 63 4 51 4 37V14L29 2Z" stroke="rgba(201,168,76,0.13)" stroke-width="2" fill="rgba(201,168,76,0.01)"/><text x="29" y="43" font-size="21" fill="rgba(201,168,76,0.14)" text-anchor="middle">🔒</text></svg>
+        <div class="rname">• • • • •</div><div class="rpts">2,800 — 9,999 نقطة</div>
+      </div>
+      <div class="rcard legend rv d3">
+        <svg class="rbadge" viewBox="0 0 58 66"><path d="M29 2L56 14V39C56 54 43 65 29 68C15 65 2 54 2 39V14L29 2Z" stroke="rgba(201,168,76,0.8)" stroke-width="2.5" fill="rgba(201,168,76,0.07)"/><text x="29" y="43" font-size="21" fill="rgba(201,168,76,0.65)" text-anchor="middle">💀</text></svg>
+        <div class="rname">وكلاء 187</div><div class="rpts">10,000+ نقطة</div>
+        <div class="rlimit">⚠ 187 مقعداً فقط في التاريخ</div>
+      </div>
+    </div>
+    <div class="ranks-note rv">🔒 اكتشف رتبتك بنفسك — الشارات الخمس المخفية تنتظرك</div>
+  </div>
+</div>
+
+<!-- POINTS -->
+<div class="sec" id="points">
+  <div class="shdr rv" style="text-align:center">
+    <div class="stag">نظام النقاط</div>
+    <h2 class="stitle">كيف <span>تكسب</span> وكيف تخسر</h2>
+  </div>
+  <div class="pts-grid">
+    <div class="pcard rv d1">
+      <div class="phead earn">✅ كسب النقاط</div>
+      <div class="prow"><span class="plbl">إجابة صحيحة كاملة</span><span class="pval pos">+100</span></div>
+      <div class="prow"><span class="plbl">+ السلاح + الدافع</span><span class="pval pos">+40</span></div>
+      <div class="prow"><span class="plbl">الثلاثة معاً (مكافأة)</span><span class="pval pos">150</span></div>
+      <div class="prow"><span class="plbl">أوائل 48 ساعة</span><span class="pval pos">+30</span></div>
+      <div class="prow"><span class="plbl">رهان "واثق جداً" وصح</span><span class="pval pos">×1.5</span></div>
+      <div class="prow"><span class="plbl">ربط بملف بارد</span><span class="pval neu">+50</span></div>
+      <div class="prow"><span class="plbl">3 قضايا متتالية</span><span class="pval pos">+40</span></div>
+    </div>
+    <div class="pcard rv d2">
+      <div class="phead lose">⚠️ خصم النقاط</div>
+      <div class="prow"><span class="plbl">الوقوع في الدليل الفخ</span><span class="pval neg">-20</span></div>
+      <div class="prow"><span class="plbl">نسخ إجابة شخص آخر</span><span class="pval neg">-30</span></div>
+      <div class="prow"><span class="plbl">إجابة عشوائية واضحة</span><span class="pval neg">-20</span></div>
+      <div class="prow"><span class="plbl">رهان "واثق جداً" وأخطأ</span><span class="pval neg">-40</span></div>
+      <div class="prow"><span class="plbl">أقصى خصم لكل قضية</span><span class="pval neg">-50</span></div>
+      <div class="safe"><p>✅ لا خصم على الغياب أو التأخر<br>✅ شارك بأمان في أي وقت</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<section class="cta-sec" id="join">
+  <div class="cta-inner" id="ctaContent">
+    <!-- يتغير بناءً على حالة تسجيل الدخول -->
+    <h2>هل أنت مستعد<br>لفتح <span>الملف؟</span></h2>
+    <p>انضم للمحققين العرب. اختر اسمك المستعار وابدأ رحلتك نحو رتبة لا يعلمها أحد.</p>
+    <button class="gbtn" onclick="signInWithGoogle()">
+      <svg width="22" height="22" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+      سجّل الدخول بـ Google
+    </button>
+    <div class="cta-note">بياناتك محمية — نحفظ فقط اسمك المستعار ونقاطك</div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="flogo">سجل الجريمة</div>
+  <div class="fdisc">جميع القصص خيالية بالكامل — أي تشابه مع الواقع محض مصادفة</div>
+  <div class="fnum">187</div>
+</footer>
+
+<!-- Supabase SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+
+<script>
+// ══ CONFIG ══
+const SUPABASE_URL = 'https://lfvtqfusxwatgsehtccd.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_70F2-jlvujCTWy1oLgli0Q_DUxFCJVT';
+const ADMIN_EMAIL  = '3omarbq@gmail.com';
+
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// ══ TOAST ══
+function showToast(msg, type='success') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = `toast ${type} show`;
+  setTimeout(() => t.className = 'toast', 3000);
+}
+
+// ══ AUTH: Google Sign In ══
+async function signInWithGoogle() {
+  const { error } = await sb.auth.signInWithOAuth({
+    provider: 'google',
+    options: { redirectTo: window.location.origin }
+  });
+  if (error) showToast('حدث خطأ — حاول مرة أخرى', 'error');
+}
+
+// ══ AUTH: Sign Out ══
+async function signOut() {
+  await sb.auth.signOut();
+  updateUI(null);
+  showToast('تم تسجيل الخروج');
+}
+
+// ══ PROFILE ══
+async function getProfile(userId) {
+  const { data } = await sb.from('profiles').select('*').eq('id', userId).single();
+  return data;
+}
+
+async function saveName() {
+  const btn = document.getElementById('saveNameBtn');
+  const input = document.getElementById('detectiveName');
+  const err = document.getElementById('nameError');
+  const name = input.value.trim();
+
+  if (name.length < 3 || name.length > 20) {
+    err.style.display = 'block';
+    err.textContent = 'الاسم يجب أن يكون بين 3 و20 حرف';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'جاري الحفظ...';
+  err.style.display = 'none';
+
+  const { data: { user } } = await sb.auth.getUser();
+
+  const { error } = await sb.from('profiles').upsert({
+    id: user.id,
+    detective_name: name,
+    total_points: 0,
+    cases_solved: 0
+  });
+
+  if (error) {
+    err.style.display = 'block';
+    err.textContent = error.code === '23505' ? 'هذا الاسم محجوز — جرب اسماً آخر' : 'حدث خطأ — حاول مرة أخرى';
+    btn.disabled = false;
+    btn.textContent = 'تأكيد الاسم والدخول 🔍';
+    return;
+  }
+
+  document.getElementById('nameModal').classList.remove('active');
+  const profile = await getProfile(user.id);
+  updateUI(user, profile);
+  showToast(`مرحباً يا ${name} — التحقيق بدأ! 🔍`);
+}
+
+// ══ UPDATE UI ══
+function updateUI(user, profile) {
+  const navAuth = document.getElementById('navAuth');
+  const ctaContent = document.getElementById('ctaContent');
+
+  if (!user) {
+    navAuth.innerHTML = `<button class="nav-btn" onclick="signInWithGoogle()">ابدأ التحقيق</button>`;
+    ctaContent.innerHTML = `
+      <h2>هل أنت مستعد<br>لفتح <span>الملف؟</span></h2>
+      <p>انضم للمحققين العرب. اختر اسمك المستعار وابدأ رحلتك نحو رتبة لا يعلمها أحد.</p>
+      <button class="gbtn" onclick="signInWithGoogle()">
+        <svg width="22" height="22" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+        سجّل الدخول بـ Google
+      </button>
+      <div class="cta-note">بياناتك محمية — نحفظ فقط اسمك المستعار ونقاطك</div>`;
+    return;
+  }
+
+  const name = profile?.detective_name || '...';
+  const pts = profile?.total_points || 0;
+  const isAdmin = user.email === ADMIN_EMAIL;
+
+  navAuth.innerHTML = `
+    <div class="nav-user">
+      ${isAdmin ? `<a href="/admin.html" style="color:var(--gold-dim);font-size:11px;text-decoration:none;letter-spacing:1px;font-weight:700">⚙️ ADMIN</a>` : ''}
+      <span class="nav-user-name">🕵️ ${name}</span>
+      <button class="nav-signout" onclick="signOut()">خروج</button>
+    </div>`;
+
+  ctaContent.innerHTML = `
+    <div class="cta-logged">
+      <div class="cta-logged-name">🕵️ ${name}</div>
+      <div class="cta-logged-msg">أنت جاهز للتحقيق — انتظر فتح الملف الأول</div>
+      <div class="cta-logged-pts">نقاطك الحالية: ${pts} نقطة</div>
+      <button class="cta-theory-btn" onclick="window.open('https://youtube.com/@sijil187','_blank')">🎬 تابع القناة لتعلم موعد الحلقة</button>
+    </div>`;
+}
+
+// ══ INIT ══
+async function init() {
+  const { data: { session } } = await sb.auth.getSession();
+
+  if (session?.user) {
+    const user = session.user;
+    const profile = await getProfile(user.id);
+
+    if (!profile?.detective_name) {
+      document.getElementById('nameModal').classList.add('active');
+    } else {
+      updateUI(user, profile);
+    }
+  }
+
+  sb.auth.onAuthStateChange(async (event, session) => {
+    if (event === 'SIGNED_IN' && session?.user) {
+      const user = session.user;
+      const profile = await getProfile(user.id);
+      if (!profile?.detective_name) {
+        document.getElementById('nameModal').classList.add('active');
+      } else {
+        updateUI(user, profile);
+      }
+    }
+    if (event === 'SIGNED_OUT') updateUI(null);
+  });
+}
+
+init();
+
+// ══ REVEAL ══
+const rvs = document.querySelectorAll('.rv');
+const ob = new IntersectionObserver(e => {
+  e.forEach(x => { if (x.isIntersecting) x.target.classList.add('show'); });
+}, { threshold: 0.06 });
+rvs.forEach(r => ob.observe(r));
+
+// ══ PARALLAX GHOST ══
+document.addEventListener('mousemove', e => {
+  const g = document.querySelector('.hero-ghost'); if (!g) return;
+  const x = (e.clientX / innerWidth - .5) * 13, y = (e.clientY / innerHeight - .5) * 7;
+  g.style.transform = `translate(calc(-50% + ${x}px),calc(-54% + ${y}px))`;
+});
+
+// ══ TIMER ══
+function tick() {
+  const l = new Date('2025-04-20T20:00:00+03:00'), n = new Date(), d = l - n;
+  if (d <= 0) { ['t-d','t-h','t-m'].forEach(i => document.getElementById(i).textContent = '00'); return; }
+  document.getElementById('t-d').textContent = String(Math.floor(d / 864e5)).padStart(2,'0');
+  document.getElementById('t-h').textContent = String(Math.floor((d % 864e5) / 36e5)).padStart(2,'0');
+  document.getElementById('t-m').textContent = String(Math.floor((d % 36e5) / 6e4)).padStart(2,'0');
+}
+tick(); setInterval(tick, 60000);
+</script>
+</body>
+</html>
