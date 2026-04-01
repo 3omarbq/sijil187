@@ -349,7 +349,7 @@ tr:hover td{background:rgba(255,255,255,0.015)}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
 const SUPABASE_URL = 'https://lfvtqfusxwatgsehtccd.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_70F2-jlvujCTWy1oLgli0Q_DUxFCJVT';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxmdnRxZnVzeHdhdGdzZWh0Y2NkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQzNDE2MzgsImV4cCI6MjA4OTkxNzYzOH0.FkEh9zpBaXFE3nNXD2I6TmjbPHkXEVO3CLUJRWltrqs';
 const ADMIN_EMAIL  = '3omarbq@gmail.com';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);sb.auth.onAuthStateChange((ev, sess) => {
   if (ev === 'SIGNED_IN' && sess?.access_token) {
