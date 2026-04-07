@@ -281,7 +281,12 @@ async function boot(){
   await loadCase(params.get('case'))
 }
 
-async function signIn(){await sb.auth.signInWithOAuth({provider:'google',options:{redirectTo:location.href}})}
+async function signIn(){
+  await sb.auth.signInWithOAuth({
+    provider:'google',
+    options:{redirectTo:'https://sijil187.vercel.app/case.html'}
+  })
+}
 async function signOut(){await sb.auth.signOut()}
 
 function renderHeader(){
