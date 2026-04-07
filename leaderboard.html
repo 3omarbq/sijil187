@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لوحة الشرف | سجل الجريمة 187</title>
+<style>
+:root{--bg:#070707;--surface:#0e0e0e;--card:#131313;--border:#1e1e1e;--border-lg:#2a2a2a;--red:#c0392b;--red-dk:#8b0000;--red-lt:#e74c3c;--text:#e8e8e8;--text-sec:#888;--text-mute:#444;--gold:#d4a853;--green:#27ae60}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-serif;min-height:100vh;line-height:1.6}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:#2a2a2a;border-radius:3px}
+header{background:#050505;border-bottom:1px solid var(--red-dk);padding:.875rem 2rem;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:200}
+.logo{display:flex;align-items:center;gap:.75rem;text-decoration:none;color:var(--text)}
+.logo-mark{width:38px;height:38px;background:var(--red-dk);border-radius:5px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1rem;color:#fff}
+.logo-name{font-size:.95rem;font-weight:700;line-height:1.2}.logo-sub{font-size:.7rem;color:var(--text-sec)}
+.header-right{display:flex;align-items:center;gap:.75rem}
+.user-chip{display:flex;align-items:center;gap:.5rem;font-size:.8rem;color:var(--text-sec);border:1px solid var(--border-lg);border-radius:20px;padding:.3rem .75rem}
+.user-chip img{width:22px;height:22px;border-radius:50%}
+.btn{padding:.45rem 1.1rem;border-radius:5px;border:none;cursor:pointer;font-size:.8rem;font-weight:600;transition:all .15s;font-family:inherit}
+.btn-red{background:var(--red);color:#fff}.btn-red:hover{background:var(--red-lt)}
+.btn-ghost{background:transparent;color:var(--text-sec);border:1px solid var(--border-lg)}.btn-ghost:hover{color:var(--text);border-color:#444}
+.btn-sm{padding:.35rem .85rem;font-size:.75rem}
+
+/* Hero */
+.hero{background:linear-gradient(180deg,#0c0c0c 0%,var(--bg) 100%);border-bottom:1px solid var(--border);padding:2.5rem 2rem 2rem;text-align:center}
+.hero h1{font-size:1.8rem;font-weight:900;margin-bottom:.4rem}
+.hero h1 span{color:var(--gold)}
+.hero p{color:var(--text-sec);font-size:.875rem}
+
+.container{max-width:860px;margin:2rem auto;padding:0 2rem}
+@media(max-width:640px){.container{padding:0 1rem}.hero{padding:1.5rem 1rem}}
+
+/* بطاقة المستخدم */
+.my-card{background:linear-gradient(135deg,rgba(212,168,83,.08),rgba(139,0,0,.08));border:1px solid rgba(212,168,83,.25);border-radius:10px;padding:1.1rem 1.25rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
+.my-rank-icon{font-size:1.75rem;min-width:44px;text-align:center}
+.my-info{flex:1;min-width:120px}
+.my-name{font-weight:700;font-size:.95rem;margin-bottom:.2rem}
+.my-badge{display:inline-block;padding:.15rem .65rem;border-radius:20px;font-size:.68rem;font-weight:700}
+.my-stats{display:flex;gap:1.5rem;margin-right:auto}
+.my-stat{text-align:center}
+.my-stat-val{font-size:1.2rem;font-weight:900;color:var(--gold);font-family:monospace}
+.my-stat-lbl{font-size:.65rem;color:var(--text-mute);text-transform:uppercase;letter-spacing:.05em}
+
+/* جدول */
+.lb-wrap{background:var(--card);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.lb-head{display:grid;grid-template-columns:52px 1fr 90px 90px;padding:.6rem 1rem;border-bottom:1px solid var(--border);background:var(--surface)}
+.lb-head span{font-size:.65rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-mute);font-weight:700}
+.lb-head span:last-child{text-align:left}
+.lb-head span:nth-child(3){text-align:center}
+.lb-row{display:grid;grid-template-columns:52px 1fr 90px 90px;padding:.75rem 1rem;border-bottom:1px solid var(--border);align-items:center;transition:background .1s}
+.lb-row:last-child{border-bottom:none}
+.lb-row:hover{background:rgba(255,255,255,.02)}
+.lb-row.me{background:rgba(212,168,83,.04);border-right:2px solid rgba(212,168,83,.4)}
+
+.pos{font-family:monospace;font-weight:700;color:var(--text-mute);font-size:.8rem;text-align:center}
+.pos.g1{font-size:1.2rem;color:#FFD700}
+.pos.g2{font-size:1.1rem;color:#C0C0C0}
+.pos.g3{font-size:1rem;color:#CD7F32}
+
+.player{display:flex;align-items:center;gap:.625rem}
+.player-badge{padding:.1rem .5rem;border-radius:20px;font-size:.62rem;font-weight:700;white-space:nowrap}
+.player-name{font-size:.875rem;font-weight:600}
+.player-me{font-size:.65rem;color:var(--gold);margin-right:.3rem}
+
+.theories-val{text-align:center;font-weight:700;color:var(--green);font-size:.875rem}
+.pts-val{text-align:left;font-weight:900;color:var(--gold);font-family:monospace;font-size:.9rem}
+
+/* رتب */
+.r-observer{background:rgba(100,100,100,.15);color:#888;border:1px solid #444}
+.r-hidden{background:rgba(212,168,83,.08);color:rgba(212,168,83,.5);border:1px solid rgba(212,168,83,.2)}
+.r-legend{background:linear-gradient(135deg,rgba(212,168,83,.2),rgba(192,57,43,.2));color:var(--gold);border:1px solid rgba(212,168,83,.5)}
+.r-beginner{background:rgba(41,128,185,.15);color:#5dade2;border:1px solid rgba(41,128,185,.3)}
+.r-pro{background:rgba(39,174,96,.15);color:#2ecc71;border:1px solid rgba(39,174,96,.3)}
+.r-forensic{background:rgba(142,68,173,.15);color:#9b59b6;border:1px solid rgba(142,68,173,.3)}
+.r-expert{background:rgba(192,57,43,.15);color:#e74c3c;border:1px solid rgba(192,57,43,.3)}
+
+/* حالات */
+.empty{text-align:center;padding:3rem 1rem;color:var(--text-mute)}
+.empty .ei{font-size:2.5rem;opacity:.3;margin-bottom:.75rem}
+.empty p{font-size:.85rem}
+.spinner{width:26px;height:26px;border:2px solid var(--border);border-top-color:var(--red);border-radius:50%;animation:spin .7s linear infinite;margin:2rem auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-wrap{text-align:center;padding:2rem;color:var(--text-mute);font-size:.8rem}
+
+/* تذييل الجدول */
+.lb-footer{padding:.75rem 1rem;border-top:1px solid var(--border);background:var(--surface);font-size:.72rem;color:var(--text-mute);text-align:center}
+
+/* gate تسجيل الدخول */
+.auth-notice{background:rgba(212,168,83,.06);border:1px solid rgba(212,168,83,.2);border-radius:8px;padding:1rem 1.25rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:.875rem}
+.auth-notice p{font-size:.82rem;color:var(--text-sec);flex:1}
+
+footer{border-top:1px solid var(--border);padding:1.75rem 2rem;text-align:center;color:var(--text-mute);font-size:.75rem;margin-top:3rem}
+</style>
+</head>
+<body>
+
+<header>
+  <a href="/" class="logo">
+    <div class="logo-mark">187</div>
+    <div><div class="logo-name">سجل الجريمة</div><div class="logo-sub">كل جريمة لها سجل</div></div>
+  </a>
+  <div class="header-right" id="hdr-auth"></div>
+</header>
+
+<div class="hero">
+  <h1>🏆 <span>لوحة الشرف</span></h1>
+  <p>أفضل المحققين في سجل الجريمة 187</p>
+</div>
+
+<div class="container">
+
+  <!-- إشعار تسجيل الدخول -->
+  <div class="auth-notice" id="auth-notice" style="display:none">
+    <span style="font-size:1.4rem">🔑</span>
+    <p>سجّل دخولك لترى ترتيبك ونقاطك ورتبتك الحالية</p>
+    <button class="btn btn-red btn-sm" onclick="signIn()">تسجيل الدخول</button>
+  </div>
+
+  <!-- بطاقة المستخدم الحالي -->
+  <div id="my-card-wrap"></div>
+
+  <!-- جدول الترتيب -->
+  <div class="lb-wrap">
+    <div class="loading-wrap" id="lb-loading"><div class="spinner"></div><p>جاري تحميل البيانات...</p></div>
+    <div id="lb-table-wrap" style="display:none">
+      <div class="lb-head">
+        <span style="text-align:center">#</span>
+        <span>المحقق</span>
+        <span style="text-align:center">صحيح</span>
+        <span style="text-align:left">النقاط</span>
+      </div>
+      <div id="lb-body"></div>
+      <div class="empty" id="lb-empty" style="display:none">
+        <div class="ei">🕵️</div>
+        <p>لا يوجد محققون بعد — كن الأول!</p>
+      </div>
+      <div class="lb-footer" id="lb-footer"></div>
+    </div>
+  </div>
+
+</div>
+
+<footer><p>سجل الجريمة 187 © ٢٠٢٥ — جميع الحقوق محفوظة</p></footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+const SB_URL = 'https://lfvtqfusxwatgsehtccd.supabase.co'
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxmdnRxZnVzeHdhdGdzZWh0Y2NkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQzNDE2MzgsImV4cCI6MjA4OTkxNzYzOH0.FkEh9zpBaXFE3nNXD2I6TmjbPHkXEVO3CLUJRWltrqs'
+const sb = supabase.createClient(SB_URL, SB_KEY)
+
+let user = null
+
+// نظام الرتب — الأسماء مخفية إلا لمن وصل
+const RANKS = [
+  { min:0,     max:149,        name:'مُلاحِظ',     icon:'👁️',  cls:'r-observer', public:true  },
+  { min:150,   max:499,        name:'• • • • •',   icon:'🔒', cls:'r-hidden',   public:false },
+  { min:500,   max:1199,       name:'• • • • •',   icon:'🔒', cls:'r-hidden',   public:false },
+  { min:1200,  max:2799,       name:'• • • • •',   icon:'🔒', cls:'r-hidden',   public:false },
+  { min:2800,  max:9999,       name:'• • • • •',   icon:'🔒', cls:'r-hidden',   public:false },
+  { min:10000, max:Infinity,   name:'وكلاء 187',   icon:'💀', cls:'r-legend',   public:false }
+]
+
+// الأسماء الحقيقية للرتب — تُكشف فقط لمن وصل
+const RANK_REAL_NAMES = [
+  { min:0,     name:'مُلاحِظ',        icon:'👁️',  cls:'r-observer' },
+  { min:150,   name:'محقق مبتدئ',     icon:'🔵', cls:'r-beginner'  },
+  { min:500,   name:'محقق محترف',     icon:'🟢', cls:'r-pro'       },
+  { min:1200,  name:'محلل جنائي',     icon:'🔬', cls:'r-forensic'  },
+  { min:2800,  name:'خبير الجريمة',   icon:'🔴', cls:'r-expert'    },
+  { min:10000, name:'وكلاء 187 💀',   icon:'💀', cls:'r-legend'    }
+]
+
+function getPublicRank(pts) {
+  // للعرض في الجدول — يظهر مُلاحِظ فقط، الباقي •••
+  for(let i = RANKS.length-1; i >= 0; i--) {
+    if(pts >= RANKS[i].min) return RANKS[i]
+  }
+  return RANKS[0]
+}
+
+function getMyRank(pts) {
+  // للمستخدم نفسه — يرى اسم رتبته الحقيقي
+  for(let i = RANK_REAL_NAMES.length-1; i >= 0; i--) {
+    if(pts >= RANK_REAL_NAMES[i].min) return RANK_REAL_NAMES[i]
+  }
+  return RANK_REAL_NAMES[0]
+}
+
+async function boot() {
+  if(location.hash.includes('access_token')){
+    await sb.auth.getSession()
+    history.replaceState(null,'',location.pathname+location.search)
+  }
+  const { data: { session } } = await sb.auth.getSession()
+  user = session?.user || null
+  sb.auth.onAuthStateChange((ev, sess) => {
+    user = sess?.user || null
+    renderHeader()
+    renderAuthNotice()
+  })
+  renderHeader()
+  renderAuthNotice()
+  loadLeaderboard()
+}
+
+async function signIn(){
+  await sb.auth.signInWithOAuth({
+    provider:'google',
+    options:{redirectTo:'https://sijil187.vercel.app/leaderboard.html'}
+  })
+}
+async function signOut(){ await sb.auth.signOut() }
+
+function renderHeader(){
+  const el = document.getElementById('hdr-auth')
+  if(user){
+    const name = user.user_metadata?.full_name || user.email.split('@')[0]
+    const avatar = user.user_metadata?.avatar_url || ''
+    el.innerHTML = `<div class="user-chip">${avatar?`<img src="${avatar}" alt="">`:''}${name}</div><button class="btn btn-ghost btn-sm" onclick="signOut()">خروج</button>`
+  } else {
+    el.innerHTML = `<button class="btn btn-ghost btn-sm" onclick="signIn()">🔑 تسجيل الدخول</button>`
+  }
+}
+
+function renderAuthNotice(){
+  document.getElementById('auth-notice').style.display = user ? 'none' : 'flex'
+}
+
+async function loadLeaderboard(){
+  const { data, error } = await sb
+    .from('honor_board')
+    .select('user_id, user_name, total_points, correct_theories')
+    .order('total_points', { ascending: false })
+    .limit(100)
+
+  document.getElementById('lb-loading').style.display = 'none'
+  document.getElementById('lb-table-wrap').style.display = 'block'
+
+  if(error || !data || data.length === 0){
+    document.getElementById('lb-empty').style.display = 'block'
+    return
+  }
+
+  // فلتر البيانات القديمة الخاطئة
+  const validData = data.filter(r => r.user_name && r.user_name !== '?????' && r.user_name !== 'NULL')
+
+  if(validData.length === 0){
+    document.getElementById('lb-empty').style.display = 'block'
+    return
+  }
+
+  const body = document.getElementById('lb-body')
+  body.innerHTML = ''
+
+  let myPos = null
+  let myEntry = null
+
+  validData.forEach((row, i) => {
+    const pos = i + 1
+    const pts = row.total_points || 0
+    const isMe = user && row.user_id === user.id
+
+    if(isMe){ myPos = pos; myEntry = row }
+
+    // في الجدول — الرتبة تظهر مخفية لكل الناس (• • • • •) إلا المُلاحِظ
+    const publicRank = getPublicRank(pts)
+
+    let posHtml = `<span class="pos">${pos}</span>`
+    if(pos===1) posHtml = `<span class="pos g1">🥇</span>`
+    else if(pos===2) posHtml = `<span class="pos g2">🥈</span>`
+    else if(pos===3) posHtml = `<span class="pos g3">🥉</span>`
+
+    const div = document.createElement('div')
+    div.className = `lb-row${isMe?' me':''}`
+    div.innerHTML = `
+      ${posHtml}
+      <div class="player">
+        <span class="player-badge ${publicRank.cls}">${publicRank.icon} ${publicRank.name}</span>
+        <span class="player-name">${row.user_name||'—'}${isMe?'<span class="player-me">(أنت)</span>':''}</span>
+      </div>
+      <div class="theories-val">${row.correct_theories||0}</div>
+      <div class="pts-val">${(pts).toLocaleString()}</div>
+    `
+    body.appendChild(div)
+  })
+
+  // تذييل الجدول
+  document.getElementById('lb-footer').textContent = `${validData.length} محقق مسجّل`
+
+  // بطاقة المستخدم
+  if(user){
+    if(!myEntry){
+      const { data: myData } = await sb
+        .from('honor_board')
+        .select('total_points, correct_theories, user_name')
+        .eq('user_id', user.id)
+        .maybeSingle()
+      if(myData) renderMyCard(myData, null)
+      else renderMyCard(null, null)
+    } else {
+      renderMyCard(myEntry, myPos)
+    }
+  }
+}
+
+function renderMyCard(entry, pos){
+  const wrap = document.getElementById('my-card-wrap')
+  const pts = entry?.total_points || 0
+  const myRank = getMyRank(pts) // المستخدم يرى رتبته الحقيقية
+  const name = entry?.user_name || user.user_metadata?.full_name || user.email.split('@')[0]
+
+  wrap.innerHTML = `
+    <div class="my-card">
+      <div class="my-rank-icon">${myRank.icon}</div>
+      <div class="my-info">
+        <div class="my-name">${name}</div>
+        <span class="my-badge ${myRank.cls}">${myRank.name}</span>
+      </div>
+      <div class="my-stats">
+        <div class="my-stat">
+          <div class="my-stat-val">${pos ? '#'+pos : '—'}</div>
+          <div class="my-stat-lbl">الترتيب</div>
+        </div>
+        <div class="my-stat">
+          <div class="my-stat-val">${(pts).toLocaleString()}</div>
+          <div class="my-stat-lbl">نقطة</div>
+        </div>
+        <div class="my-stat">
+          <div class="my-stat-val">${entry?.correct_theories||0}</div>
+          <div class="my-stat-lbl">صحيح</div>
+        </div>
+      </div>
+    </div>`
+}
+
+document.addEventListener('DOMContentLoaded', boot)
+</script>
+</body>
+</html>
