@@ -93,6 +93,10 @@ header{background:#050505;border-bottom:1px solid var(--red-dk);padding:.875rem 
 .msg.ok{background:rgba(39,174,96,.1);border:1px solid rgba(39,174,96,.25);color:var(--green)}
 .msg.err{background:rgba(192,57,43,.1);border:1px solid rgba(192,57,43,.25);color:var(--red-lt)}
 .msg.show{display:block}
+.already-submitted{text-align:center;padding:1.5rem 1rem;display:none}
+.already-submitted .ai{font-size:2rem;margin-bottom:.75rem}
+.already-submitted h3{margin-bottom:.4rem;color:var(--gold)}
+.already-submitted p{font-size:.8rem;color:var(--text-sec)}
 .closed-state{text-align:center;padding:2rem 1rem;display:none}
 .closed-state .ci{font-size:2rem;opacity:.4;margin-bottom:.75rem}
 .closed-state h3{margin-bottom:.4rem}.closed-state p{font-size:.8rem;color:var(--text-sec)}
@@ -167,6 +171,11 @@ footer{border-top:1px solid var(--border);padding:1.75rem 2rem;text-align:center
         </div>
         <div class="closed-state" id="case-closed">
           <div class="ci">🔒</div><h3>القضية مغلقة</h3><p>انتهى وقت الإرسال. ترقّب القضية القادمة.</p>
+        </div>
+        <div class="already-submitted" id="already-submitted">
+          <div class="ai">✅</div>
+          <h3>نظريتك مُرسَلة!</h3>
+          <p>لقد أرسلت نظريتك لهذه القضية من قبل.<br>انتظر حكم المحقق خالد.</p>
         </div>
         <div id="msg-ok" class="msg ok"></div>
         <div id="msg-err" class="msg err"></div>
@@ -348,13 +357,44 @@ function setDeadline(dl){
   tick()
 }
 
-function renderFormState(){
-  const gate=document.getElementById('auth-gate'),closed=document.getElementById('case-closed'),wrap=document.getElementById('form-wrap')
-  if(!user){gate.style.display='block';closed.style.display='none';wrap.style.display='none';return}
+async function renderFormState(){
+  const gate=document.getElementById('auth-gate')
+  const closed=document.getElementById('case-closed')
+  const wrap=document.getElementById('form-wrap')
+  const alreadyDiv=document.getElementById('already-submitted')
+
+  if(!user){
+    gate.style.display='block'
+    closed.style.display='none'
+    wrap.style.display='none'
+    alreadyDiv.style.display='none'
+    return
+  }
+
   gate.style.display='none'
+
   const isClosed=caseData?.status==='closed'
-  closed.style.display=isClosed?'block':'none'
-  wrap.style.display=isClosed?'none':'block'
+  if(isClosed){
+    closed.style.display='block'
+    wrap.style.display='none'
+    alreadyDiv.style.display='none'
+    return
+  }
+
+  // تحقق هل أرسل المستخدم نظرية لهذه القضية من قبل
+  if(caseData?.id){
+    const{data:existing}=await sb.from('theories').select('id').eq('episode_id',caseData.id).eq('user_id',user.id).maybeSingle()
+    if(existing){
+      alreadyDiv.style.display='block'
+      wrap.style.display='none'
+      closed.style.display='none'
+      return
+    }
+  }
+
+  alreadyDiv.style.display='none'
+  closed.style.display='none'
+  wrap.style.display='block'
 }
 
 function goTab(name,btn){
@@ -379,24 +419,73 @@ function updatePts(){
 async function sendTheory(){
   if(!user)return showErr('يجب تسجيل الدخول أولاً')
   if(!caseData||caseData.status!=='active')return showErr('هذه القضية مغلقة')
+
   const killer=document.getElementById('f-killer')?.value.trim()
   const narrative=document.getElementById('f-narrative')?.value.trim()
   if(!killer)return showErr('يجب تحديد المشتبه به')
   if(!narrative||narrative.length<30)return showErr('الرواية قصيرة جداً (٣٠ حرفاً على الأقل)')
   if(!conf)return showErr('اختر مستوى ثقتك أولاً')
+
+  // تحقق هل أرسل من قبل
+  const{data:existing}=await sb.from('theories').select('id').eq('episode_id',caseData.id).eq('user_id',user.id).maybeSingle()
+  if(existing){
+    document.getElementById('form-wrap').style.display='none'
+    document.getElementById('already-submitted').style.display='block'
+    return
+  }
+
+  // نافذة التأكيد
+  const confirmed=confirm('هل أنت متأكد من نظريتك؟\n\nبعد الإرسال لن تتمكن من التعديل أو الإرسال مرة ثانية.')
+  if(!confirmed)return
+
   const btn=document.getElementById('btn-send')
   btn.disabled=true;btn.textContent='جاري الإرسال...';hideMsg()
+
   const{data:{session}}=await sb.auth.getSession()
-  if(!session?.access_token){showErr('انتهت جلستك. أعد تسجيل الدخول.');btn.disabled=false;btn.textContent='إرسال النظرية إلى المحقق خالد ←';return}
-  const payload={episode_id:caseData.id,killer,weapon:document.getElementById('f-weapon')?.value.trim()||'',motive:document.getElementById('f-motive')?.value.trim()||'',execution_method:document.getElementById('f-exec')?.value.trim()||'',silent_witness:document.getElementById('f-witness')?.value.trim()||'',narrative,relationship_map:document.getElementById('f-relations')?.value.trim()||'',confidence_scale:conf,confident_bet:betOn,early_submission:earlyBonus}
+  if(!session?.access_token){
+    showErr('انتهت جلستك. أعد تسجيل الدخول.')
+    btn.disabled=false
+    btn.textContent='إرسال النظرية إلى المحقق خالد ←'
+    return
+  }
+
+  const payload={
+    episode_id:caseData.id,
+    killer,
+    weapon:document.getElementById('f-weapon')?.value.trim()||'',
+    motive:document.getElementById('f-motive')?.value.trim()||'',
+    execution_method:document.getElementById('f-exec')?.value.trim()||'',
+    silent_witness:document.getElementById('f-witness')?.value.trim()||'',
+    narrative,
+    relationship_map:document.getElementById('f-relations')?.value.trim()||'',
+    confidence_scale:conf,
+    confident_bet:betOn,
+    early_submission:earlyBonus
+  }
+
   try{
-    const res=await fetch('/api/submit-theory',{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${session.access_token}`},body:JSON.stringify(payload)})
+    const res=await fetch('/api/submit-theory',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':`Bearer ${session.access_token}`},
+      body:JSON.stringify(payload)
+    })
     const json=await res.json()
-    if(!res.ok){showErr(json.error||'خطأ غير متوقع.');btn.disabled=false;btn.textContent='إرسال النظرية إلى المحقق خالد ←';return}
+    if(!res.ok){
+      showErr(json.error||'خطأ غير متوقع.')
+      btn.disabled=false
+      btn.textContent='إرسال النظرية إلى المحقق خالد ←'
+      return
+    }
     document.getElementById('form-wrap').style.display='none'
+    document.getElementById('already-submitted').style.display='block'
     showOk(json.message||'تم الإرسال بنجاح! 🕵️')
     const ct=document.getElementById('s-th');ct.textContent=String((parseInt(ct.textContent)||0)+1)
-  }catch(e){console.error(e);showErr('خطأ في الاتصال.');btn.disabled=false;btn.textContent='إرسال النظرية إلى المحقق خالد ←'}
+  }catch(e){
+    console.error(e)
+    showErr('خطأ في الاتصال.')
+    btn.disabled=false
+    btn.textContent='إرسال النظرية إلى المحقق خالد ←'
+  }
 }
 
 function showOk(msg){const el=document.getElementById('msg-ok');el.textContent='✅ '+msg;el.classList.add('show')}
