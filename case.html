@@ -208,8 +208,8 @@ footer{border-top:1px solid var(--border);padding:1.75rem 2rem;text-align:center
           </div>
 
           <div class="fg">
-            <label class="fl">طريقة التنفيذ<span class="hint">كيف نُفّذت الجريمة؟ | اختياري — من ١٠ إلى ٣٠٠ حرف</span></label>
-            <textarea class="ft" id="f-exec" placeholder="صف كيف تمت الجريمة..." maxlength="300" oninput="updateCount('f-exec','cnt-exec',10,300)"></textarea>
+            <label class="fl">طريقة التنفيذ<span class="hint">كيف نُفّذت الجريمة؟ | اختياري — من ٣٠ إلى ٣٠٠ حرف</span></label>
+            <textarea class="ft" id="f-exec" placeholder="صف كيف تمت الجريمة..." maxlength="300" oninput="updateCount('f-exec','cnt-exec',30,300)"></textarea>
             <span class="char-count" id="cnt-exec">٠ / ٣٠٠</span>
           </div>
 
@@ -465,7 +465,7 @@ async function sendTheory(){
   if(!weapon||weapon.length<3) return showErr('⚠️ السلاح: يجب أن يكون على الأقل ٣ أحرف')
   if(!motive||motive.length<3) return showErr('⚠️ الدافع: يجب أن يكون على الأقل ٣ أحرف')
   if(!narrative||narrative.length<80) return showErr(`⚠️ الرواية قصيرة — أدخل على الأقل ٨٠ حرفاً (حالياً: ${narrative?.length||0})`)
-  if(exec&&exec.length<10) return showErr('⚠️ طريقة التنفيذ: يجب أن تكون على الأقل ١٠ أحرف إذا أدخلتها')
+  if(exec&&exec.length<30) return showErr('⚠️ طريقة التنفيذ: يجب أن تكون على الأقل ٣٠ حرفاً إذا أدخلتها')
   if(witness&&witness.length<3) return showErr('⚠️ الشاهد الصامت: يجب أن يكون على الأقل ٣ أحرف إذا أدخلته')
   if(relations&&relations.length<10) return showErr('⚠️ خريطة العلاقات: يجب أن تكون على الأقل ١٠ أحرف إذا أدخلتها')
   if(!conf) return showErr('⚠️ اختر مستوى ثقتك أولاً')
