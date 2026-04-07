@@ -256,6 +256,11 @@ const sb = supabase.createClient(SB_URL, SB_KEY)
 let user=null,caseData=null,conf=null,betOn=false,earlyBonus=false
 
 async function boot(){
+  // معالجة الـ hash بعد تسجيل الدخول
+  if(location.hash.includes('access_token')){
+    await sb.auth.getSession()
+    history.replaceState(null,'',location.pathname+location.search)
+  }
   const{data:{session}}=await sb.auth.getSession()
   user=session?.user||null
   sb.auth.onAuthStateChange((ev,sess)=>{
