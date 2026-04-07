@@ -76,6 +76,9 @@ header{background:#050505;border-bottom:1px solid var(--red-dk);padding:.875rem 
 .fi,.ft{width:100%;background:var(--surface);border:1px solid var(--border-lg);border-radius:5px;padding:.55rem .8rem;color:var(--text);font-size:.85rem;font-family:inherit;direction:rtl;transition:border-color .15s}
 .fi:focus,.ft:focus{outline:none;border-color:var(--red);box-shadow:0 0 0 2px rgba(192,57,43,.1)}
 .ft{resize:vertical;min-height:80px}.ft.lg{min-height:120px}
+.char-count{display:block;font-size:.65rem;color:var(--text-mute);text-align:left;margin-top:.2rem;transition:color .15s}
+.char-count.warn{color:var(--gold)}
+.char-count.ok{color:var(--green)}
 .conf-row{display:flex;gap:.4rem}
 .conf-btn{flex:1;padding:.55rem 0;border:1px solid var(--border-lg);background:var(--surface);border-radius:5px;color:var(--text-sec);cursor:pointer;font-size:.85rem;font-weight:700;font-family:inherit;transition:all .15s}
 .conf-btn:hover{border-color:var(--gold);color:var(--gold)}.conf-btn.on{border-color:var(--gold);background:rgba(212,168,83,.1);color:var(--gold)}
@@ -185,34 +188,49 @@ footer{border-top:1px solid var(--border);padding:1.75rem 2rem;text-align:center
             <div><div class="dl-lbl">الوقت المتبقي للإرسال</div><div class="dl-time" id="countdown">—</div></div>
           </div>
           <div class="early-notice" id="early-notice">🎉 <strong>+٣٠ نقطة</strong> — أنت في أول ٤٨ ساعة!</div>
+
           <div class="fg">
-            <label class="fl"><span class="req">*</span> من المجرم؟<span class="hint">اكتب اسمه كما ورد في القضية</span></label>
-            <input type="text" class="fi" id="f-killer" placeholder="اسم المشتبه به...">
+            <label class="fl"><span class="req">*</span> من المجرم؟<span class="hint">اكتب اسمه كما ورد في القضية | من ٣ إلى ٦٠ حرفاً</span></label>
+            <input type="text" class="fi" id="f-killer" placeholder="اسم المشتبه به..." maxlength="60" oninput="updateCount('f-killer','cnt-killer',3,60)">
+            <span class="char-count" id="cnt-killer">٠ / ٦٠</span>
           </div>
+
           <div class="fg">
-            <label class="fl">السلاح أو الأداة<span class="hint">ما الوسيلة المستخدمة؟</span></label>
-            <input type="text" class="fi" id="f-weapon" placeholder="السلاح أو الأداة...">
+            <label class="fl"><span class="req">*</span> السلاح أو الأداة<span class="hint">ما الوسيلة المستخدمة؟ | من ٣ إلى ٨٠ حرفاً</span></label>
+            <input type="text" class="fi" id="f-weapon" placeholder="السلاح أو الأداة..." maxlength="80" oninput="updateCount('f-weapon','cnt-weapon',3,80)">
+            <span class="char-count" id="cnt-weapon">٠ / ٨٠</span>
           </div>
+
           <div class="fg">
-            <label class="fl">الدافع<span class="hint">لماذا فعل ذلك؟</span></label>
-            <input type="text" class="fi" id="f-motive" placeholder="الدافع وراء الجريمة...">
+            <label class="fl"><span class="req">*</span> الدافع<span class="hint">لماذا فعل ذلك؟ | من ٣ إلى ١٠٠ حرف</span></label>
+            <input type="text" class="fi" id="f-motive" placeholder="الدافع وراء الجريمة..." maxlength="100" oninput="updateCount('f-motive','cnt-motive',3,100)">
+            <span class="char-count" id="cnt-motive">٠ / ١٠٠</span>
           </div>
+
           <div class="fg">
-            <label class="fl">طريقة التنفيذ<span class="hint">كيف نُفّذت الجريمة؟</span></label>
-            <textarea class="ft" id="f-exec" placeholder="صف كيف تمت الجريمة..."></textarea>
+            <label class="fl">طريقة التنفيذ<span class="hint">كيف نُفّذت الجريمة؟ | اختياري — من ١٠ إلى ٣٠٠ حرف</span></label>
+            <textarea class="ft" id="f-exec" placeholder="صف كيف تمت الجريمة..." maxlength="300" oninput="updateCount('f-exec','cnt-exec',10,300)"></textarea>
+            <span class="char-count" id="cnt-exec">٠ / ٣٠٠</span>
           </div>
+
           <div class="fg">
-            <label class="fl">الشاهد الصامت<span class="hint">ما الشيء أو الشخص الذي رأى ولم يُسأل؟</span></label>
-            <input type="text" class="fi" id="f-witness" placeholder="الشاهد الصامت...">
+            <label class="fl">الشاهد الصامت<span class="hint">ما الشيء أو الشخص الذي رأى ولم يُسأل؟ | اختياري — من ٣ إلى ١٥٠ حرف</span></label>
+            <input type="text" class="fi" id="f-witness" placeholder="الشاهد الصامت..." maxlength="150" oninput="updateCount('f-witness','cnt-witness',3,150)">
+            <span class="char-count" id="cnt-witness">٠ / ١٥٠</span>
           </div>
+
           <div class="fg">
-            <label class="fl"><span class="req">*</span> روايتك الكاملة<span class="hint">اسرد ما حدث من بدايته للنهاية بنظرتك</span></label>
-            <textarea class="ft lg" id="f-narrative" placeholder="في تقديري..."></textarea>
+            <label class="fl"><span class="req">*</span> روايتك الكاملة<span class="hint">اسرد ما حدث من بدايته للنهاية | من ٨٠ إلى ١٠٠٠ حرف</span></label>
+            <textarea class="ft lg" id="f-narrative" placeholder="في تقديري..." maxlength="1000" oninput="updateCount('f-narrative','cnt-narrative',80,1000)"></textarea>
+            <span class="char-count" id="cnt-narrative">٠ / ١٠٠٠</span>
           </div>
+
           <div class="fg">
-            <label class="fl">خريطة العلاقات<span class="hint">اشرح العلاقات بين الشخصيات (اختياري)</span></label>
-            <textarea class="ft" id="f-relations" placeholder="مثال: أحمد وسلطان كانا شريكين..."></textarea>
+            <label class="fl">خريطة العلاقات<span class="hint">اشرح العلاقات بين الشخصيات | اختياري — من ١٠ إلى ٤٠٠ حرف</span></label>
+            <textarea class="ft" id="f-relations" placeholder="مثال: أحمد وسلطان كانا شريكين..." maxlength="400" oninput="updateCount('f-relations','cnt-relations',10,400)"></textarea>
+            <span class="char-count" id="cnt-relations">٠ / ٤٠٠</span>
           </div>
+
           <div class="fg">
             <label class="fl"><span class="req">*</span> مستوى ثقتك<span class="hint">١ = تخمين | ٥ = متأكد ١٠٠٪</span></label>
             <div class="conf-row">
@@ -255,8 +273,19 @@ const sb = supabase.createClient(SB_URL, SB_KEY)
 
 let user=null,caseData=null,conf=null,betOn=false,earlyBonus=false
 
+function updateCount(fieldId, countId, min, max){
+  const field = document.getElementById(fieldId)
+  const counter = document.getElementById(countId)
+  if(!field || !counter) return
+  const len = field.value.length
+  counter.textContent = `${len} / ${max}`
+  counter.className = 'char-count'
+  if(len === 0) counter.className = 'char-count'
+  else if(len < min) counter.className = 'char-count warn'
+  else counter.className = 'char-count ok'
+}
+
 async function boot(){
-  // معالجة الـ hash بعد تسجيل الدخول
   if(location.hash.includes('access_token')){
     await sb.auth.getSession()
     history.replaceState(null,'',location.pathname+location.search)
@@ -372,7 +401,6 @@ async function renderFormState(){
   const closed=document.getElementById('case-closed')
   const wrap=document.getElementById('form-wrap')
   const alreadyDiv=document.getElementById('already-submitted')
-
   if(!user){
     gate.style.display='block'
     closed.style.display='none'
@@ -380,9 +408,7 @@ async function renderFormState(){
     alreadyDiv.style.display='none'
     return
   }
-
   gate.style.display='none'
-
   const isClosed=caseData?.status==='closed'
   if(isClosed){
     closed.style.display='block'
@@ -390,8 +416,6 @@ async function renderFormState(){
     alreadyDiv.style.display='none'
     return
   }
-
-  // تحقق هل أرسل المستخدم نظرية لهذه القضية من قبل
   if(caseData?.id){
     const{data:existing}=await sb.from('theories').select('id').eq('episode_id',caseData.id).eq('user_id',user.id).maybeSingle()
     if(existing){
@@ -401,7 +425,6 @@ async function renderFormState(){
       return
     }
   }
-
   alreadyDiv.style.display='none'
   closed.style.display='none'
   wrap.style.display='block'
@@ -431,12 +454,22 @@ async function sendTheory(){
   if(!caseData||caseData.status!=='active')return showErr('هذه القضية مغلقة')
 
   const killer=document.getElementById('f-killer')?.value.trim()
+  const weapon=document.getElementById('f-weapon')?.value.trim()
+  const motive=document.getElementById('f-motive')?.value.trim()
   const narrative=document.getElementById('f-narrative')?.value.trim()
-  if(!killer)return showErr('يجب تحديد المشتبه به')
-  if(!narrative||narrative.length<30)return showErr('الرواية قصيرة جداً (٣٠ حرفاً على الأقل)')
-  if(!conf)return showErr('اختر مستوى ثقتك أولاً')
+  const exec=document.getElementById('f-exec')?.value.trim()
+  const witness=document.getElementById('f-witness')?.value.trim()
+  const relations=document.getElementById('f-relations')?.value.trim()
 
-  // تحقق هل أرسل من قبل
+  if(!killer||killer.length<3) return showErr('⚠️ المجرم: يجب أن يكون على الأقل ٣ أحرف')
+  if(!weapon||weapon.length<3) return showErr('⚠️ السلاح: يجب أن يكون على الأقل ٣ أحرف')
+  if(!motive||motive.length<3) return showErr('⚠️ الدافع: يجب أن يكون على الأقل ٣ أحرف')
+  if(!narrative||narrative.length<80) return showErr(`⚠️ الرواية قصيرة — أدخل على الأقل ٨٠ حرفاً (حالياً: ${narrative?.length||0})`)
+  if(exec&&exec.length<10) return showErr('⚠️ طريقة التنفيذ: يجب أن تكون على الأقل ١٠ أحرف إذا أدخلتها')
+  if(witness&&witness.length<3) return showErr('⚠️ الشاهد الصامت: يجب أن يكون على الأقل ٣ أحرف إذا أدخلته')
+  if(relations&&relations.length<10) return showErr('⚠️ خريطة العلاقات: يجب أن تكون على الأقل ١٠ أحرف إذا أدخلتها')
+  if(!conf) return showErr('⚠️ اختر مستوى ثقتك أولاً')
+
   const{data:existing}=await sb.from('theories').select('id').eq('episode_id',caseData.id).eq('user_id',user.id).maybeSingle()
   if(existing){
     document.getElementById('form-wrap').style.display='none'
@@ -444,7 +477,6 @@ async function sendTheory(){
     return
   }
 
-  // نافذة التأكيد
   const confirmed=confirm('هل أنت متأكد من نظريتك؟\n\nبعد الإرسال لن تتمكن من التعديل أو الإرسال مرة ثانية.')
   if(!confirmed)return
 
@@ -462,12 +494,12 @@ async function sendTheory(){
   const payload={
     episode_id:caseData.id,
     killer,
-    weapon:document.getElementById('f-weapon')?.value.trim()||'',
-    motive:document.getElementById('f-motive')?.value.trim()||'',
-    execution_method:document.getElementById('f-exec')?.value.trim()||'',
-    silent_witness:document.getElementById('f-witness')?.value.trim()||'',
+    weapon,
+    motive,
+    execution_method:exec||'',
+    silent_witness:witness||'',
     narrative,
-    relationship_map:document.getElementById('f-relations')?.value.trim()||'',
+    relationship_map:relations||'',
     confidence_scale:conf,
     confident_bet:betOn,
     early_submission:earlyBonus
@@ -499,7 +531,7 @@ async function sendTheory(){
 }
 
 function showOk(msg){const el=document.getElementById('msg-ok');el.textContent='✅ '+msg;el.classList.add('show')}
-function showErr(msg){const el=document.getElementById('msg-err');el.textContent='⚠️ '+msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),5000)}
+function showErr(msg){const el=document.getElementById('msg-err');el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),6000)}
 function hideMsg(){document.getElementById('msg-ok').classList.remove('show');document.getElementById('msg-err').classList.remove('show')}
 
 document.addEventListener('DOMContentLoaded',boot)
