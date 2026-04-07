@@ -72,25 +72,38 @@ export default async function handler(req, res) {
   if (!checkRate(rateKey))
     return res.status(429).json({ error: 'تجاوزت الحد المسموح (٣ مرات). انتظر ساعة.' })
 
-  const { episode_id, killer, narrative, confidence_scale } = body
+  const { episode_id, killer, weapon, motive, narrative, confidence_scale } = body
 
+  // التحقق من الحقول الإلزامية — موحّدة مع case.html
   if (!episode_id)
     return res.status(400).json({ error: 'episode_id مطلوب.' })
-  if (!killer?.trim())
-    return res.status(400).json({ error: 'يجب تحديد المشتبه به.' })
-  if (!narrative?.trim() || narrative.trim().length < 30)
-    return res.status(400).json({ error: 'الرواية قصيرة جداً (٣٠ حرف على الأقل).' })
+  if (!killer?.trim() || killer.trim().length < 3)
+    return res.status(400).json({ error: 'يجب تحديد المشتبه به (٣ أحرف على الأقل).' })
+  if (!weapon?.trim() || weapon.trim().length < 3)
+    return res.status(400).json({ error: 'يجب تحديد السلاح أو الأداة (٣ أحرف على الأقل).' })
+  if (!motive?.trim() || motive.trim().length < 3)
+    return res.status(400).json({ error: 'يجب تحديد الدافع (٣ أحرف على الأقل).' })
+  if (!narrative?.trim() || narrative.trim().length < 80)
+    return res.status(400).json({ error: 'الرواية قصيرة جداً (٨٠ حرفاً على الأقل).' })
   if (!confidence_scale || confidence_scale < 1 || confidence_scale > 5)
     return res.status(400).json({ error: 'مستوى الثقة يجب أن يكون بين ١ و٥.' })
+
+  // إصلاح user_nickname — يأخذ الاسم الكامل أو اسم Google أو جزء الإيميل
+  const userNickname =
+    user.user_metadata?.full_name ||
+    user.user_metadata?.name ||
+    user.email?.split('@')[0] ||
+    'مجهول'
 
   const theory = {
     episode_id,
     user_id:          user.id,
     user_email:       user.email,
-    user_name:        user.user_metadata?.full_name || user.email.split('@')[0],
+    user_name:        userNickname,
+    user_nickname:    userNickname,
     killer:           killer.trim(),
-    weapon:           (body.weapon || '').trim(),
-    motive:           (body.motive || '').trim(),
+    weapon:           weapon.trim(),
+    motive:           motive.trim(),
     execution_method: (body.execution_method || '').trim(),
     crime_scene:      (body.crime_scene || '').trim(),
     silent_witness:   (body.silent_witness || '').trim(),
