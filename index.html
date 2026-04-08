@@ -568,7 +568,6 @@ body{background:var(--black);color:var(--white);font-family:'Tajawal',sans-serif
 <!-- CTA -->
 <section class="cta-sec" id="join">
   <div class="cta-inner" id="ctaContent">
-    <!-- يتغير بناءً على حالة تسجيل الدخول -->
     <h2>هل أنت مستعد<br>لفتح <span>الملف؟</span></h2>
     <p>انضم للمحققين العرب. اختر اسمك المستعار وابدأ رحلتك نحو رتبة لا يعلمها أحد.</p>
     <button class="gbtn" onclick="signInWithGoogle()">
@@ -594,7 +593,8 @@ const SUPABASE_URL = 'https://lfvtqfusxwatgsehtccd.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_70F2-jlvujCTWy1oLgli0Q_DUxFCJVT';
 const ADMIN_EMAIL  = '3omarbq@gmail.com';
 
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);sb.auth.onAuthStateChange((ev, sess) => {
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+sb.auth.onAuthStateChange((ev, sess) => {
   if (ev === 'SIGNED_IN' && sess?.access_token) {
     const exp = new Date(sess.expires_at * 1000).toUTCString()
     document.cookie = `sijil187_auth=${sess.access_token}; path=/; expires=${exp}; samesite=lax`
@@ -618,7 +618,7 @@ function showToast(msg, type='success') {
 async function signInWithGoogle() {
   const { error } = await sb.auth.signInWithOAuth({
     provider: 'google',
-    options: { redirectTo: window.location.origin }
+    options: { redirectTo: window.location.origin + '/case.html' }
   });
   if (error) showToast('حدث خطأ — حاول مرة أخرى', 'error');
 }
