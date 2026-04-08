@@ -308,7 +308,7 @@ body{background:var(--black);color:var(--white);font-family:'Tajawal',sans-serif
       <h1 class="hero-h1">كل جريمة<em class="hero-h1-num">187</em></h1>
       <p class="hero-sub">قصة غامضة تنتظر محققاً ذكياً.<br>شاهد الحلقة، حلل الأدلة، وأثبت أنك الأفضل.</p>
       <div class="hero-btns">
-        <button class="btn-g" onclick="document.getElementById('join').scrollIntoView({behavior:'smooth'})">ابدأ التحقيق الآن</button>
+        <button class="btn-g" onclick="handleStartBtn()">ابدأ التحقيق الآن</button>
         <button class="btn-o" onclick="document.getElementById('cases').scrollIntoView({behavior:'smooth'})">استعرض الملفات</button>
       </div>
     </div>
@@ -707,10 +707,20 @@ function updateUI(user, profile) {
   ctaContent.innerHTML = `
     <div class="cta-logged">
       <div class="cta-logged-name">🕵️ ${name}</div>
-      <div class="cta-logged-msg">أنت جاهز للتحقيق — انتظر فتح الملف الأول</div>
+      <div class="cta-logged-msg">أنت جاهز للتحقيق — ادخل على القضية الآن</div>
       <div class="cta-logged-pts">نقاطك الحالية: ${pts} نقطة</div>
-      <button class="cta-theory-btn" onclick="window.open('https://youtube.com/@sijil187','_blank')">🎬 تابع القناة لتعلم موعد الحلقة</button>
+      <button class="cta-theory-btn" onclick="window.location.href='/case.html'">🔍 ابدأ التحقيق</button>
     </div>`;
+}
+
+// ══ HANDLE START BTN ══
+async function handleStartBtn() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (session?.user) {
+    window.location.href = '/case.html';
+  } else {
+    document.getElementById('join').scrollIntoView({behavior:'smooth'});
+  }
 }
 
 // ══ INIT ══
