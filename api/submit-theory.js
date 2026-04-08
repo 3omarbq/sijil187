@@ -1,7 +1,7 @@
 const SUPABASE_URL   = process.env.NEXT_PUBLIC_SUPABASE_URL
 const SUPABASE_KEY   = process.env.SUPABASE_SERVICE_ROLE_KEY
 const N8N_WEBHOOK    = process.env.N8N_WEBHOOK_URL
-const ALLOWED_ORIGIN = 'https://sijil187.vercel.app'
+const ALLOWED_ORIGIN = 'https://www.sijil187.com'
 
 const rateMap = new Map()
 const RATE_LIMIT  = 3
@@ -74,7 +74,6 @@ export default async function handler(req, res) {
 
   const { episode_id, killer, weapon, motive, narrative, confidence_scale } = body
 
-  // التحقق من الحقول الإلزامية — موحّدة مع case.html
   if (!episode_id)
     return res.status(400).json({ error: 'episode_id مطلوب.' })
   if (!killer?.trim() || killer.trim().length < 3)
@@ -88,7 +87,6 @@ export default async function handler(req, res) {
   if (!confidence_scale || confidence_scale < 1 || confidence_scale > 5)
     return res.status(400).json({ error: 'مستوى الثقة يجب أن يكون بين ١ و٥.' })
 
-  // إصلاح user_nickname — يأخذ الاسم الكامل أو اسم Google أو جزء الإيميل
   const userNickname =
     user.user_metadata?.full_name ||
     user.user_metadata?.name ||
