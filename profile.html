@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ملف المحقق | سجل الجريمة 187</title>
+<style>
+:root{--bg:#070707;--surface:#0e0e0e;--card:#131313;--border:#1e1e1e;--border-lg:#2a2a2a;--red:#c0392b;--red-dk:#8b0000;--red-lt:#e74c3c;--text:#e8e8e8;--text-sec:#888;--text-mute:#444;--gold:#d4a853;--gold-dim:rgba(212,168,83,.15);--green:#27ae60}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-serif;min-height:100vh;line-height:1.6}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:#2a2a2a;border-radius:3px}
+
+/* HEADER */
+header{background:#050505;border-bottom:1px solid var(--red-dk);padding:.875rem 2rem;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:200}
+.logo{display:flex;align-items:center;gap:.75rem;text-decoration:none;color:var(--text)}
+.logo-mark{width:38px;height:38px;background:var(--red-dk);border-radius:5px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1rem;color:#fff}
+.logo-name{font-size:.95rem;font-weight:700;line-height:1.2}.logo-sub{font-size:.7rem;color:var(--text-sec)}
+.header-right{display:flex;align-items:center;gap:.75rem}
+.user-chip{display:flex;align-items:center;gap:.5rem;font-size:.8rem;color:var(--text-sec);border:1px solid var(--border-lg);border-radius:20px;padding:.3rem .75rem}
+.user-chip img{width:22px;height:22px;border-radius:50%}
+.btn{padding:.45rem 1.1rem;border-radius:5px;border:none;cursor:pointer;font-size:.8rem;font-weight:600;transition:all .15s;font-family:inherit}
+.btn-red{background:var(--red);color:#fff}.btn-red:hover{background:var(--red-lt)}
+.btn-ghost{background:transparent;color:var(--text-sec);border:1px solid var(--border-lg)}.btn-ghost:hover{color:var(--text);border-color:#444}
+.btn-sm{padding:.35rem .85rem;font-size:.75rem}
+
+/* HERO */
+.hero{background:linear-gradient(180deg,#0c0c0c 0%,var(--bg) 100%);border-bottom:1px solid var(--border);padding:2.5rem 2rem 2rem;text-align:center}
+.hero h1{font-size:1.8rem;font-weight:900;margin-bottom:.4rem}
+.hero h1 span{color:var(--gold)}
+.hero p{color:var(--text-sec);font-size:.875rem}
+
+.container{max-width:860px;margin:2rem auto;padding:0 2rem}
+@media(max-width:640px){.container{padding:0 1rem}.hero{padding:1.5rem 1rem}}
+
+/* بطاقة الهوية */
+.id-card{background:linear-gradient(135deg,rgba(212,168,83,.06),rgba(139,0,0,.06));border:1px solid rgba(212,168,83,.2);border-radius:12px;padding:1.5rem;margin-bottom:1.5rem;position:relative;overflow:hidden}
+.id-card::before{content:'187';position:absolute;left:-10px;bottom:-20px;font-size:8rem;font-weight:900;color:rgba(212,168,83,.04);font-family:monospace;pointer-events:none}
+.id-top{display:flex;align-items:center;gap:1.25rem;flex-wrap:wrap}
+.id-avatar{width:64px;height:64px;border-radius:50%;border:2px solid rgba(212,168,83,.3);object-fit:cover;flex-shrink:0}
+.id-avatar-placeholder{width:64px;height:64px;border-radius:50%;border:2px solid rgba(212,168,83,.3);background:rgba(212,168,83,.08);display:flex;align-items:center;justify-content:center;font-size:1.8rem;flex-shrink:0}
+.id-info{flex:1}
+.id-name{font-size:1.2rem;font-weight:900;margin-bottom:.25rem}
+.id-rank-badge{display:inline-flex;align-items:center;gap:.4rem;padding:.2rem .75rem;border-radius:20px;font-size:.75rem;font-weight:700;margin-bottom:.4rem}
+.id-join{font-size:.72rem;color:var(--text-mute)}
+.id-stats{display:flex;gap:1.5rem;margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border);flex-wrap:wrap}
+.id-stat{text-align:center;flex:1;min-width:60px}
+.id-stat-val{font-size:1.4rem;font-weight:900;color:var(--gold);font-family:monospace}
+.id-stat-lbl{font-size:.65rem;color:var(--text-mute);text-transform:uppercase;letter-spacing:.05em}
+
+/* شريط التقدم */
+.progress-wrap{margin-bottom:1.5rem;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1rem 1.25rem}
+.progress-label{display:flex;justify-content:space-between;align-items:center;margin-bottom:.6rem}
+.progress-label span{font-size:.75rem;color:var(--text-sec)}
+.progress-label strong{font-size:.75rem;color:var(--gold)}
+.progress-bar{height:6px;background:var(--border-lg);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--red-dk),var(--gold));border-radius:3px;transition:width .8s ease}
+.progress-hint{font-size:.7rem;color:var(--text-mute);margin-top:.5rem;text-align:center}
+
+/* الشارات */
+.section-title{font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:var(--text-mute);font-weight:700;margin-bottom:.875rem;display:flex;align-items:center;gap:.5rem}
+.section-title::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.badges-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:.75rem;margin-bottom:1.5rem}
+.badge-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:.875rem;text-align:center;transition:transform .2s,border-color .2s;position:relative}
+.badge-card.earned{border-color:rgba(212,168,83,.3);background:rgba(212,168,83,.03)}
+.badge-card.earned:hover{transform:translateY(-2px);border-color:rgba(212,168,83,.5)}
+.badge-card.lost{border-color:rgba(192,57,43,.2);background:rgba(192,57,43,.02);opacity:.7}
+.badge-card.locked{opacity:.4;filter:grayscale(1)}
+.badge-card.mystery{border-style:dashed;border-color:rgba(212,168,83,.15)}
+.badge-icon{font-size:1.8rem;margin-bottom:.4rem;display:block}
+.badge-name{font-size:.72rem;font-weight:700;margin-bottom:.2rem}
+.badge-desc{font-size:.62rem;color:var(--text-mute);line-height:1.5}
+.badge-date{font-size:.58rem;color:rgba(212,168,83,.5);margin-top:.3rem}
+.badge-lost-tag{position:absolute;top:.4rem;left:.4rem;background:rgba(192,57,43,.2);color:#e74c3c;font-size:.55rem;font-weight:700;padding:.1rem .35rem;border-radius:3px}
+.badge-shield{position:absolute;top:.4rem;right:.4rem;font-size:.7rem;cursor:help}
+
+/* سجل القضايا */
+.cases-list{display:flex;flex-direction:column;gap:.5rem;margin-bottom:1.5rem}
+.case-row{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:.875rem 1rem;display:grid;grid-template-columns:auto 1fr auto auto;align-items:center;gap:.875rem}
+.case-row.correct{border-right:3px solid var(--green)}
+.case-row.wrong{border-right:3px solid var(--red)}
+.case-row.pending{border-right:3px solid var(--text-mute)}
+.case-result-icon{font-size:1.2rem;width:28px;text-align:center}
+.case-info{}
+.case-name{font-size:.82rem;font-weight:700}
+.case-date{font-size:.65rem;color:var(--text-mute);margin-top:.1rem}
+.case-pts{font-family:monospace;font-weight:900;font-size:.9rem}
+.case-pts.pos{color:var(--green)}
+.case-pts.neg{color:var(--red-lt)}
+.case-pts.neu{color:var(--text-mute)}
+.case-status-badge{padding:.15rem .5rem;border-radius:20px;font-size:.62rem;font-weight:700}
+.sb-correct{background:rgba(39,174,96,.15);color:#2ecc71;border:1px solid rgba(39,174,96,.3)}
+.sb-wrong{background:rgba(192,57,43,.1);color:#e74c3c;border:1px solid rgba(192,57,43,.3)}
+.sb-pending{background:rgba(100,100,100,.1);color:#888;border:1px solid #333}
+
+/* حالات */
+.empty{text-align:center;padding:3rem 1rem;color:var(--text-mute)}
+.empty .ei{font-size:2.5rem;opacity:.3;margin-bottom:.75rem}
+.empty p{font-size:.85rem}
+.spinner{width:26px;height:26px;border:2px solid var(--border);border-top-color:var(--red);border-radius:50%;animation:spin .7s linear infinite;margin:2rem auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-wrap{text-align:center;padding:2rem;color:var(--text-mute);font-size:.8rem}
+
+/* gate */
+.gate{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:3rem;text-align:center;margin-top:2rem}
+.gate-icon{font-size:3rem;margin-bottom:1rem;opacity:.5}
+.gate h2{font-size:1.1rem;font-weight:700;margin-bottom:.5rem}
+.gate p{font-size:.82rem;color:var(--text-sec);margin-bottom:1.5rem}
+
+/* رتب */
+.r-observer{background:rgba(100,100,100,.15);color:#888;border:1px solid #444}
+.r-hidden{background:rgba(212,168,83,.08);color:rgba(212,168,83,.5);border:1px solid rgba(212,168,83,.2)}
+.r-legend{background:linear-gradient(135deg,rgba(212,168,83,.2),rgba(192,57,43,.2));color:var(--gold);border:1px solid rgba(212,168,83,.5)}
+.r-beginner{background:rgba(41,128,185,.15);color:#5dade2;border:1px solid rgba(41,128,185,.3)}
+.r-pro{background:rgba(39,174,96,.15);color:#2ecc71;border:1px solid rgba(39,174,96,.3)}
+.r-forensic{background:rgba(142,68,173,.15);color:#9b59b6;border:1px solid rgba(142,68,173,.3)}
+.r-expert{background:rgba(192,57,43,.15);color:#e74c3c;border:1px solid rgba(192,57,43,.3)}
+
+footer{border-top:1px solid var(--border);padding:1.75rem 2rem;text-align:center;color:var(--text-mute);font-size:.75rem;margin-top:3rem}
+</style>
+</head>
+<body>
+
+<header>
+  <a href="/" class="logo">
+    <div class="logo-mark">187</div>
+    <div><div class="logo-name">سجل الجريمة</div><div class="logo-sub">كل جريمة لها سجل</div></div>
+  </a>
+  <div class="header-right" id="hdr-auth"></div>
+</header>
+
+<div class="hero">
+  <h1>🕵️ <span>ملف المحقق</span></h1>
+  <p>سجلك الجنائي الكامل — نقاطك، شاراتك، تاريخك</p>
+</div>
+
+<div class="container" id="main-container">
+  <div class="loading-wrap"><div class="spinner"></div><p>جاري تحميل ملفك...</p></div>
+</div>
+
+<footer><p>سجل الجريمة 187 © ٢٠٢٥ — جميع الحقوق محفوظة</p></footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+const SB_URL = 'https://lfvtqfusxwatgsehtccd.supabase.co'
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxmdnRxZnVzeHdhdGdzZWh0Y2NkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQzNDE2MzgsImV4cCI6MjA4OTkxNzYzOH0.FkEh9zpBaXFE3nNXD2I6TmjbPHkXEVO3CLUJRWltrqs'
+const sb = supabase.createClient(SB_URL, SB_KEY)
+
+// ══ الرتب ══
+const RANKS = [
+  { min:0,     max:149,      name:'مُلاحِظ',      icon:'👁️',  cls:'r-observer', next:150  },
+  { min:150,   max:499,      name:'محقق مبتدئ',   icon:'🔵', cls:'r-beginner',  next:500  },
+  { min:500,   max:1199,     name:'محقق محترف',   icon:'🟢', cls:'r-pro',       next:1200 },
+  { min:1200,  max:2799,     name:'محلل جنائي',   icon:'🔬', cls:'r-forensic',  next:2800 },
+  { min:2800,  max:9999,     name:'خبير الجريمة', icon:'🔴', cls:'r-expert',    next:10000},
+  { min:10000, max:Infinity, name:'وكلاء 187',    icon:'💀', cls:'r-legend',    next:null }
+]
+
+function getRank(pts) {
+  for(let i = RANKS.length-1; i >= 0; i--) {
+    if(pts >= RANKS[i].min) return RANKS[i]
+  }
+  return RANKS[0]
+}
+
+// ══ الشارات (16 شارة) ══
+const ALL_BADGES = [
+  // إنجاز — للأبد
+  { id:'welcome',       icon:'🚪', name:'دخل الملف',         desc:'أول خطوة في رحلة المحقق',                     type:'achievement', hint:null },
+  { id:'bloodtruth',    icon:'🩸', name:'الدم لا يكذب',      desc:'أصاب القاتل والسلاح والدافع في قضية واحدة',    type:'achievement', hint:null },
+  { id:'scientist',     icon:'🔬', name:'عالم الجريمة',       desc:'إجابة كاملة في 3 قضايا مختلفة',               type:'achievement', hint:null },
+  { id:'candlelight',   icon:'🕯️', name:'في الظلام نور',     desc:'أرسل نظريته في أول ساعتين من فتح القضية',      type:'achievement', hint:null },
+  { id:'coldfile',      icon:'📁', name:'الملف المنسي',       desc:'ربط ملفاً بارداً بقضية جديدة بنجاح',           type:'achievement', hint:null },
+  { id:'maskread',      icon:'🎭', name:'قرأ القناع',         desc:'لم يقع في فخ الدليل المضلل',                   type:'achievement', hint:null },
+  { id:'justice',       icon:'⚖️', name:'العدالة لا تتأخر',  desc:'رهن "واثق جداً" وأصاب 3 مرات متتالية',        type:'achievement', hint:null },
+  { id:'novice',        icon:'🔍', name:'المحقق لا يستسلم',  desc:'شارك في 3 قضايا بغض النظر عن النتيجة',         type:'achievement', hint:null },
+  // استمرارية — تختفي عند الانقطاع
+  { id:'neverclose',    icon:'🚬', name:'لم يُغلق الملف',     desc:'شارك في كل قضية منذ انضمامه دون انقطاع',      type:'streak',      hint:'درع حماية: مرة كل 3 أشهر' },
+  { id:'nightwatch',    icon:'🌙', name:'يقظة الليل',         desc:'أرسل نظريته في أول 6 ساعات 3 مرات متتالية',   type:'streak',      hint:'درع حماية: مرة كل 3 أشهر' },
+  { id:'redthread',     icon:'🔴', name:'خيط أحمر',           desc:'3 قضايا متتالية بإجابة صحيحة',                 type:'streak',      hint:'درع حماية: مرة كل 3 أشهر' },
+  // غموض — مخفية
+  { id:'mystery1',      icon:'👁️', name:'شاهد الأبدية',      desc:'???',  type:'mystery', hint:'تلميح: الجواب ليس في النظرية — بل فيما قبلها' },
+  { id:'mystery2',      icon:'🗝️', name:'مفتاح 187',          desc:'???',  type:'mystery', hint:'تلميح: فُتح مرة واحدة في التاريخ' },
+  { id:'mystery3',      icon:'🩻', name:'تحت الجلد',          desc:'???',  type:'mystery', hint:'تلميح: لاحظ ما لم يلاحظه أحد' },
+  { id:'mystery4',      icon:'🎙️', name:'صوت الصمت',          desc:'???',  type:'mystery', hint:'تلميح: الصامت أحياناً يسمع أكثر' },
+  // أسطورة
+  { id:'blackfile',     icon:'☠️', name:'الملف الأسود',       desc:'187 إجابة صحيحة — أسطورة لم تتحقق بعد',       type:'legend',      hint:null },
+]
+
+async function boot() {
+  if(location.hash.includes('access_token')){
+    await sb.auth.getSession()
+    history.replaceState(null,'',location.pathname+location.search)
+  }
+
+  const { data: { session } } = await sb.auth.getSession()
+
+  renderHeader(session?.user)
+
+  sb.auth.onAuthStateChange((ev, sess) => {
+    renderHeader(sess?.user)
+    if(ev === 'SIGNED_IN') loadProfile(sess.user)
+    if(ev === 'SIGNED_OUT') showGate()
+  })
+
+  if(session?.user) {
+    await loadProfile(session.user)
+  } else {
+    showGate()
+  }
+}
+
+function renderHeader(user) {
+  const el = document.getElementById('hdr-auth')
+  if(user){
+    const name = user.user_metadata?.full_name || user.email.split('@')[0]
+    const avatar = user.user_metadata?.avatar_url || ''
+    el.innerHTML = `
+      <div class="user-chip">${avatar?`<img src="${avatar}" alt="">`:''}${name}</div>
+      <button class="btn btn-ghost btn-sm" onclick="sb.auth.signOut()">خروج</button>`
+  } else {
+    el.innerHTML = `<button class="btn btn-ghost btn-sm" onclick="signIn()">🔑 تسجيل الدخول</button>`
+  }
+}
+
+async function signIn(){
+  await sb.auth.signInWithOAuth({
+    provider:'google',
+    options:{redirectTo: window.location.origin + '/profile.html'}
+  })
+}
+
+function showGate() {
+  document.getElementById('main-container').innerHTML = `
+    <div class="gate">
+      <div class="gate-icon">🔐</div>
+      <h2>ملفك السري ينتظرك</h2>
+      <p>سجّل دخولك لترى نقاطك وشاراتك وسجل قضاياك كاملاً</p>
+      <button class="btn btn-red" onclick="signIn()">تسجيل الدخول بـ Google</button>
+    </div>`
+}
+
+async function loadProfile(user) {
+  const container = document.getElementById('main-container')
+  container.innerHTML = `<div class="loading-wrap"><div class="spinner"></div><p>جاري تحميل ملفك...</p></div>`
+
+  // جلب البيانات بالتوازي
+  const [profileRes, theoriesRes, honourRes] = await Promise.all([
+    sb.from('profiles').select('*').eq('id', user.id).maybeSingle(),
+    sb.from('theories').select('*').eq('user_id', user.id).order('submitted_at', {ascending:false}),
+    sb.from('honor_board').select('*').eq('user_id', user.id).maybeSingle()
+  ])
+
+  const profile  = profileRes.data
+  const theories = theoriesRes.data || []
+  const honour   = honourRes.data
+
+  const name      = profile?.detective_name || honour?.user_name || user.user_metadata?.full_name || user.email.split('@')[0]
+  const pts       = honour?.total_points || 0
+  const correct   = honour?.correct_theories || 0
+  const avatar    = user.user_metadata?.avatar_url || ''
+  const joinDate  = new Date(user.created_at).toLocaleDateString('ar-SA', {year:'numeric',month:'long',day:'numeric'})
+  const rank      = getRank(pts)
+
+  // حساب شريط التقدم
+  let progressPct = 100
+  let progressHint = 'وصلت للقمة 🏆'
+  if(rank.next) {
+    const rangeSize = rank.next - rank.min
+    const current   = pts - rank.min
+    progressPct     = Math.min(100, Math.round((current / rangeSize) * 100))
+    progressHint    = `${(rank.next - pts).toLocaleString()} نقطة للرتبة التالية`
+  }
+
+  // حساب الشارات المكتسبة (مبدئياً)
+  const earned = computeEarnedBadges(user, theories, pts, correct)
+
+  container.innerHTML = `
+    ${renderIDCard(name, avatar, rank, pts, correct, theories.length, joinDate)}
+    ${renderProgressBar(rank, pts, progressPct, progressHint)}
+    <div class="section-title">الشارات</div>
+    ${renderBadges(earned)}
+    <div class="section-title">سجل القضايا</div>
+    ${renderCases(theories)}
+  `
+}
+
+function computeEarnedBadges(user, theories, pts, correct) {
+  const earned = {}
+
+  // 🚪 دخل الملف — دائماً
+  earned['welcome'] = { date: new Date(user.created_at).toLocaleDateString('ar-SA') }
+
+  // 🔍 المحقق لا يستسلم — 3 مشاركات
+  if(theories.length >= 3) earned['novice'] = {}
+
+  // 🩸 الدم لا يكذب — إجابة كاملة
+  const fullCorrect = theories.find(t => t.status === 'graded' &&
+    t.killer && t.weapon && t.motive)
+  if(fullCorrect) earned['bloodtruth'] = {}
+
+  // ⚖️ العدالة لا تتأخر — 3 نظريات graded متتالية مع رهان
+  const gradedBets = theories.filter(t => t.status === 'graded' && t.confident_bet)
+  if(gradedBets.length >= 3) earned['justice'] = {}
+
+  // 🔴 خيط أحمر — 3 قضايا صحيحة متتالية
+  let streak = 0
+  for(const t of [...theories].reverse()){
+    if(t.status === 'graded') streak++
+    else if(t.status === 'rejected') streak = 0
+  }
+  if(streak >= 3) earned['redthread'] = {}
+
+  // 📁 الملف المنسي — نقاط cross-episode
+  const crossEp = theories.find(t => (t.points || 0) >= 50)
+  if(crossEp) earned['coldfile'] = {}
+
+  return earned
+}
+
+function renderIDCard(name, avatar, rank, pts, correct, total, joinDate) {
+  const avatarHtml = avatar
+    ? `<img class="id-avatar" src="${avatar}" alt="">`
+    : `<div class="id-avatar-placeholder">🕵️</div>`
+
+  return `
+    <div class="id-card">
+      <div class="id-top">
+        ${avatarHtml}
+        <div class="id-info">
+          <div class="id-name">${name}</div>
+          <span class="id-rank-badge ${rank.cls}">${rank.icon} ${rank.name}</span>
+          <div class="id-join">📅 انضم في ${joinDate}</div>
+        </div>
+      </div>
+      <div class="id-stats">
+        <div class="id-stat">
+          <div class="id-stat-val">${pts.toLocaleString()}</div>
+          <div class="id-stat-lbl">نقطة</div>
+        </div>
+        <div class="id-stat">
+          <div class="id-stat-val">${correct}</div>
+          <div class="id-stat-lbl">إجابة صحيحة</div>
+        </div>
+        <div class="id-stat">
+          <div class="id-stat-val">${total}</div>
+          <div class="id-stat-lbl">قضية شارك</div>
+        </div>
+        <div class="id-stat">
+          <div class="id-stat-val">${total > 0 ? Math.round((correct/total)*100) : 0}%</div>
+          <div class="id-stat-lbl">دقة</div>
+        </div>
+      </div>
+    </div>`
+}
+
+function renderProgressBar(rank, pts, pct, hint) {
+  if(!rank.next) return ''
+  return `
+    <div class="progress-wrap">
+      <div class="progress-label">
+        <span>الرتبة الحالية: <strong style="color:var(--gold)">${rank.name}</strong></span>
+        <strong>${pts.toLocaleString()} / ${rank.next.toLocaleString()}</strong>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+      <div class="progress-hint">${hint}</div>
+    </div>`
+}
+
+function renderBadges(earned) {
+  const html = ALL_BADGES.map(b => {
+    const isEarned  = !!earned[b.id]
+    const isMystery = b.type === 'mystery'
+    const isStreak  = b.type === 'streak'
+    const isLegend  = b.type === 'legend'
+
+    if(isMystery && !isEarned) {
+      return `
+        <div class="badge-card mystery locked">
+          <span class="badge-icon">❓</span>
+          <div class="badge-name" style="color:rgba(212,168,83,.4)">شارة مخفية</div>
+          <div class="badge-desc">${b.hint || '???'}</div>
+        </div>`
+    }
+
+    if(isLegend && !isEarned) {
+      return `
+        <div class="badge-card locked">
+          <span class="badge-icon">☠️</span>
+          <div class="badge-name" style="color:rgba(212,168,83,.3)">الملف الأسود</div>
+          <div class="badge-desc" style="color:var(--text-mute)">أسطورة لم تتحقق بعد</div>
+        </div>`
+    }
+
+    const cls = isEarned ? 'earned' : 'locked'
+    return `
+      <div class="badge-card ${cls}" title="${isEarned ? 'مكتسبة' : 'لم تكتسب بعد'}">
+        ${isStreak && isEarned ? `<span class="badge-shield" title="${b.hint}">🛡️</span>` : ''}
+        <span class="badge-icon">${b.icon}</span>
+        <div class="badge-name">${b.name}</div>
+        <div class="badge-desc">${b.desc}</div>
+        ${isEarned && earned[b.id]?.date ? `<div class="badge-date">${earned[b.id].date}</div>` : ''}
+      </div>`
+  }).join('')
+
+  return `<div class="badges-grid">${html}</div>`
+}
+
+function renderCases(theories) {
+  if(!theories.length) return `
+    <div class="empty">
+      <div class="ei">📂</div>
+      <p>لم تشارك في أي قضية بعد</p>
+    </div>`
+
+  const rows = theories.map(t => {
+    const status  = t.status || 'pending'
+    const pts     = t.points || 0
+    const date    = new Date(t.submitted_at).toLocaleDateString('ar-SA', {year:'numeric',month:'short',day:'numeric'})
+    const icon    = status === 'graded' ? '✅' : status === 'rejected' ? '❌' : '⏳'
+    const rowCls  = status === 'graded' ? 'correct' : status === 'rejected' ? 'wrong' : 'pending'
+    const ptsCls  = pts > 0 ? 'pos' : pts < 0 ? 'neg' : 'neu'
+    const ptsStr  = pts > 0 ? `+${pts}` : `${pts}`
+    const badgeCls= status === 'graded' ? 'sb-correct' : status === 'rejected' ? 'sb-wrong' : 'sb-pending'
+    const badgeTxt= status === 'graded' ? 'صحيح' : status === 'rejected' ? 'خطأ' : 'قيد المراجعة'
+
+    return `
+      <div class="case-row ${rowCls}">
+        <div class="case-result-icon">${icon}</div>
+        <div class="case-info">
+          <div class="case-name">القضية ${t.episode_id || '—'}</div>
+          <div class="case-date">${date}</div>
+        </div>
+        <div class="case-pts ${ptsCls}">${status === 'pending' ? '—' : ptsStr}</div>
+        <span class="case-status-badge ${badgeCls}">${badgeTxt}</span>
+      </div>`
+  }).join('')
+
+  return `<div class="cases-list">${rows}</div>`
+}
+
+document.addEventListener('DOMContentLoaded', boot)
+</script>
+</body>
+</html>
