@@ -618,7 +618,7 @@ function showToast(msg, type='success') {
 async function signInWithGoogle() {
   const { error } = await sb.auth.signInWithOAuth({
     provider: 'google',
-    options: { redirectTo: window.location.origin + '/case.html' }
+    options: { redirectTo: window.location.origin }
   });
   if (error) showToast('حدث خطأ — حاول مرة أخرى', 'error');
 }
