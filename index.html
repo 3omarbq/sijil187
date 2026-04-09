@@ -74,7 +74,7 @@ body{background:var(--black);color:var(--white);font-family:'Tajawal',sans-serif
 @keyframes flicker{0%,91%,100%{opacity:1}92%{opacity:.18}93%{opacity:1}96.5%{opacity:.48}97%{opacity:1}}
 .hero-sub{font-size:16px;color:var(--smoke);max-width:400px;margin:16px 0 34px;line-height:1.95;font-weight:300}
 .hero-btns{display:flex;gap:12px;flex-wrap:wrap}
-.btn-g{background:var(--gold);color:var(--black);border:none;padding:14px 38px;font-family:'Tajawal',sans-serif;font-size:15px;font-weight:800;letter-spacing:1px;transition:transform .2s,box-shadow .2s}
+.btn-g{background:var(--gold);color:var(--black);border:none;padding:14px 38px;font-family:'Tajawal',sans-serif;font-size:15px;font-weight:800;letter-spacing:1px;transition:transform .2s,box-shadow .2s;cursor:pointer;-webkit-tap-highlight-color:transparent}
 .btn-g:hover{transform:translateY(-3px);box-shadow:0 12px 36px rgba(201,168,76,0.2)}
 .btn-o{background:transparent;color:var(--white);border:1px solid rgba(255,255,255,0.1);padding:14px 38px;font-family:'Tajawal',sans-serif;font-size:15px;font-weight:700;transition:border-color .2s,color .2s}
 .btn-o:hover{border-color:var(--gold);color:var(--gold)}
@@ -258,7 +258,6 @@ body{background:var(--black);color:var(--white);font-family:'Tajawal',sans-serif
   .sec,.cta-sec{padding:56px 20px}
   .sec-dk{padding:0}.sec-dk .sec{padding:56px 20px}
 }
-.hamburger{display:none}
 </style>
 </head>
 <body>
@@ -723,7 +722,6 @@ function updateUI(user, profile) {
   navAuth.innerHTML = `
     <div class="nav-user">
       ${isAdmin ? `<a href="/admin.html" style="color:var(--gold-dim);font-size:11px;text-decoration:none;letter-spacing:1px;font-weight:700">⚙️ ADMIN</a>` : ''}
-      <a href="/case.html" class="nav-btn" style="text-decoration:none;font-size:12px;padding:8px 16px">🔍 التحقيق</a>
       <span class="nav-user-name" onclick="window.location.href='/profile.html'" style="cursor:pointer">🕵️ ${name}</span>
       <button class="nav-signout" onclick="signOut()">خروج</button>
     </div>`;
