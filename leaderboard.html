@@ -150,7 +150,6 @@ const sb = supabase.createClient(SB_URL, SB_KEY)
 
 let user = null
 
-// نظام الرتب — الأسماء مخفية إلا لمن وصل
 const RANKS = [
   { min:0,     max:149,        name:'مُلاحِظ',     icon:'👁️',  cls:'r-observer', public:true  },
   { min:150,   max:499,        name:'• • • • •',   icon:'🔒', cls:'r-hidden',   public:false },
@@ -160,7 +159,6 @@ const RANKS = [
   { min:10000, max:Infinity,   name:'وكلاء 187',   icon:'💀', cls:'r-legend',   public:false }
 ]
 
-// الأسماء الحقيقية للرتب — تُكشف فقط لمن وصل
 const RANK_REAL_NAMES = [
   { min:0,     name:'مُلاحِظ',        icon:'👁️',  cls:'r-observer' },
   { min:150,   name:'محقق مبتدئ',     icon:'🔵', cls:'r-beginner'  },
@@ -171,7 +169,6 @@ const RANK_REAL_NAMES = [
 ]
 
 function getPublicRank(pts) {
-  // للعرض في الجدول — يظهر مُلاحِظ فقط، الباقي •••
   for(let i = RANKS.length-1; i >= 0; i--) {
     if(pts >= RANKS[i].min) return RANKS[i]
   }
@@ -179,7 +176,6 @@ function getPublicRank(pts) {
 }
 
 function getMyRank(pts) {
-  // للمستخدم نفسه — يرى اسم رتبته الحقيقي
   for(let i = RANK_REAL_NAMES.length-1; i >= 0; i--) {
     if(pts >= RANK_REAL_NAMES[i].min) return RANK_REAL_NAMES[i]
   }
@@ -206,7 +202,7 @@ async function boot() {
 async function signIn(){
   await sb.auth.signInWithOAuth({
     provider:'google',
-    options:{redirectTo:'https://sijil187.vercel.app/leaderboard.html'}
+    options:{ redirectTo: window.location.origin + '/leaderboard.html' }
   })
 }
 async function signOut(){ await sb.auth.signOut() }
@@ -241,7 +237,6 @@ async function loadLeaderboard(){
     return
   }
 
-  // فلتر البيانات القديمة الخاطئة
   const validData = data.filter(r => r.user_name && r.user_name !== '?????' && r.user_name !== 'NULL')
 
   if(validData.length === 0){
@@ -262,7 +257,6 @@ async function loadLeaderboard(){
 
     if(isMe){ myPos = pos; myEntry = row }
 
-    // في الجدول — الرتبة تظهر مخفية لكل الناس (• • • • •) إلا المُلاحِظ
     const publicRank = getPublicRank(pts)
 
     let posHtml = `<span class="pos">${pos}</span>`
@@ -284,10 +278,8 @@ async function loadLeaderboard(){
     body.appendChild(div)
   })
 
-  // تذييل الجدول
   document.getElementById('lb-footer').textContent = `${validData.length} محقق مسجّل`
 
-  // بطاقة المستخدم
   if(user){
     if(!myEntry){
       const { data: myData } = await sb
@@ -306,7 +298,7 @@ async function loadLeaderboard(){
 function renderMyCard(entry, pos){
   const wrap = document.getElementById('my-card-wrap')
   const pts = entry?.total_points || 0
-  const myRank = getMyRank(pts) // المستخدم يرى رتبته الحقيقية
+  const myRank = getMyRank(pts)
   const name = entry?.user_name || user.user_metadata?.full_name || user.email.split('@')[0]
 
   wrap.innerHTML = `
