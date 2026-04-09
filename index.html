@@ -26,8 +26,8 @@ body{background:var(--black);color:var(--white);font-family:'Tajawal',sans-serif
 .nav-links{display:flex;gap:30px;list-style:none}
 .nav-links a{color:var(--smoke);text-decoration:none;font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;transition:color .2s}
 .nav-links a:hover{color:var(--gold)}
-.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:6px;background:transparent;border:none}
-.hamburger span{display:block;width:24px;height:2px;background:var(--smoke);border-radius:2px;transition:all .3s}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;background:transparent;border:1px solid rgba(201,168,76,0.3);border-radius:4px;min-width:40px;min-height:40px;align-items:center;justify-content:center}
+.hamburger span{display:block;width:22px;height:2px;background:var(--gold);border-radius:2px;transition:all .3s}
 .hamburger.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
 .hamburger.open span:nth-child(2){opacity:0}
 .hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
@@ -290,9 +290,9 @@ body{background:var(--black);color:var(--white);font-family:'Tajawal',sans-serif
     <div id="navAuth">
       <button class="nav-btn" onclick="signInWithGoogle()">ابدأ التحقيق</button>
     </div>
-    <div class="hamburger" id="hamburger" onclick="toggleNav()">
+    <button class="hamburger" id="hamburger" onclick="toggleNav()" aria-label="القائمة">
       <span></span><span></span><span></span>
-    </div>
+    </button>
   </div>
 </nav>
 
@@ -723,7 +723,8 @@ function updateUI(user, profile) {
   navAuth.innerHTML = `
     <div class="nav-user">
       ${isAdmin ? `<a href="/admin.html" style="color:var(--gold-dim);font-size:11px;text-decoration:none;letter-spacing:1px;font-weight:700">⚙️ ADMIN</a>` : ''}
-      <span class="nav-user-name">🕵️ ${name}</span>
+      <a href="/case.html" class="nav-btn" style="text-decoration:none;font-size:12px;padding:8px 16px">🔍 التحقيق</a>
+      <span class="nav-user-name" onclick="window.location.href='/profile.html'" style="cursor:pointer">🕵️ ${name}</span>
       <button class="nav-signout" onclick="signOut()">خروج</button>
     </div>`;
 
