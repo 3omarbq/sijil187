@@ -313,7 +313,7 @@ async function boot(){
 async function signIn(){
   await sb.auth.signInWithOAuth({
     provider:'google',
-    options:{redirectTo:'https://sijil187.vercel.app/case.html'}
+    options:{ redirectTo: window.location.origin + '/case.html' }
   })
 }
 async function signOut(){await sb.auth.signOut()}
