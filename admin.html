@@ -175,9 +175,15 @@ tr:hover td{background:rgba(255,255,255,0.015)}
       </div>
       <div class="stats-grid">
         <div class="stat-card gold"><div class="stat-n" id="stat-theories">-</div><div class="stat-l">نظرية واردة</div></div>
-        <div class="stat-card green"><div class="stat-n" id="stat-users">-</div><div class="stat-l">مستخدم مسجل</div></div>
+        <div class="stat-card green"><div class="stat-n" id="stat-users">-</div><div class="stat-l">مستخدم اختار اسماً</div></div>
         <div class="stat-card blue"><div class="stat-n" id="stat-pending">-</div><div class="stat-l">بانتظار التقييم</div></div>
         <div class="stat-card red"><div class="stat-n" id="stat-blocked">-</div><div class="stat-l">مستخدم محظور</div></div>
+      </div>
+      <div class="stats-grid" style="margin-top:-16px">
+        <div class="stat-card" style="border-top:2px solid var(--blue)"><div class="stat-n" style="color:var(--blue)" id="stat-auth-users">-</div><div class="stat-l">إجمالي المسجلين (Google)</div></div>
+        <div class="stat-card" style="border-top:2px solid var(--green)"><div class="stat-n" style="color:var(--green)" id="stat-cases">-</div><div class="stat-l">قضية منشورة</div></div>
+        <div class="stat-card" style="border-top:2px solid var(--gold)"><div class="stat-n" style="color:var(--gold)" id="stat-graded">-</div><div class="stat-l">نظرية مقيّمة</div></div>
+        <div class="stat-card" style="border-top:2px solid var(--smoke)"><div class="stat-n" style="color:var(--smoke)" id="stat-capacity">50K</div><div class="stat-l">أقصى سعة مجانية</div></div>
       </div>
       <div class="table-wrap">
         <table>
@@ -446,16 +452,29 @@ function fmtDate(d) {
 
 // ══ DASHBOARD ══
 async function loadDashboard() {
-  const [t, u, p, b] = await Promise.all([
+  const [t, u, p, b, c, g] = await Promise.all([
     sb.from('theories').select('*', {count:'exact', head:true}),
     sb.from('profiles').select('*', {count:'exact', head:true}),
     sb.from('theories').select('*', {count:'exact', head:true}).eq('status','pending'),
-    sb.from('blocked_users').select('*', {count:'exact', head:true})
+    sb.from('blocked_users').select('*', {count:'exact', head:true}),
+    sb.from('cases').select('*', {count:'exact', head:true}),
+    sb.from('theories').select('*', {count:'exact', head:true}).neq('status','pending'),
   ])
   document.getElementById('stat-theories').textContent = t.count ?? 0
   document.getElementById('stat-users').textContent = u.count ?? 0
   document.getElementById('stat-pending').textContent = p.count ?? 0
   document.getElementById('stat-blocked').textContent = b.count ?? 0
+  document.getElementById('stat-cases').textContent = c.count ?? 0
+  document.getElementById('stat-graded').textContent = g.count ?? 0
+
+  // إجمالي المسجلين من auth
+  try {
+    const { data: authData } = await sb.rpc('get_auth_users_count')
+    if(authData !== null) document.getElementById('stat-auth-users').textContent = authData
+    else document.getElementById('stat-auth-users').textContent = u.count ?? 0
+  } catch {
+    document.getElementById('stat-auth-users').textContent = u.count ?? 0
+  }
 
   const { data: recent } = await sb.from('theories').select('*').order('created_at', {ascending:false}).limit(5)
   const tbody = document.getElementById('recent-theories')
