@@ -57,7 +57,8 @@ header{background:#050505;border-bottom:1px solid var(--red-dk);padding:.875rem 
 .progress-hint{font-size:.7rem;color:var(--text-mute);margin-top:.5rem;text-align:center}
 
 /* الشارات */
-.section-title{font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:var(--text-mute);font-weight:700;margin-bottom:.875rem;display:flex;align-items:center;gap:.5rem}
+.update-notice{background:rgba(212,168,83,.04);border:1px solid rgba(212,168,83,.12);border-radius:6px;padding:.6rem 1rem;margin-bottom:1.5rem;font-size:.72rem;color:var(--text-mute);text-align:center}
+.update-notice span{color:rgba(212,168,83,.5)}
 .section-title::after{content:'';flex:1;height:1px;background:var(--border)}
 
 .badges-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:.75rem;margin-bottom:1.5rem}
@@ -244,6 +245,7 @@ async function loadProfile(user) {
   const container = document.getElementById('main-container')
   container.innerHTML = `<div class="loading-wrap"><div class="spinner"></div><p>جاري تحميل ملفك...</p></div>`
 
+
   // جلب البيانات بالتوازي
   const [profileRes, theoriesRes, honourRes] = await Promise.all([
     sb.from('profiles').select('*').eq('id', user.id).maybeSingle(),
@@ -278,6 +280,7 @@ async function loadProfile(user) {
   container.innerHTML = `
     ${renderIDCard(name, avatar, rank, pts, correct, theories.length, joinDate)}
     ${renderProgressBar(rank, pts, progressPct, progressHint)}
+    <div class="update-notice">⏱ <span>النقاط تُحدَّث تلقائياً كل 5 أيام بعد إغلاق كل قضية</span></div>
     <div class="section-title">الشارات</div>
     ${renderBadges(earned)}
     <div class="section-title">سجل القضايا</div>
