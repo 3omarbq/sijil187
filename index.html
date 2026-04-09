@@ -747,8 +747,10 @@ async function init() {
   sb.auth.onAuthStateChange(async (event, session) => {
     if (event === 'SIGNED_IN' && session?.user) {
       const user = session.user;
+      // انتظر قليلاً لضمان اكتمال أي عمليات سابقة
+      await new Promise(r => setTimeout(r, 500));
       const profile = await getProfile(user.id);
-      if (!profile?.detective_name) {
+      if (!profile || !profile.detective_name) {
         document.getElementById('nameModal').classList.add('active');
       } else {
         updateUI(user, profile);
