@@ -318,14 +318,14 @@ body{background:var(--black);color:var(--white);font-family:'Tajawal',sans-serif
     <rect x="0" y="0" width="1440" height="130" fill="url(#fb)" transform="rotate(180,720,65)"/>
   </svg>
 
-  <div class="hero-inner">
+  <div class="hero-inner" style="position:relative;z-index:5">
     <div>
       <div class="hero-eyebrow">قصص خيالية للترفيه فقط</div>
       <h1 class="hero-h1">كل جريمة<em class="hero-h1-num">187</em></h1>
       <p class="hero-sub">قصة غامضة تنتظر محققاً ذكياً.<br>شاهد الحلقة، حلل الأدلة، وأثبت أنك الأفضل.</p>
-      <div class="hero-btns">
-        <button class="btn-g" onclick="handleStartBtn()">ابدأ التحقيق الآن</button>
-        <button class="btn-o" onclick="document.getElementById('cases').scrollIntoView({behavior:'smooth'})">استعرض الملفات</button>
+      <div class="hero-btns" style="position:relative;z-index:10">
+        <button class="btn-g" onclick="handleStartBtn()" style="position:relative;z-index:10">ابدأ التحقيق الآن</button>
+        <button class="btn-o" onclick="document.getElementById('cases').scrollIntoView({behavior:'smooth'})" style="position:relative;z-index:10">استعرض الملفات</button>
       </div>
     </div>
 
@@ -721,8 +721,14 @@ function updateUI(user, profile) {
 
   navAuth.innerHTML = `
     <div class="nav-user">
-      ${isAdmin ? `<a href="/admin.html" style="color:var(--gold-dim);font-size:11px;text-decoration:none;letter-spacing:1px;font-weight:700">⚙️ ADMIN</a>` : ''}
-      <span class="nav-user-name" onclick="window.location.href='/profile.html'" style="cursor:pointer">🕵️ ${name}</span>
+      ${isAdmin ? `<a href="/admin.html" style="color:var(--gold-dim);font-size:11px;text-decoration:none;letter-spacing:1px;font-weight:700;margin-left:8px">⚙️ ADMIN</a>` : ''}
+      <a href="/profile.html" style="display:flex;align-items:center;gap:7px;text-decoration:none;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.25);padding:7px 14px;border-radius:4px;transition:all .2s" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='rgba(201,168,76,0.25)'">
+        <span style="font-size:18px">🕵️</span>
+        <span style="display:flex;flex-direction:column;line-height:1.2">
+          <span style="color:var(--gold);font-size:11px;font-weight:700;letter-spacing:1px">ملف المحقق</span>
+          <span style="color:var(--white);font-size:13px;font-weight:800">${name}</span>
+        </span>
+      </a>
       <button class="nav-signout" onclick="signOut()">خروج</button>
     </div>`;
 
