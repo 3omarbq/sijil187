@@ -1,7 +1,12 @@
 const SUPABASE_URL   = process.env.NEXT_PUBLIC_SUPABASE_URL
 const SUPABASE_KEY   = process.env.SUPABASE_SERVICE_ROLE_KEY
 const N8N_WEBHOOK    = process.env.N8N_WEBHOOK_URL
-const ALLOWED_ORIGIN = 'https://www.sijil187.com'
+
+const ALLOWED_ORIGINS = [
+  'https://www.sijil187.com',
+  'https://sijil187.com',
+  'https://sijil187.vercel.app'
+]
 
 const rateMap = new Map()
 const RATE_LIMIT  = 3
@@ -46,7 +51,12 @@ async function isBlocked(userId) {
 }
 
 export default async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', ALLOWED_ORIGIN)
+  const origin = req.headers.origin || ''
+  const allowedOrigin = ALLOWED_ORIGINS.includes(origin)
+    ? origin
+    : ALLOWED_ORIGINS[0]
+
+  res.setHeader('Access-Control-Allow-Origin', allowedOrigin)
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS')
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
 
