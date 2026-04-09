@@ -14,22 +14,14 @@
 }
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:var(--black);color:var(--white);font-family:'Tajawal',sans-serif;min-height:100vh}
-
-/* ══ LOADING ══ */
 #loading{position:fixed;inset:0;background:var(--black);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;gap:16px}
 #loading .logo{font-size:32px;font-weight:900;font-family:'IBM Plex Mono',monospace;color:var(--gold)}
 #loading p{color:var(--smoke);font-size:14px}
-
-/* ══ ACCESS DENIED ══ */
 #denied{position:fixed;inset:0;background:var(--black);display:none;flex-direction:column;align-items:center;justify-content:center;gap:16px;z-index:999}
 #denied h1{font-size:48px;color:var(--red)}
 #denied p{color:var(--smoke);font-size:16px}
 #denied a{color:var(--gold);text-decoration:none;font-size:14px;border:1px solid var(--gold-dim);padding:10px 24px;margin-top:8px}
-
-/* ══ MAIN ══ */
 #app{display:none}
-
-/* ══ SIDEBAR ══ */
 .sidebar{position:fixed;top:0;right:0;bottom:0;width:220px;background:var(--dark);border-left:1px solid var(--border);padding:24px 0;display:flex;flex-direction:column;z-index:100}
 .sidebar-logo{padding:0 24px 24px;border-bottom:1px solid var(--border);margin-bottom:16px}
 .sidebar-logo span{font-size:13px;font-weight:900;color:var(--gold);font-family:'IBM Plex Mono',monospace;display:block}
@@ -43,19 +35,13 @@ body{background:var(--black);color:var(--white);font-family:'Tajawal',sans-serif
 .admin-info strong{color:var(--gold);display:block;font-size:12px}
 .signout-btn{width:100%;background:transparent;color:var(--smoke);border:1px solid rgba(201,168,76,0.2);padding:8px;font-family:'Tajawal',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s}
 .signout-btn:hover{color:var(--red);border-color:var(--red)}
-
-/* ══ CONTENT ══ */
 .content{margin-right:220px;padding:32px;min-height:100vh}
 .page{display:none}
 .page.active{display:block}
-
-/* ══ HEADER ══ */
-.page-header{margin-bottom:28px}
+.page-header{margin-bottom:28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
 .page-title{font-size:24px;font-weight:900;letter-spacing:-0.5px;margin-bottom:4px}
 .page-title span{color:var(--gold)}
 .page-sub{font-size:13px;color:var(--smoke)}
-
-/* ══ STATS ══ */
 .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:28px}
 .stat-card{background:var(--card);border:1px solid var(--border);padding:20px;position:relative;overflow:hidden}
 .stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
@@ -69,8 +55,6 @@ body{background:var(--black);color:var(--white);font-family:'Tajawal',sans-serif
 .stat-card.red .stat-n{color:var(--red)}
 .stat-card.blue .stat-n{color:var(--blue)}
 .stat-l{font-size:12px;color:var(--smoke)}
-
-/* ══ TABLE ══ */
 .table-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px}
 .table-title{font-size:16px;font-weight:800}
 .search-box{background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--white);padding:8px 14px;font-family:'Tajawal',sans-serif;font-size:13px;outline:none;width:220px;transition:border-color .2s}
@@ -87,66 +71,69 @@ tr:hover td{background:rgba(255,255,255,0.015)}
 .badge-pending{background:rgba(201,168,76,0.1);color:var(--gold);border:1px solid var(--gold-dim)}
 .badge-graded{background:rgba(76,175,130,0.1);color:var(--green);border:1px solid rgba(76,175,130,0.3)}
 .badge-rejected{background:rgba(192,57,43,0.1);color:var(--red);border:1px solid rgba(192,57,43,0.3)}
+.badge-active{background:rgba(76,175,130,0.1);color:var(--green);border:1px solid rgba(76,175,130,0.3)}
+.badge-closed{background:rgba(100,100,100,0.1);color:var(--smoke);border:1px solid rgba(100,100,100,0.3)}
 .action-btn{background:transparent;border:1px solid rgba(255,255,255,0.08);color:var(--smoke);padding:5px 10px;font-family:'Tajawal',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;margin-left:4px}
 .action-btn:hover{border-color:var(--gold);color:var(--gold)}
 .action-btn.danger:hover{border-color:var(--red);color:var(--red)}
+.action-btn.success:hover{border-color:var(--green);color:var(--green)}
 .empty-state{text-align:center;padding:48px;color:var(--smoke);font-size:14px}
 .empty-state span{font-size:32px;display:block;margin-bottom:10px;opacity:.4}
 .loading-row td{text-align:center;color:var(--smoke);font-size:13px;padding:32px}
-
-/* ══ MODAL ══ */
 .modal-overlay{position:fixed;inset:0;background:rgba(1,1,10,0.9);z-index:500;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s}
 .modal-overlay.open{opacity:1;pointer-events:all}
-.modal-box{background:var(--card);border:1px solid rgba(201,168,76,0.2);padding:32px;max-width:480px;width:90%;position:relative}
+.modal-box{background:var(--card);border:1px solid rgba(201,168,76,0.2);padding:32px;max-width:480px;width:90%;position:relative;max-height:90vh;overflow-y:auto}
+.modal-box.wide{max-width:700px}
 .modal-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
-.modal-title{font-size:18px;font-weight:900;margin-bottom:8px}
+.modal-title{font-size:18px;font-weight:900;margin-bottom:16px}
 .modal-body{font-size:14px;color:var(--smoke);line-height:1.8;margin-bottom:24px}
 .modal-body strong{color:var(--white)}
-.modal-footer{display:flex;gap:10px;justify-content:flex-end}
+.modal-footer{display:flex;gap:10px;justify-content:flex-end;margin-top:20px}
 .btn-cancel{background:transparent;border:1px solid var(--border);color:var(--smoke);padding:10px 22px;font-family:'Tajawal',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s}
 .btn-cancel:hover{border-color:var(--gold);color:var(--gold)}
 .btn-danger{background:var(--red);border:none;color:white;padding:10px 22px;font-family:'Tajawal',sans-serif;font-size:14px;font-weight:800;cursor:pointer;transition:opacity .2s}
 .btn-danger:hover{opacity:.85}
 .btn-primary{background:var(--gold);border:none;color:var(--black);padding:10px 22px;font-family:'Tajawal',sans-serif;font-size:14px;font-weight:800;cursor:pointer;transition:opacity .2s}
 .btn-primary:hover{opacity:.85}
-
-/* ══ THEORY DETAIL ══ */
 .theory-detail{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .detail-item{background:rgba(255,255,255,0.03);border:1px solid var(--border);padding:12px}
 .detail-label{font-size:10px;color:var(--smoke);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
 .detail-value{font-size:14px;font-weight:600}
 .detail-item.full{grid-column:1/-1}
-
-/* ══ TOAST ══ */
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--card);border:1px solid rgba(201,168,76,0.3);padding:12px 24px;font-size:14px;font-weight:600;opacity:0;transition:all .3s;z-index:600;white-space:nowrap}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .toast.success{border-color:rgba(76,175,130,0.5);color:var(--green)}
 .toast.error{border-color:rgba(192,57,43,0.5);color:var(--red)}
-
-/* ══ BLOCK FORM ══ */
 .block-form{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap}
 .block-input{flex:1;background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--white);padding:10px 14px;font-family:'Tajawal',sans-serif;font-size:14px;outline:none;min-width:200px}
 .block-input:focus{border-color:rgba(201,168,76,0.3)}
 .block-input::placeholder{color:var(--smoke)}
 .btn-block{background:var(--red);border:none;color:white;padding:10px 20px;font-family:'Tajawal',sans-serif;font-size:14px;font-weight:800;cursor:pointer;white-space:nowrap}
-
+/* فورم القضية */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-group.full{grid-column:1/-1}
+.form-label{font-size:11px;color:var(--smoke);letter-spacing:1px;text-transform:uppercase;font-weight:700}
+.form-input,.form-textarea,.form-select{background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--white);padding:10px 14px;font-family:'Tajawal',sans-serif;font-size:13px;outline:none;width:100%;transition:border-color .2s;direction:rtl}
+.form-input:focus,.form-textarea:focus,.form-select:focus{border-color:rgba(201,168,76,0.4)}
+.form-input::placeholder,.form-textarea::placeholder{color:var(--smoke)}
+.form-textarea{resize:vertical;min-height:80px}
+.form-select option{background:var(--dark)}
+.add-btn{background:var(--gold);border:none;color:var(--black);padding:10px 20px;font-family:'Tajawal',sans-serif;font-size:13px;font-weight:800;cursor:pointer;transition:opacity .2s}
+.add-btn:hover{opacity:.85}
 @media(max-width:768px){
   .sidebar{display:none}
   .content{margin-right:0;padding:20px}
   .stats-grid{grid-template-columns:1fr 1fr}
   .theory-detail{grid-template-columns:1fr}
+  .form-grid{grid-template-columns:1fr}
 }
 </style>
 </head>
 <body>
 
-<!-- Loading -->
-<div id="loading">
-  <div class="logo">187</div>
-  <p>جاري التحقق من الصلاحيات...</p>
-</div>
+<div id="loading"><div class="logo">187</div><p>جاري التحقق من الصلاحيات...</p></div>
 
-<!-- Access Denied -->
 <div id="denied">
   <h1>⛔</h1>
   <h2 style="color:var(--red)">غير مصرح</h2>
@@ -154,30 +141,19 @@ tr:hover td{background:rgba(255,255,255,0.015)}
   <a href="/">العودة للموقع</a>
 </div>
 
-<!-- Toast -->
 <div class="toast" id="toast"></div>
 
-<!-- App -->
 <div id="app">
-
-  <!-- Sidebar -->
   <div class="sidebar">
     <div class="sidebar-logo">
       <span>سجل الجريمة 187</span>
       <small>⚙️ لوحة التحكم</small>
     </div>
-    <div class="nav-item active" onclick="showPage('dashboard')" id="nav-dashboard">
-      <span class="icon">📊</span> الإحصائيات
-    </div>
-    <div class="nav-item" onclick="showPage('theories')" id="nav-theories">
-      <span class="icon">🔍</span> النظريات
-    </div>
-    <div class="nav-item" onclick="showPage('users')" id="nav-users">
-      <span class="icon">👥</span> المستخدمون
-    </div>
-    <div class="nav-item" onclick="showPage('blocked')" id="nav-blocked">
-      <span class="icon">🚫</span> المحظورون
-    </div>
+    <div class="nav-item active" onclick="showPage('dashboard')" id="nav-dashboard"><span class="icon">📊</span> الإحصائيات</div>
+    <div class="nav-item" onclick="showPage('cases')" id="nav-cases"><span class="icon">📁</span> القضايا</div>
+    <div class="nav-item" onclick="showPage('theories')" id="nav-theories"><span class="icon">🔍</span> النظريات</div>
+    <div class="nav-item" onclick="showPage('users')" id="nav-users"><span class="icon">👥</span> المستخدمون</div>
+    <div class="nav-item" onclick="showPage('blocked')" id="nav-blocked"><span class="icon">🚫</span> المحظورون</div>
     <div class="sidebar-bottom">
       <div class="admin-info">
         <strong id="adminName">...</strong>
@@ -187,48 +163,52 @@ tr:hover td{background:rgba(255,255,255,0.015)}
     </div>
   </div>
 
-  <!-- Content -->
   <div class="content">
 
     <!-- Dashboard -->
     <div class="page active" id="page-dashboard">
       <div class="page-header">
-        <div class="page-title">لوحة <span>التحكم</span></div>
-        <div class="page-sub">مرحباً بك يا أدمن — نظرة عامة على المشروع</div>
+        <div>
+          <div class="page-title">لوحة <span>التحكم</span></div>
+          <div class="page-sub">نظرة عامة على المشروع</div>
+        </div>
       </div>
       <div class="stats-grid">
-        <div class="stat-card gold">
-          <div class="stat-n" id="stat-theories">-</div>
-          <div class="stat-l">نظرية واردة</div>
-        </div>
-        <div class="stat-card green">
-          <div class="stat-n" id="stat-users">-</div>
-          <div class="stat-l">مستخدم مسجل</div>
-        </div>
-        <div class="stat-card blue">
-          <div class="stat-n" id="stat-pending">-</div>
-          <div class="stat-l">بانتظار التقييم</div>
-        </div>
-        <div class="stat-card red">
-          <div class="stat-n" id="stat-blocked">-</div>
-          <div class="stat-l">مستخدم محظور</div>
-        </div>
+        <div class="stat-card gold"><div class="stat-n" id="stat-theories">-</div><div class="stat-l">نظرية واردة</div></div>
+        <div class="stat-card green"><div class="stat-n" id="stat-users">-</div><div class="stat-l">مستخدم مسجل</div></div>
+        <div class="stat-card blue"><div class="stat-n" id="stat-pending">-</div><div class="stat-l">بانتظار التقييم</div></div>
+        <div class="stat-card red"><div class="stat-n" id="stat-blocked">-</div><div class="stat-l">مستخدم محظور</div></div>
       </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>آخر النظريات</th><th>الحلقة</th><th>القاتل المشتبه</th><th>الحالة</th><th>الوقت</th></tr></thead>
+          <tbody id="recent-theories"><tr class="loading-row"><td colspan="5">جاري التحميل...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
 
+    <!-- Cases -->
+    <div class="page" id="page-cases">
+      <div class="page-header">
+        <div>
+          <div class="page-title">إدارة <span>القضايا</span></div>
+          <div class="page-sub">إضافة وتعديل وإغلاق القضايا</div>
+        </div>
+        <button class="add-btn" onclick="openAddCase()">+ إضافة قضية جديدة</button>
+      </div>
       <div class="table-wrap">
         <table>
           <thead>
             <tr>
-              <th>آخر النظريات الواردة</th>
+              <th>العنوان</th>
               <th>الحلقة</th>
-              <th>القاتل المشتبه</th>
+              <th>الصعوبة</th>
               <th>الحالة</th>
-              <th>الوقت</th>
+              <th>النظريات</th>
+              <th>إجراءات</th>
             </tr>
           </thead>
-          <tbody id="recent-theories">
-            <tr class="loading-row"><td colspan="5">جاري التحميل...</td></tr>
-          </tbody>
+          <tbody id="cases-table"><tr class="loading-row"><td colspan="6">جاري التحميل...</td></tr></tbody>
         </table>
       </div>
     </div>
@@ -236,29 +216,19 @@ tr:hover td{background:rgba(255,255,255,0.015)}
     <!-- Theories -->
     <div class="page" id="page-theories">
       <div class="page-header">
-        <div class="page-title">إدارة <span>النظريات</span></div>
-        <div class="page-sub">عرض وتقييم وحذف النظريات الواردة</div>
+        <div>
+          <div class="page-title">إدارة <span>النظريات</span></div>
+          <div class="page-sub">عرض وتقييم وحذف النظريات الواردة</div>
+        </div>
       </div>
       <div class="table-header">
         <div class="table-title">جميع النظريات</div>
-        <input class="search-box" placeholder="🔍 بحث بالاسم أو الحلقة..." oninput="filterTheories(this.value)" id="theoriesSearch">
+        <input class="search-box" placeholder="🔍 بحث بالاسم أو الحلقة..." oninput="filterTheories(this.value)">
       </div>
       <div class="table-wrap">
         <table>
-          <thead>
-            <tr>
-              <th>المحقق</th>
-              <th>الحلقة</th>
-              <th>القاتل</th>
-              <th>الثقة</th>
-              <th>الحالة</th>
-              <th>التاريخ</th>
-              <th>إجراءات</th>
-            </tr>
-          </thead>
-          <tbody id="theories-table">
-            <tr class="loading-row"><td colspan="7">جاري التحميل...</td></tr>
-          </tbody>
+          <thead><tr><th>المحقق</th><th>الحلقة</th><th>القاتل</th><th>الثقة</th><th>الحالة</th><th>التاريخ</th><th>إجراءات</th></tr></thead>
+          <tbody id="theories-table"><tr class="loading-row"><td colspan="7">جاري التحميل...</td></tr></tbody>
         </table>
       </div>
     </div>
@@ -266,27 +236,19 @@ tr:hover td{background:rgba(255,255,255,0.015)}
     <!-- Users -->
     <div class="page" id="page-users">
       <div class="page-header">
-        <div class="page-title">إدارة <span>المستخدمين</span></div>
-        <div class="page-sub">عرض المحققين المسجلين وإدارتهم</div>
+        <div>
+          <div class="page-title">إدارة <span>المستخدمين</span></div>
+          <div class="page-sub">عرض المحققين المسجلين وإدارتهم</div>
+        </div>
       </div>
       <div class="table-header">
         <div class="table-title">المحققون المسجلون</div>
-        <input class="search-box" placeholder="🔍 بحث بالاسم..." oninput="filterUsers(this.value)" id="usersSearch">
+        <input class="search-box" placeholder="🔍 بحث بالاسم..." oninput="filterUsers(this.value)">
       </div>
       <div class="table-wrap">
         <table>
-          <thead>
-            <tr>
-              <th>اسم المحقق</th>
-              <th>النقاط</th>
-              <th>القضايا</th>
-              <th>تاريخ التسجيل</th>
-              <th>إجراءات</th>
-            </tr>
-          </thead>
-          <tbody id="users-table">
-            <tr class="loading-row"><td colspan="5">جاري التحميل...</td></tr>
-          </tbody>
+          <thead><tr><th>اسم المحقق</th><th>النقاط</th><th>القضايا</th><th>تاريخ التسجيل</th><th>إجراءات</th></tr></thead>
+          <tbody id="users-table"><tr class="loading-row"><td colspan="5">جاري التحميل...</td></tr></tbody>
         </table>
       </div>
     </div>
@@ -294,8 +256,10 @@ tr:hover td{background:rgba(255,255,255,0.015)}
     <!-- Blocked -->
     <div class="page" id="page-blocked">
       <div class="page-header">
-        <div class="page-title">المستخدمون <span>المحظورون</span></div>
-        <div class="page-sub">إدارة قائمة الحظر</div>
+        <div>
+          <div class="page-title">المستخدمون <span>المحظورون</span></div>
+          <div class="page-sub">إدارة قائمة الحظر</div>
+        </div>
       </div>
       <div class="block-form">
         <input class="block-input" id="blockEmail" placeholder="أدخل الإيميل للحظر..." type="email">
@@ -304,17 +268,8 @@ tr:hover td{background:rgba(255,255,255,0.015)}
       </div>
       <div class="table-wrap">
         <table>
-          <thead>
-            <tr>
-              <th>الإيميل</th>
-              <th>السبب</th>
-              <th>تاريخ الحظر</th>
-              <th>إجراءات</th>
-            </tr>
-          </thead>
-          <tbody id="blocked-table">
-            <tr class="loading-row"><td colspan="4">جاري التحميل...</td></tr>
-          </tbody>
+          <thead><tr><th>الإيميل</th><th>السبب</th><th>تاريخ الحظر</th><th>إجراءات</th></tr></thead>
+          <tbody id="blocked-table"><tr class="loading-row"><td colspan="4">جاري التحميل...</td></tr></tbody>
         </table>
       </div>
     </div>
@@ -322,9 +277,9 @@ tr:hover td{background:rgba(255,255,255,0.015)}
   </div>
 </div>
 
-<!-- Theory Detail Modal -->
+<!-- Modal: تفاصيل النظرية -->
 <div class="modal-overlay" id="theoryModal">
-  <div class="modal-box" style="max-width:600px">
+  <div class="modal-box wide">
     <div class="modal-title">🔍 تفاصيل النظرية</div>
     <div id="theoryDetails" style="margin:16px 0"></div>
     <div class="modal-footer">
@@ -334,7 +289,97 @@ tr:hover td{background:rgba(255,255,255,0.015)}
   </div>
 </div>
 
-<!-- Confirm Modal -->
+<!-- Modal: إضافة/تعديل قضية -->
+<div class="modal-overlay" id="caseModal">
+  <div class="modal-box wide">
+    <div class="modal-title" id="caseModalTitle">📁 إضافة قضية جديدة</div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label class="form-label">العنوان *</label>
+        <input class="form-input" id="c-title" placeholder="عنوان القضية">
+      </div>
+      <div class="form-group">
+        <label class="form-label">الشعار (Tagline)</label>
+        <input class="form-input" id="c-tagline" placeholder="جملة تشويقية قصيرة">
+      </div>
+      <div class="form-group">
+        <label class="form-label">رقم الحلقة *</label>
+        <input class="form-input" id="c-episode" placeholder="1" type="number">
+      </div>
+      <div class="form-group">
+        <label class="form-label">معرّف الحلقة (episode_id) *</label>
+        <input class="form-input" id="c-episodeid" placeholder="EP01">
+      </div>
+      <div class="form-group">
+        <label class="form-label">الصعوبة</label>
+        <select class="form-select" id="c-difficulty">
+          <option value="beginner">🔵 مبتدئ</option>
+          <option value="intermediate">🟤 متوسط</option>
+          <option value="hard">🔴 صعب</option>
+          <option value="expert">⚫ خبير</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">الحالة</label>
+        <select class="form-select" id="c-status">
+          <option value="active">🟢 مفتوحة</option>
+          <option value="closed">🔒 مغلقة</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">الموقع</label>
+        <input class="form-input" id="c-location" placeholder="مثال: فندق القمة — الرياض">
+      </div>
+      <div class="form-group">
+        <label class="form-label">تاريخ الحادثة</label>
+        <input class="form-input" id="c-date" placeholder="مثال: الخميس 23 يناير 2025">
+      </div>
+      <div class="form-group full">
+        <label class="form-label">وصف القضية *</label>
+        <textarea class="form-textarea" id="c-desc" placeholder="اكتب وصف القضية هنا..."></textarea>
+      </div>
+
+      <div style="grid-column:1/-1;border-top:1px solid var(--border);padding-top:16px;margin-top:4px">
+        <div style="font-size:11px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;font-weight:700;margin-bottom:12px">⚠️ الإجابات الصحيحة — سرية لا تظهر للمستخدمين</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">القاتل الحقيقي *</label>
+        <input class="form-input" id="c-killer" placeholder="اسم القاتل">
+      </div>
+      <div class="form-group">
+        <label class="form-label">السلاح الحقيقي</label>
+        <input class="form-input" id="c-weapon" placeholder="السلاح أو الأداة">
+      </div>
+      <div class="form-group">
+        <label class="form-label">الدافع الحقيقي</label>
+        <input class="form-input" id="c-motive" placeholder="دافع الجريمة">
+      </div>
+      <div class="form-group">
+        <label class="form-label">طريقة التنفيذ</label>
+        <input class="form-input" id="c-execution" placeholder="كيف نُفّذت الجريمة">
+      </div>
+      <div class="form-group">
+        <label class="form-label">الشاهد الصامت</label>
+        <input class="form-input" id="c-witness" placeholder="من رأى ولم يُسأل">
+      </div>
+      <div class="form-group">
+        <label class="form-label">🔍 الخيط المخفي (كلمة مفتاحية)</label>
+        <input class="form-input" id="c-clue" placeholder="الكلمة التي يبحث عنها n8n في الرواية">
+      </div>
+      <div class="form-group">
+        <label class="form-label">موعد إغلاق الإرسال</label>
+        <input class="form-input" id="c-deadline" type="datetime-local">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal('caseModal')">إلغاء</button>
+      <button class="btn-primary" onclick="saveCase()">💾 حفظ القضية</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: تأكيد -->
 <div class="modal-overlay" id="confirmModal">
   <div class="modal-box">
     <div class="modal-title" id="confirmTitle">تأكيد</div>
@@ -348,63 +393,55 @@ tr:hover td{background:rgba(255,255,255,0.015)}
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
-const SUPABASE_URL = 'https://lfvtqfusxwatgsehtccd.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxmdnRxZnVzeHdhdGdzZWh0Y2NkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQzNDE2MzgsImV4cCI6MjA4OTkxNzYzOH0.FkEh9zpBaXFE3nNXD2I6TmjbPHkXEVO3CLUJRWltrqs';
-const ADMIN_EMAIL  = '3omarbq@gmail.com';
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);sb.auth.onAuthStateChange((ev, sess) => {
+const SUPABASE_URL = 'https://lfvtqfusxwatgsehtccd.supabase.co'
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxmdnRxZnVzeHdhdGdzZWh0Y2NkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQzNDE2MzgsImV4cCI6MjA4OTkxNzYzOH0.FkEh9zpBaXFE3nNXD2I6TmjbPHkXEVO3CLUJRWltrqs'
+const ADMIN_EMAIL = '3omarbq@gmail.com'
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
+
+sb.auth.onAuthStateChange((ev, sess) => {
   if (ev === 'SIGNED_IN' && sess?.access_token) {
     const exp = new Date(sess.expires_at * 1000).toUTCString()
     document.cookie = `sijil187_auth=${sess.access_token}; path=/; expires=${exp}; samesite=lax`
   } else if (ev === 'SIGNED_OUT') {
     document.cookie = 'sijil187_auth=; path=/; max-age=0'
-  } else if (ev === 'TOKEN_REFRESHED' && sess?.access_token) {
-    const exp = new Date(sess.expires_at * 1000).toUTCString()
-    document.cookie = `sijil187_auth=${sess.access_token}; path=/; expires=${exp}; samesite=lax`
   }
 })
 
-let allTheories = [];
-let allUsers = [];
-let currentTheoryId = null;
+let allTheories = [], allUsers = [], editingCaseId = null
 
-// ══ TOAST ══
 function toast(msg, type='success') {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = `toast ${type} show`;
-  setTimeout(() => t.className = 'toast', 3000);
+  const t = document.getElementById('toast')
+  t.textContent = msg
+  t.className = `toast ${type} show`
+  setTimeout(() => t.className = 'toast', 3000)
 }
 
-// ══ MODAL ══
-function closeModal(id) {
-  document.getElementById(id).classList.remove('open');
+function closeModal(id) { document.getElementById(id).classList.remove('open') }
+
+function confirmDialog(title, body, onConfirm, danger=true) {
+  document.getElementById('confirmTitle').textContent = title
+  document.getElementById('confirmBody').innerHTML = body
+  const btn = document.getElementById('confirmBtn')
+  btn.className = danger ? 'btn-danger' : 'btn-primary'
+  btn.textContent = 'تأكيد'
+  btn.onclick = () => { closeModal('confirmModal'); onConfirm() }
+  document.getElementById('confirmModal').classList.add('open')
 }
 
-function confirm(title, body, onConfirm, danger=true) {
-  document.getElementById('confirmTitle').textContent = title;
-  document.getElementById('confirmBody').innerHTML = body;
-  const btn = document.getElementById('confirmBtn');
-  btn.className = danger ? 'btn-danger' : 'btn-primary';
-  btn.textContent = 'تأكيد';
-  btn.onclick = () => { closeModal('confirmModal'); onConfirm(); };
-  document.getElementById('confirmModal').classList.add('open');
-}
-
-// ══ NAV ══
 function showPage(page) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  document.getElementById('page-' + page).classList.add('active');
-  document.getElementById('nav-' + page).classList.add('active');
-  if (page === 'theories') loadTheories();
-  if (page === 'users') loadUsers();
-  if (page === 'blocked') loadBlocked();
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'))
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'))
+  document.getElementById('page-' + page).classList.add('active')
+  document.getElementById('nav-' + page).classList.add('active')
+  if (page === 'cases') loadCases()
+  if (page === 'theories') loadTheories()
+  if (page === 'users') loadUsers()
+  if (page === 'blocked') loadBlocked()
 }
 
-// ══ FORMAT DATE ══
 function fmtDate(d) {
-  if (!d) return '-';
-  return new Date(d).toLocaleDateString('ar-SA', { year:'numeric', month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' });
+  if (!d) return '-'
+  return new Date(d).toLocaleDateString('ar-SA', { year:'numeric', month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' })
 }
 
 // ══ DASHBOARD ══
@@ -414,17 +451,17 @@ async function loadDashboard() {
     sb.from('profiles').select('*', {count:'exact', head:true}),
     sb.from('theories').select('*', {count:'exact', head:true}).eq('status','pending'),
     sb.from('blocked_users').select('*', {count:'exact', head:true})
-  ]);
-  document.getElementById('stat-theories').textContent = t.count ?? 0;
-  document.getElementById('stat-users').textContent = u.count ?? 0;
-  document.getElementById('stat-pending').textContent = p.count ?? 0;
-  document.getElementById('stat-blocked').textContent = b.count ?? 0;
+  ])
+  document.getElementById('stat-theories').textContent = t.count ?? 0
+  document.getElementById('stat-users').textContent = u.count ?? 0
+  document.getElementById('stat-pending').textContent = p.count ?? 0
+  document.getElementById('stat-blocked').textContent = b.count ?? 0
 
-  const { data: recent } = await sb.from('theories').select('*').order('created_at', {ascending:false}).limit(5);
-  const tbody = document.getElementById('recent-theories');
+  const { data: recent } = await sb.from('theories').select('*').order('created_at', {ascending:false}).limit(5)
+  const tbody = document.getElementById('recent-theories')
   if (!recent?.length) {
-    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--smoke);padding:24px">لا توجد نظريات بعد</td></tr>`;
-    return;
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--smoke);padding:24px">لا توجد نظريات بعد</td></tr>`
+    return
   }
   tbody.innerHTML = recent.map(t => `
     <tr>
@@ -433,22 +470,155 @@ async function loadDashboard() {
       <td>${t.killer || '-'}</td>
       <td><span class="badge badge-${t.status}">${t.status}</span></td>
       <td class="td-mono" style="color:var(--smoke);font-size:11px">${fmtDate(t.created_at)}</td>
-    </tr>`).join('');
+    </tr>`).join('')
+}
+
+// ══ CASES ══
+async function loadCases() {
+  document.getElementById('cases-table').innerHTML = `<tr class="loading-row"><td colspan="6">جاري التحميل...</td></tr>`
+  const { data } = await sb.from('cases').select('*').order('episode_number', {ascending:true})
+  const tbody = document.getElementById('cases-table')
+  if (!data?.length) {
+    tbody.innerHTML = `<tr><td colspan="6"><div class="empty-state"><span>📁</span>لا توجد قضايا — أضف أولى</div></td></tr>`
+    return
+  }
+  // جلب عدد النظريات لكل قضية
+  const theoryCounts = {}
+  for(const c of data) {
+    const { count } = await sb.from('theories').select('*', {count:'exact', head:true}).eq('episode_id', c.episode_id || c.id)
+    theoryCounts[c.id] = count || 0
+  }
+  tbody.innerHTML = data.map(c => `
+    <tr>
+      <td><strong>${c.title || '-'}</strong><br><small style="color:var(--smoke);font-size:11px">${c.tagline || ''}</small></td>
+      <td class="td-mono">${c.episode_id || c.episode_number || '-'}</td>
+      <td><span style="font-size:12px">${difficultyLabel(c.difficulty)}</span></td>
+      <td><span class="badge badge-${c.status}">${c.status === 'active' ? 'مفتوحة' : 'مغلقة'}</span></td>
+      <td class="td-mono" style="color:var(--gold)">${theoryCounts[c.id]}</td>
+      <td>
+        <button class="action-btn" onclick="editCase('${c.id}')">✏️ تعديل</button>
+        <button class="action-btn ${c.status==='active'?'danger':'success'}" onclick="toggleCaseStatus('${c.id}','${c.status}','${(c.title||'').replace(/'/g,"\\'")}')">
+          ${c.status === 'active' ? '🔒 إغلاق' : '🟢 فتح'}
+        </button>
+      </td>
+    </tr>`).join('')
+}
+
+function difficultyLabel(d) {
+  const map = {beginner:'🔵 مبتدئ', intermediate:'🟤 متوسط', hard:'🔴 صعب', expert:'⚫ خبير'}
+  return map[d] || d || '-'
+}
+
+function openAddCase() {
+  editingCaseId = null
+  document.getElementById('caseModalTitle').textContent = '📁 إضافة قضية جديدة'
+  ;['title','tagline','episode','episodeid','location','date','desc','killer','weapon','motive','execution','witness','clue'].forEach(f => {
+    const el = document.getElementById('c-' + f)
+    if(el) el.value = ''
+  })
+  document.getElementById('c-difficulty').value = 'beginner'
+  document.getElementById('c-status').value = 'active'
+  document.getElementById('c-deadline').value = ''
+  document.getElementById('caseModal').classList.add('open')
+}
+
+async function editCase(id) {
+  const { data } = await sb.from('cases').select('*').eq('id', id).single()
+  if (!data) return
+  editingCaseId = id
+  document.getElementById('caseModalTitle').textContent = '✏️ تعديل القضية'
+  document.getElementById('c-title').value = data.title || ''
+  document.getElementById('c-tagline').value = data.tagline || ''
+  document.getElementById('c-episode').value = data.episode_number || ''
+  document.getElementById('c-episodeid').value = data.episode_id || ''
+  document.getElementById('c-difficulty').value = data.difficulty || 'beginner'
+  document.getElementById('c-status').value = data.status || 'active'
+  document.getElementById('c-location').value = data.location || ''
+  document.getElementById('c-date').value = data.incident_date || ''
+  document.getElementById('c-desc').value = data.description || ''
+  document.getElementById('c-killer').value = data.actual_killer || ''
+  document.getElementById('c-weapon').value = data.actual_weapon || ''
+  document.getElementById('c-motive').value = data.actual_motive || ''
+  document.getElementById('c-execution').value = data.actual_execution || ''
+  document.getElementById('c-witness').value = data.actual_witness || ''
+  document.getElementById('c-clue').value = data.hidden_clue_keyword || ''
+  if(data.submission_deadline) {
+    const d = new Date(data.submission_deadline)
+    document.getElementById('c-deadline').value = d.toISOString().slice(0,16)
+  }
+  document.getElementById('caseModal').classList.add('open')
+}
+
+async function saveCase() {
+  const title = document.getElementById('c-title').value.trim()
+  const killer = document.getElementById('c-killer').value.trim()
+  const episodeid = document.getElementById('c-episodeid').value.trim()
+  if (!title || !killer || !episodeid) {
+    toast('يجب ملء العنوان والقاتل الحقيقي ومعرف الحلقة', 'error')
+    return
+  }
+  const deadlineVal = document.getElementById('c-deadline').value
+  const payload = {
+    title,
+    tagline:            document.getElementById('c-tagline').value.trim(),
+    episode_number:     parseInt(document.getElementById('c-episode').value) || 1,
+    episode_id:         episodeid,
+    difficulty:         document.getElementById('c-difficulty').value,
+    status:             document.getElementById('c-status').value,
+    location:           document.getElementById('c-location').value.trim(),
+    incident_date:      document.getElementById('c-date').value.trim(),
+    description:        document.getElementById('c-desc').value.trim(),
+    actual_killer:      killer,
+    actual_weapon:      document.getElementById('c-weapon').value.trim(),
+    actual_motive:      document.getElementById('c-motive').value.trim(),
+    actual_execution:   document.getElementById('c-execution').value.trim(),
+    actual_witness:     document.getElementById('c-witness').value.trim(),
+    hidden_clue_keyword:document.getElementById('c-clue').value.trim(),
+    submission_deadline:deadlineVal ? new Date(deadlineVal).toISOString() : null,
+  }
+
+  let error
+  if (editingCaseId) {
+    ({ error } = await sb.from('cases').update(payload).eq('id', editingCaseId))
+  } else {
+    ({ error } = await sb.from('cases').insert(payload))
+  }
+
+  if (error) { toast('حدث خطأ: ' + error.message, 'error'); return }
+  toast(editingCaseId ? 'تم تحديث القضية ✅' : 'تم إضافة القضية ✅')
+  closeModal('caseModal')
+  loadCases()
+  loadDashboard()
+}
+
+async function toggleCaseStatus(id, currentStatus, title) {
+  const newStatus = currentStatus === 'active' ? 'closed' : 'active'
+  const label = newStatus === 'closed' ? 'إغلاق' : 'فتح'
+  confirmDialog(
+    `${label} القضية`,
+    `هل تريد ${label} قضية <strong>${title}</strong>؟`,
+    async () => {
+      const { error } = await sb.from('cases').update({ status: newStatus }).eq('id', id)
+      if (error) { toast('حدث خطأ', 'error'); return }
+      toast(`تم ${label} القضية ✅`)
+      loadCases()
+    }
+  )
 }
 
 // ══ THEORIES ══
 async function loadTheories() {
-  document.getElementById('theories-table').innerHTML = `<tr class="loading-row"><td colspan="7">جاري التحميل...</td></tr>`;
-  const { data } = await sb.from('theories').select('*').order('created_at', {ascending:false});
-  allTheories = data || [];
-  renderTheories(allTheories);
+  document.getElementById('theories-table').innerHTML = `<tr class="loading-row"><td colspan="7">جاري التحميل...</td></tr>`
+  const { data } = await sb.from('theories').select('*').order('created_at', {ascending:false})
+  allTheories = data || []
+  renderTheories(allTheories)
 }
 
 function renderTheories(list) {
-  const tbody = document.getElementById('theories-table');
+  const tbody = document.getElementById('theories-table')
   if (!list.length) {
-    tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state"><span>📭</span>لا توجد نظريات</div></td></tr>`;
-    return;
+    tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state"><span>📭</span>لا توجد نظريات</div></td></tr>`
+    return
   }
   tbody.innerHTML = list.map(t => `
     <tr>
@@ -462,7 +632,7 @@ function renderTheories(list) {
         <button class="action-btn" onclick="viewTheory('${t.id}')">عرض</button>
         <button class="action-btn danger" onclick="deleteTheory('${t.id}', '${(t.user_nickname||'').replace(/'/g,"\\'")}')">حذف</button>
       </td>
-    </tr>`).join('');
+    </tr>`).join('')
 }
 
 function filterTheories(q) {
@@ -470,14 +640,13 @@ function filterTheories(q) {
     (t.user_nickname||'').includes(q) ||
     (t.episode_id||'').includes(q) ||
     (t.killer||'').includes(q)
-  );
-  renderTheories(f);
+  )
+  renderTheories(f)
 }
 
 function viewTheory(id) {
-  const t = allTheories.find(x => x.id === id);
-  if (!t) return;
-  currentTheoryId = id;
+  const t = allTheories.find(x => x.id === id)
+  if (!t) return
   document.getElementById('theoryDetails').innerHTML = `
     <div class="theory-detail">
       <div class="detail-item"><div class="detail-label">المحقق</div><div class="detail-value">${t.user_nickname||'-'}</div></div>
@@ -485,49 +654,44 @@ function viewTheory(id) {
       <div class="detail-item"><div class="detail-label">القاتل</div><div class="detail-value">${t.killer||'-'}</div></div>
       <div class="detail-item"><div class="detail-label">السلاح</div><div class="detail-value">${t.weapon||'-'}</div></div>
       <div class="detail-item"><div class="detail-label">الدافع</div><div class="detail-value">${t.motive||'-'}</div></div>
-      <div class="detail-item"><div class="detail-label">أسلوب التنفيذ</div><div class="detail-value">${t.execution_method||'-'}</div></div>
-      <div class="detail-item"><div class="detail-label">مكان الجريمة</div><div class="detail-value">${t.crime_scene_location||'-'}</div></div>
+      <div class="detail-item"><div class="detail-label">طريقة التنفيذ</div><div class="detail-value">${t.execution_method||'-'}</div></div>
       <div class="detail-item"><div class="detail-label">الشاهد الصامت</div><div class="detail-value">${t.silent_witness||'-'}</div></div>
-      <div class="detail-item full"><div class="detail-label">نص النظرية</div><div class="detail-value" style="font-weight:400;line-height:1.7;color:var(--smoke)">${t.theory_narrative||'-'}</div></div>
       <div class="detail-item"><div class="detail-label">مستوى الثقة</div><div class="detail-value td-mono" style="color:var(--gold)">${t.confidence_scale||'-'}/5</div></div>
-      <div class="detail-item"><div class="detail-label">رهان واثق</div><div class="detail-value">${t.is_confident_bet ? '✅ نعم' : '❌ لا'}</div></div>
-      <div class="detail-item"><div class="detail-label">إرسال مبكر</div><div class="detail-value">${t.is_early_submission ? '✅ نعم' : '❌ لا'}</div></div>
+      <div class="detail-item"><div class="detail-label">رهان واثق</div><div class="detail-value">${t.confident_bet ? '✅ نعم' : '❌ لا'}</div></div>
       <div class="detail-item"><div class="detail-label">الحالة</div><div class="detail-value"><span class="badge badge-${t.status}">${t.status}</span></div></div>
-    </div>`;
+      <div class="detail-item full"><div class="detail-label">الرواية</div><div class="detail-value" style="font-weight:400;line-height:1.7;color:var(--smoke)">${t.narrative||t.theory_narrative||'-'}</div></div>
+      <div class="detail-item full"><div class="detail-label">خريطة العلاقات</div><div class="detail-value" style="font-weight:400;color:var(--smoke)">${t.relationship_map||'-'}</div></div>
+    </div>`
   document.getElementById('deleteTheoryBtn').onclick = () => {
-    closeModal('theoryModal');
-    deleteTheory(id, t.user_nickname);
-  };
-  document.getElementById('theoryModal').classList.add('open');
+    closeModal('theoryModal')
+    deleteTheory(id, t.user_nickname)
+  }
+  document.getElementById('theoryModal').classList.add('open')
 }
 
 async function deleteTheory(id, name) {
-  confirm(
-    'حذف النظرية',
-    `هل أنت متأكد من حذف نظرية <strong>${name}</strong>؟ لا يمكن التراجع.`,
-    async () => {
-      const { error } = await sb.from('theories').delete().eq('id', id);
-      if (error) { toast('حدث خطأ', 'error'); return; }
-      toast('تم حذف النظرية ✅');
-      loadTheories();
-      loadDashboard();
-    }
-  );
+  confirmDialog('حذف النظرية', `هل أنت متأكد من حذف نظرية <strong>${name}</strong>؟`, async () => {
+    const { error } = await sb.from('theories').delete().eq('id', id)
+    if (error) { toast('حدث خطأ', 'error'); return }
+    toast('تم حذف النظرية ✅')
+    loadTheories()
+    loadDashboard()
+  })
 }
 
 // ══ USERS ══
 async function loadUsers() {
-  document.getElementById('users-table').innerHTML = `<tr class="loading-row"><td colspan="5">جاري التحميل...</td></tr>`;
-  const { data } = await sb.from('profiles').select('*').order('total_points', {ascending:false});
-  allUsers = data || [];
-  renderUsers(allUsers);
+  document.getElementById('users-table').innerHTML = `<tr class="loading-row"><td colspan="5">جاري التحميل...</td></tr>`
+  const { data } = await sb.from('profiles').select('*').order('total_points', {ascending:false})
+  allUsers = data || []
+  renderUsers(allUsers)
 }
 
 function renderUsers(list) {
-  const tbody = document.getElementById('users-table');
+  const tbody = document.getElementById('users-table')
   if (!list.length) {
-    tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state"><span>👥</span>لا يوجد مستخدمون بعد</div></td></tr>`;
-    return;
+    tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state"><span>👥</span>لا يوجد مستخدمون بعد</div></td></tr>`
+    return
   }
   tbody.innerHTML = list.map(u => `
     <tr>
@@ -535,93 +699,84 @@ function renderUsers(list) {
       <td class="td-mono" style="color:var(--gold)">${u.total_points||0}</td>
       <td class="td-mono">${u.cases_solved||0}</td>
       <td class="td-mono" style="color:var(--smoke);font-size:11px">${fmtDate(u.created_at)}</td>
-      <td>
-        <button class="action-btn danger" onclick="blockByUserId('${u.id}', '${(u.detective_name||'').replace(/'/g,"\\'")}')">🚫 حظر</button>
-      </td>
-    </tr>`).join('');
+      <td><button class="action-btn danger" onclick="blockByUserId('${u.id}', '${(u.detective_name||'').replace(/'/g,"\\'")}')">🚫 حظر</button></td>
+    </tr>`).join('')
 }
 
 function filterUsers(q) {
-  const f = allUsers.filter(u => (u.detective_name||'').includes(q));
-  renderUsers(f);
+  renderUsers(allUsers.filter(u => (u.detective_name||'').includes(q)))
 }
 
 async function blockByUserId(userId, name) {
-  confirm(
-    'حظر المستخدم',
-    `هل تريد حظر المحقق <strong>${name}</strong>؟ لن يتمكن من إرسال نظريات.`,
-    async () => {
-      const { error } = await sb.from('blocked_users').insert({ user_id: userId, email: name, reason: 'حظر يدوي' });
-      if (error) { toast('حدث خطأ', 'error'); return; }
-      toast(`تم حظر ${name} ✅`);
-      loadUsers();
-    }
-  );
+  confirmDialog('حظر المستخدم', `هل تريد حظر المحقق <strong>${name}</strong>؟`, async () => {
+    const { error } = await sb.from('blocked_users').insert({ user_id: userId, email: name, reason: 'حظر يدوي' })
+    if (error) { toast('حدث خطأ', 'error'); return }
+    toast(`تم حظر ${name} ✅`)
+    loadUsers()
+  })
 }
 
 // ══ BLOCKED ══
 async function loadBlocked() {
-  document.getElementById('blocked-table').innerHTML = `<tr class="loading-row"><td colspan="4">جاري التحميل...</td></tr>`;
-  const { data } = await sb.from('blocked_users').select('*').order('blocked_at', {ascending:false});
-  const tbody = document.getElementById('blocked-table');
+  document.getElementById('blocked-table').innerHTML = `<tr class="loading-row"><td colspan="4">جاري التحميل...</td></tr>`
+  const { data } = await sb.from('blocked_users').select('*').order('blocked_at', {ascending:false})
+  const tbody = document.getElementById('blocked-table')
   if (!data?.length) {
-    tbody.innerHTML = `<tr><td colspan="4"><div class="empty-state"><span>✅</span>لا يوجد مستخدمون محظورون</div></td></tr>`;
-    return;
+    tbody.innerHTML = `<tr><td colspan="4"><div class="empty-state"><span>✅</span>لا يوجد مستخدمون محظورون</div></td></tr>`
+    return
   }
   tbody.innerHTML = data.map(b => `
     <tr>
       <td class="td-mono">${b.email||'-'}</td>
       <td style="color:var(--smoke)">${b.reason||'-'}</td>
       <td class="td-mono" style="color:var(--smoke);font-size:11px">${fmtDate(b.blocked_at)}</td>
-      <td><button class="action-btn" onclick="unblock('${b.id}', '${(b.email||'').replace(/'/g,"\\'")}')">رفع الحظر</button></td>
-    </tr>`).join('');
+      <td><button class="action-btn" onclick="unblock('${b.id}','${(b.email||'').replace(/'/g,"\\'")}')">رفع الحظر</button></td>
+    </tr>`).join('')
 }
 
 async function blockUser() {
-  const email = document.getElementById('blockEmail').value.trim();
-  const reason = document.getElementById('blockReason').value.trim();
-  if (!email) { toast('أدخل إيميلاً', 'error'); return; }
-  const { error } = await sb.from('blocked_users').insert({ email, reason: reason || 'حظر يدوي' });
-  if (error) { toast('حدث خطأ', 'error'); return; }
-  toast(`تم حظر ${email} ✅`);
-  document.getElementById('blockEmail').value = '';
-  document.getElementById('blockReason').value = '';
-  loadBlocked();
-  loadDashboard();
+  const email = document.getElementById('blockEmail').value.trim()
+  const reason = document.getElementById('blockReason').value.trim()
+  if (!email) { toast('أدخل إيميلاً', 'error'); return }
+  const { error } = await sb.from('blocked_users').insert({ email, reason: reason || 'حظر يدوي' })
+  if (error) { toast('حدث خطأ', 'error'); return }
+  toast(`تم حظر ${email} ✅`)
+  document.getElementById('blockEmail').value = ''
+  document.getElementById('blockReason').value = ''
+  loadBlocked()
+  loadDashboard()
 }
 
 async function unblock(id, email) {
-  confirm('رفع الحظر', `هل تريد رفع الحظر عن <strong>${email}</strong>؟`, async () => {
-    const { error } = await sb.from('blocked_users').delete().eq('id', id);
-    if (error) { toast('حدث خطأ', 'error'); return; }
-    toast(`تم رفع الحظر ✅`);
-    loadBlocked();
-    loadDashboard();
-  }, false);
+  confirmDialog('رفع الحظر', `هل تريد رفع الحظر عن <strong>${email}</strong>؟`, async () => {
+    const { error } = await sb.from('blocked_users').delete().eq('id', id)
+    if (error) { toast('حدث خطأ', 'error'); return }
+    toast('تم رفع الحظر ✅')
+    loadBlocked()
+    loadDashboard()
+  }, false)
 }
 
-// ══ SIGN OUT ══
 async function signOut() {
-  await sb.auth.signOut();
-  window.location.href = '/';
+  await sb.auth.signOut()
+  window.location.href = '/'
 }
 
-// ══ INIT ══
 async function init() {
-  const { data: { session } } = await sb.auth.getSession();
+  const { data: { session } } = await sb.auth.getSession()
   if (!session?.user || session.user.email !== ADMIN_EMAIL) {
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('denied').style.display = 'flex';
-    return;
+    document.getElementById('loading').style.display = 'none'
+    document.getElementById('denied').style.display = 'flex'
+    return
   }
-  document.getElementById('adminName').textContent = '🕵️ ' + (session.user.user_metadata?.full_name || 'أدمن');
-  document.getElementById('adminEmail').textContent = session.user.email;
-  document.getElementById('loading').style.display = 'none';
-  document.getElementById('app').style.display = 'block';
-  loadDashboard();
+  document.getElementById('adminName').textContent = '🕵️ ' + (session.user.user_metadata?.full_name || 'أدمن')
+  document.getElementById('adminEmail').textContent = session.user.email
+  document.getElementById('loading').style.display = 'none'
+  document.getElementById('app').style.display = 'block'
+  loadDashboard()
 }
 
-init();
+init()
 </script>
 </body>
 </html>
