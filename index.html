@@ -235,6 +235,14 @@ body{background:var(--black);color:var(--white);font-family:'Tajawal',sans-serif
 
 @media(max-width:960px){
   .nav{padding:14px 20px}.nav-links{display:none}
+  .nav-links.open{display:flex;flex-direction:column;position:fixed;top:52px;right:0;left:0;background:#050505;border-bottom:1px solid var(--border);padding:16px 20px;gap:0;z-index:199}
+  .nav-links.open li a{display:block;padding:14px 0;font-size:14px;border-bottom:1px solid rgba(201,168,76,0.07);color:var(--smoke)}
+  .nav-links.open li:last-child a{border-bottom:none}
+  .hamburger{display:flex;flex-direction:column;gap:5px;cursor:pointer;padding:6px;margin-left:8px}
+  .hamburger span{width:22px;height:2px;background:var(--smoke);border-radius:2px;transition:all .3s}
+  .hamburger.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+  .hamburger.open span:nth-child(2){opacity:0}
+  .hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
   .hero-inner{grid-template-columns:1fr;padding:100px 20px 60px;gap:36px}
   .desk-visual{height:360px}
   .steps{grid-template-columns:1fr 1fr}.step:not(:last-child)::after{display:none}
@@ -247,6 +255,7 @@ body{background:var(--black);color:var(--white);font-family:'Tajawal',sans-serif
   .sec,.cta-sec{padding:56px 20px}
   .sec-dk{padding:0}.sec-dk .sec{padding:56px 20px}
 }
+.hamburger{display:none}
 </style>
 </head>
 <body>
@@ -269,13 +278,18 @@ body{background:var(--black);color:var(--white);font-family:'Tajawal',sans-serif
 
 <nav class="nav">
   <div class="logo">سجل الجريمة <em>187</em></div>
-  <ul class="nav-links">
-    <li><a href="#how">كيف يعمل</a></li>
-    <li><a href="#cases">الملفات</a></li>
-    <li><a href="/profile.html">الرتب</a></li>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#how" onclick="closeNav()">كيف يعمل</a></li>
+    <li><a href="#cases" onclick="closeNav()">الملفات</a></li>
+    <li><a href="#ranks" onclick="closeNav()">رتب المحققين</a></li>
   </ul>
-  <div id="navAuth">
-    <button class="nav-btn" onclick="signInWithGoogle()">ابدأ التحقيق</button>
+  <div style="display:flex;align-items:center;gap:8px">
+    <div id="navAuth">
+      <button class="nav-btn" onclick="signInWithGoogle()">ابدأ التحقيق</button>
+    </div>
+    <div class="hamburger" id="hamburger" onclick="toggleNav()">
+      <span></span><span></span><span></span>
+    </div>
   </div>
 </nav>
 
@@ -501,9 +515,9 @@ body{background:var(--black);color:var(--white);font-family:'Tajawal',sans-serif
 <div class="sec-dk">
   <div class="sec" id="ranks">
     <div class="shdr rv" style="text-align:center">
-      <div class="stag">رتب المحققين</div>
+      <div class="stag">مسار المحقق</div>
       <h2 class="stitle">6 رتب <span>تنتظرك</span></h2>
-      <p style="color:var(--smoke);font-size:13px;margin-top:10px;font-weight:300">رتبتك تُكشف تلقائياً عند وصول نقاطك</p>
+      <p style="color:var(--smoke);font-size:13px;margin-top:10px;font-weight:300">كلما حللت أكثر — ارتفعت أعلى. رتبتك تُكشف تلقائياً عند وصول نقاطك</p>
     </div>
     <div class="ranks-grid">
       <div class="rcard unlocked rv d1">
@@ -762,7 +776,26 @@ async function init() {
 
 init();
 
-// ══ REVEAL ══
+// ══ HAMBURGER MENU ══
+function toggleNav() {
+  const nav = document.getElementById('navLinks');
+  const btn = document.getElementById('hamburger');
+  nav.classList.toggle('open');
+  btn.classList.toggle('open');
+}
+function closeNav() {
+  document.getElementById('navLinks').classList.remove('open');
+  document.getElementById('hamburger').classList.remove('open');
+}
+// إغلاق القائمة عند الضغط خارجها
+document.addEventListener('click', e => {
+  const nav = document.getElementById('navLinks');
+  const btn = document.getElementById('hamburger');
+  if (!nav.contains(e.target) && !btn.contains(e.target)) {
+    nav.classList.remove('open');
+    btn.classList.remove('open');
+  }
+});
 const rvs = document.querySelectorAll('.rv');
 const ob = new IntersectionObserver(e => {
   e.forEach(x => { if (x.isIntersecting) x.target.classList.add('show'); });
