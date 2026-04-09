@@ -286,7 +286,7 @@ async function loadProfile(user) {
     <div class="section-title">سجل القضايا</div>
     ${renderCases(theories)}
     <div style="text-align:center;margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--border)">
-      <button onclick="deleteAccount(${JSON.stringify({id: user.id})})" style="background:transparent;border:1px solid rgba(192,57,43,.3);color:rgba(192,57,43,.6);padding:.5rem 1.25rem;border-radius:5px;font-family:inherit;font-size:.75rem;cursor:pointer;transition:all .2s" onmouseover="this.style.borderColor='var(--red)';this.style.color='var(--red)'" onmouseout="this.style.borderColor='rgba(192,57,43,.3)';this.style.color='rgba(192,57,43,.6)'">
+      <button onclick="deleteAccount()" style="background:transparent;border:1px solid rgba(192,57,43,.3);color:rgba(192,57,43,.6);padding:.5rem 1.25rem;border-radius:5px;font-family:inherit;font-size:.75rem;cursor:pointer;transition:all .2s" onmouseover="this.style.borderColor='var(--red)';this.style.color='var(--red)'" onmouseout="this.style.borderColor='rgba(192,57,43,.3)';this.style.color='rgba(192,57,43,.6)'">
         🗑️ حذف حسابي نهائياً
       </button>
     </div>
@@ -447,7 +447,11 @@ function renderCases(theories) {
   return `<div class="cases-list">${rows}</div>`
 }
 
-async function deleteAccount(user) {
+async function deleteAccount() {
+  const { data: { session } } = await sb.auth.getSession()
+  const user = session?.user
+  if (!user) { alert('يجب تسجيل الدخول أولاً'); return }
+
   const confirmed = confirm(
     '⚠️ هل أنت متأكد من حذف حسابك؟\n\nسيتم حذف جميع بياناتك نهائياً:\n• نظرياتك\n• نقاطك وشاراتك\n• ملفك الشخصي\n\nهذا الإجراء لا يمكن التراجع عنه.'
   )
