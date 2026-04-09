@@ -164,28 +164,28 @@ function getRank(pts) {
   return RANKS[0]
 }
 
-// ══ الشارات (16 شارة) ══
+// ══ الشارات (16 شارة) — نظام الرؤية ══
+// visibility: 'full'=ظاهر كامل | 'shape'=شكل فقط | 'hidden'=مخفي تماماً
 const ALL_BADGES = [
-  // إنجاز — للأبد
-  { id:'welcome',       icon:'🚪', name:'دخل الملف',         desc:'أول خطوة في رحلة المحقق',                     type:'achievement', hint:null },
-  { id:'bloodtruth',    icon:'🩸', name:'الدم لا يكذب',      desc:'أصاب القاتل والسلاح والدافع في قضية واحدة',    type:'achievement', hint:null },
-  { id:'scientist',     icon:'🔬', name:'عالم الجريمة',       desc:'إجابة كاملة في 3 قضايا مختلفة',               type:'achievement', hint:null },
-  { id:'candlelight',   icon:'🕯️', name:'في الظلام نور',     desc:'أرسل نظريته في أول ساعتين من فتح القضية',      type:'achievement', hint:null },
-  { id:'coldfile',      icon:'📁', name:'الملف المنسي',       desc:'ربط ملفاً بارداً بقضية جديدة بنجاح',           type:'achievement', hint:null },
-  { id:'maskread',      icon:'🎭', name:'قرأ القناع',         desc:'لم يقع في فخ الدليل المضلل',                   type:'achievement', hint:null },
-  { id:'justice',       icon:'⚖️', name:'العدالة لا تتأخر',  desc:'رهن "واثق جداً" وأصاب 3 مرات متتالية',        type:'achievement', hint:null },
-  { id:'novice',        icon:'🔍', name:'المحقق لا يستسلم',  desc:'شارك في 3 قضايا بغض النظر عن النتيجة',         type:'achievement', hint:null },
-  // استمرارية — تختفي عند الانقطاع
-  { id:'neverclose',    icon:'🚬', name:'لم يُغلق الملف',     desc:'شارك في كل قضية منذ انضمامه دون انقطاع',      type:'streak',      hint:'درع حماية: مرة كل 3 أشهر' },
-  { id:'nightwatch',    icon:'🌙', name:'يقظة الليل',         desc:'أرسل نظريته في أول 6 ساعات 3 مرات متتالية',   type:'streak',      hint:'درع حماية: مرة كل 3 أشهر' },
-  { id:'redthread',     icon:'🔴', name:'خيط أحمر',           desc:'3 قضايا متتالية بإجابة صحيحة',                 type:'streak',      hint:'درع حماية: مرة كل 3 أشهر' },
-  // غموض — مخفية
-  { id:'mystery1',      icon:'👁️', name:'شاهد الأبدية',      desc:'???',  type:'mystery', hint:'تلميح: الجواب ليس في النظرية — بل فيما قبلها' },
-  { id:'mystery2',      icon:'🗝️', name:'مفتاح 187',          desc:'???',  type:'mystery', hint:'تلميح: فُتح مرة واحدة في التاريخ' },
-  { id:'mystery3',      icon:'🩻', name:'تحت الجلد',          desc:'???',  type:'mystery', hint:'تلميح: لاحظ ما لم يلاحظه أحد' },
-  { id:'mystery4',      icon:'🎙️', name:'صوت الصمت',          desc:'???',  type:'mystery', hint:'تلميح: الصامت أحياناً يسمع أكثر' },
-  // أسطورة
-  { id:'blackfile',     icon:'☠️', name:'الملف الأسود',       desc:'187 إجابة صحيحة — أسطورة لم تتحقق بعد',       type:'legend',      hint:null },
+  // ظاهر بالكامل — للأبد
+  { id:'welcome',       icon:'🚪', name:'دخل الملف',         desc:'أول خطوة في رحلة المحقق',                     type:'achievement', visibility:'full',   hint:null },
+  { id:'novice',        icon:'🔍', name:'المحقق لا يستسلم',  desc:'شارك في 3 قضايا بغض النظر عن النتيجة',        type:'achievement', visibility:'full',   hint:null },
+  { id:'blackfile',     icon:'☠️', name:'وكلاء 187',          desc:'10,000 نقطة — أسطورة لم تتحقق بعد',           type:'legend',      visibility:'full',   hint:null },
+  // ظاهر الشكل فقط — بدون اسم أو طريقة
+  { id:'bloodtruth',    icon:'🩸', name:'???',                desc:'???',                                          type:'achievement', visibility:'shape',  hint:null },
+  { id:'scientist',     icon:'🔬', name:'???',                desc:'???',                                          type:'achievement', visibility:'shape',  hint:null },
+  { id:'candlelight',   icon:'🕯️', name:'???',                desc:'???',                                          type:'achievement', visibility:'shape',  hint:null },
+  { id:'coldfile',      icon:'📁', name:'???',                desc:'???',                                          type:'achievement', visibility:'shape',  hint:null },
+  { id:'maskread',      icon:'🎭', name:'???',                desc:'???',                                          type:'achievement', visibility:'shape',  hint:null },
+  { id:'justice',       icon:'⚖️', name:'???',                desc:'???',                                          type:'achievement', visibility:'shape',  hint:null },
+  // مخفي تماماً — لا يظهر إلا عند الكسب
+  { id:'mystery1',      icon:'👁️', name:'شاهد الأبدية',      desc:'???',  type:'mystery', visibility:'hidden', hint:'تلميح: الجواب ليس في النظرية — بل فيما قبلها' },
+  { id:'mystery2',      icon:'🗝️', name:'مفتاح 187',          desc:'???',  type:'mystery', visibility:'hidden', hint:'تلميح: فُتح مرة واحدة في التاريخ' },
+  { id:'mystery3',      icon:'🩻', name:'تحت الجلد',          desc:'???',  type:'mystery', visibility:'hidden', hint:'تلميح: لاحظ ما لم يلاحظه أحد' },
+  { id:'mystery4',      icon:'🎙️', name:'صوت الصمت',          desc:'???',  type:'mystery', visibility:'hidden', hint:'تلميح: الصامت أحياناً يسمع أكثر' },
+  { id:'neverclose',    icon:'📌', name:'لم يُغلق الملف',     desc:'شارك في كل قضية منذ انضمامه دون انقطاع',      type:'streak',      visibility:'hidden', hint:null },
+  { id:'nightwatch',    icon:'🌙', name:'يقظة الليل',         desc:'أرسل نظريته في أول 6 ساعات 3 مرات متتالية',   type:'streak',      visibility:'hidden', hint:null },
+  { id:'redthread',     icon:'🔴', name:'خيط أحمر',           desc:'3 قضايا متتالية بإجابة صحيحة',                 type:'streak',      visibility:'hidden', hint:null },
 ]
 
 async function boot() {
@@ -377,41 +377,66 @@ function renderProgressBar(rank, pts, pct, hint) {
 
 function renderBadges(earned) {
   const html = ALL_BADGES.map(b => {
-    const isEarned  = !!earned[b.id]
-    const isMystery = b.type === 'mystery'
-    const isStreak  = b.type === 'streak'
-    const isLegend  = b.type === 'legend'
+    const isEarned = !!earned[b.id]
+    const vis      = b.visibility
 
-    if(isMystery && !isEarned) {
+    // مخفي تماماً — لا يظهر إلا إذا كُسب
+    if(vis === 'hidden' && !isEarned) return ''
+
+    // مخفي تماماً — ظهر لأنه كُسب
+    if(vis === 'hidden' && isEarned) {
       return `
-        <div class="badge-card mystery locked">
-          <span class="badge-icon">❓</span>
-          <div class="badge-name" style="color:rgba(212,168,83,.4)">شارة مخفية</div>
-          <div class="badge-desc">${b.hint || '???'}</div>
+        <div class="badge-card earned" title="شارة نادرة">
+          <span class="badge-icon">${b.icon}</span>
+          <div class="badge-name">${b.name}</div>
+          <div class="badge-desc">${b.desc !== '???' ? b.desc : 'شارة نادرة اكتشفتها وحدك'}</div>
+          ${earned[b.id]?.date ? `<div class="badge-date">${earned[b.id].date}</div>` : ''}
         </div>`
     }
 
-    if(isLegend && !isEarned) {
+    // ظاهر الشكل فقط — غير مكتسب
+    if(vis === 'shape' && !isEarned) {
       return `
-        <div class="badge-card locked">
-          <span class="badge-icon">☠️</span>
-          <div class="badge-name" style="color:rgba(212,168,83,.3)">الملف الأسود</div>
-          <div class="badge-desc" style="color:var(--text-mute)">أسطورة لم تتحقق بعد</div>
+        <div class="badge-card locked" style="opacity:.35;filter:grayscale(1)">
+          <span class="badge-icon">${b.icon}</span>
+          <div class="badge-name" style="color:var(--text-mute)">???</div>
+          <div class="badge-desc" style="color:var(--text-mute)">اكتشف كيف تكسبها</div>
         </div>`
     }
 
-    const cls = isEarned ? 'earned' : 'locked'
+    // ظاهر الشكل فقط — مكتسب
+    if(vis === 'shape' && isEarned) {
+      return `
+        <div class="badge-card earned">
+          <span class="badge-icon">${b.icon}</span>
+          <div class="badge-name">${b.name}</div>
+          <div class="badge-desc">${b.desc}</div>
+          ${earned[b.id]?.date ? `<div class="badge-date">${earned[b.id].date}</div>` : ''}
+        </div>`
+    }
+
+    // ظاهر بالكامل
+    const isLegend = b.type === 'legend'
+    const cls = isEarned ? 'earned' : isLegend ? 'locked' : 'locked'
     return `
-      <div class="badge-card ${cls}" title="${isEarned ? 'مكتسبة' : 'لم تكتسب بعد'}">
-        ${isStreak && isEarned ? `<span class="badge-shield" title="${b.hint}">🛡️</span>` : ''}
+      <div class="badge-card ${cls}">
         <span class="badge-icon">${b.icon}</span>
-        <div class="badge-name">${b.name}</div>
-        <div class="badge-desc">${b.desc}</div>
+        <div class="badge-name" style="${!isEarned && isLegend ? 'color:rgba(212,168,83,.4)' : ''}">${b.name}</div>
+        <div class="badge-desc" style="${!isEarned ? 'color:var(--text-mute)' : ''}">${b.desc}</div>
         ${isEarned && earned[b.id]?.date ? `<div class="badge-date">${earned[b.id].date}</div>` : ''}
       </div>`
   }).join('')
 
-  return `<div class="badges-grid">${html}</div>`
+  // رسالة الشارات المخفية
+  const hiddenCount = ALL_BADGES.filter(b => b.visibility === 'hidden').length
+  const earnedHidden = ALL_BADGES.filter(b => b.visibility === 'hidden' && earned[b.id]).length
+  const hint = earnedHidden > 0
+    ? `🔍 اكتشفت ${earnedHidden} من ${hiddenCount} شارات مخفية`
+    : `🔍 يوجد شارات مخفية لا يعلم بها أحد — المحقق الحقيقي يجدها وحده`
+
+  return `
+    <div class="badges-grid">${html}</div>
+    <div style="text-align:center;margin-top:.75rem;font-size:.7rem;color:rgba(212,168,83,.4);font-style:italic">${hint}</div>`
 }
 
 function renderCases(theories) {
