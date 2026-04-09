@@ -281,9 +281,9 @@ body{background:var(--black);color:var(--white);font-family:'Tajawal',sans-serif
 <nav class="nav">
   <div class="logo">سجل الجريمة <em>187</em></div>
   <ul class="nav-links" id="navLinks">
-    <li><a href="#how" onclick="closeNav()">كيف يعمل</a></li>
-    <li><a href="#cases" onclick="closeNav()">الملفات</a></li>
-    <li><a href="#ranks" onclick="closeNav()">رتب المحققين</a></li>
+    <li><a href="#how" onclick="closeNav();document.getElementById('how').scrollIntoView({behavior:'smooth'});return false;">كيف يعمل</a></li>
+    <li><a href="#cases" onclick="closeNav();document.getElementById('cases').scrollIntoView({behavior:'smooth'});return false;">الملفات</a></li>
+    <li><a href="#ranks" onclick="closeNav();document.getElementById('ranks').scrollIntoView({behavior:'smooth'});return false;">رتب المحققين</a></li>
   </ul>
   <div style="display:flex;align-items:center;gap:8px">
     <div id="navAuth">
