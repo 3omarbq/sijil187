@@ -650,6 +650,10 @@ async function saveName() {
     return;
   }
 
+  // تأكيد أن الاسم نهائي ولا يمكن تغييره
+  const confirmed = confirm(`⚠️ تأكيد الاسم المستعار\n\nالاسم المختار: "${name}"\n\nهذا الاسم نهائي ولا يمكن تغييره مستقبلاً.\nسيظهر في قائمة الشرف وأمام جميع المحققين.\n\nهل أنت متأكد؟`);
+  if (!confirmed) return;
+
   btn.disabled = true;
   btn.textContent = 'جاري الحفظ...';
   err.style.display = 'none';
